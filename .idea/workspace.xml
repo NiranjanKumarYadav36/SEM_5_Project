@@ -5,28 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc0482e2-6edc-4332-9d8a-2b8cb8f8d319" name="Changes" comment="middleware structured">
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/migrations/0002_rename_name_item_names.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/eslint.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/public/vite.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/App.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/App.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/ItemList.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/assets/react.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/main.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/vite-env.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/tsconfig.app.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/tsconfig.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/tsconfig.node.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/vite.config.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/mysite/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/mysite/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/wild_life/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/wild_life/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/wild_life/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/serializers.py" afterDir="false" />
@@ -105,7 +84,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725721869860</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="middleware structured">
+      <option name="closed" value="true" />
+      <created>1725732670733</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1725732670733</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
