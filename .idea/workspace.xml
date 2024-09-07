@@ -5,10 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc0482e2-6edc-4332-9d8a-2b8cb8f8d319" name="Changes" comment="middleware structured">
-      <change beforePath="$PROJECT_DIR$/.idea/WILDLIFE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/WILDLIFE.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/migrations/0002_rename_name_item_names.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/eslint.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/public/vite.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/src/App.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/src/App.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/src/ItemList.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/src/assets/react.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/src/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/src/main.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/src/vite-env.d.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/tsconfig.app.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/tsconfig.node.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/demo/vite.config.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/mysite/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/mysite/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/wild_life/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/wild_life/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/wild_life/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/views.py" afterDir="false" />
@@ -39,15 +59,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/COLLEGE/min-project-sem5/WILDLIFE"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/COLLEGE/min-project-sem5/WILDLIFE&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\ANIL KUMAR YADAV\python app\WILDLIFE\Backend\wild_life" />
@@ -77,8 +97,27 @@
       <option name="project" value="LOCAL" />
       <updated>1725039201669</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="middleware structured">
+      <option name="closed" value="true" />
+      <created>1725721869860</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1725721869860</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />

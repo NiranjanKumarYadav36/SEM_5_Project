@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
+
 CORS_ALLOWED = [
     "http://localhost:5173",  # Default Vite development server
 ]
@@ -82,16 +83,42 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wildlife',
-        'USER': 'root',
-        'PASSWORD': 'haunting363@',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+
+
+
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'wildlife',
+#         'USER': 'root',
+#         'PASSWORD': 'haunting363@',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'try1',
+#         'CLIENT': {
+#             'host': 'mongodb+srv://admin:q5tDwiZDPueNbL3@cluster0.oomr3.mongodb.net/',
+#             'username': 'admin',
+#             'password': 'q5tDwiZDPueNbL3',
+#         }
+#     }
+# }
 
 
 # Password validation
