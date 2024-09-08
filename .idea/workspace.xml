@@ -4,34 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc0482e2-6edc-4332-9d8a-2b8cb8f8d319" name="Changes" comment="middleware structured">
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/migrations/0004_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/eslint.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/public/vite.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/App.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/App.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/ItemList.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/assets/react.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/main.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/src/vite-env.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/tsconfig.app.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/tsconfig.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/tsconfig.node.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/demo/vite.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/mysite/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/mysite/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/wild_life/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/wild_life/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/wild_life/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/wild_life/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="cc0482e2-6edc-4332-9d8a-2b8cb8f8d319" name="Changes" comment="middleware structured" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -120,7 +93,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725733591999</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="middleware structured">
+      <option name="closed" value="true" />
+      <created>1725771451085</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1725771451085</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
