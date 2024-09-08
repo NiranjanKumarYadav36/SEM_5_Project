@@ -53,11 +53,13 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
+# REST_FRAMEWORK = {'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permission.AllowAny']}
 
-CORS_ALLOWED = [
-    "http://localhost:5173",  # Default Vite development server
-]
+# CORS_ALLOWED = [
+#     "http://localhost:5173",  # Default Vite development server
+# ]
 
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'mysite.urls'
 
