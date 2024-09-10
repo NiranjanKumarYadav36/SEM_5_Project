@@ -5,7 +5,7 @@ import csv
 
 api_key = "ak9ff6f8ea7q"
 
-records = get_observations(api_key, 'IN-MH', back=7)
+records = get_observations(api_key, 'IN-MH', back=30)
 
 
 # with open("1.csv", 'w', encoding='utf-8') as file:
