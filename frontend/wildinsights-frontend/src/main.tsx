@@ -6,11 +6,9 @@ import router from "./routes/router.tsx"
 import './index.css'
 import ItemList from './components/ItemList.tsx'
 
+
 createRoot(document.getElementById('root')!).render(
-//   <StrictMode>
-//     <RouterProvider router={router} />
-//   </StrictMode>,
-    <StrictMode>
-    <ItemList/>
-    </StrictMode>,
+      <StrictMode>
+        <RouterProvider router={router} />
+      </StrictMode>,
 )
