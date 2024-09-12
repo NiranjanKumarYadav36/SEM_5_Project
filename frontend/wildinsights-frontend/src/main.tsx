@@ -3,8 +3,6 @@ import { createRoot } from 'react-dom/client'
 import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import router from "./routes/router.tsx"
-import './index.css'
-import ItemList from './components/ItemList.tsx'
 
 
 createRoot(document.getElementById('root')!).render(
