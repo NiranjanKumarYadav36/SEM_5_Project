@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc0482e2-6edc-4332-9d8a-2b8cb8f8d319" name="Changes" comment="added bird data in Backend\Data dir">
+    <list default="true" id="cc0482e2-6edc-4332-9d8a-2b8cb8f8d319" name="Changes" comment="separate dir for fetching methods and database insertion">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/BirdData/ebird_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Data/BirdData/ebird_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/wildinsights-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/wildinsights-frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/wildinsights-frontend/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/wildinsights-frontend/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/wildinsights-frontend/src/pages/HomePage/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/wildinsights-frontend/src/pages/HomePage/HomePage.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +56,8 @@
       <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Data\BirdData" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Backend\Data\Insertion" />
+      <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Backend\Data\Fetching" />
       <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Backend" />
       <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\frontend\wildinsights-frontend\src" />
       <recent name="C:\Users\ANIL KUMAR YADAV\python app\WILDLIFE\Backend\wild_life" />
@@ -156,7 +164,23 @@
       <option name="project" value="LOCAL" />
       <updated>1725863455979</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="added bird data in Backend\Data dir">
+      <option name="closed" value="true" />
+      <created>1725965649350</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1725965649350</updated>
+    </task>
+    <task id="LOCAL-00009" summary="separate dir for fetching methods and database insertion">
+      <option name="closed" value="true" />
+      <created>1725965991806</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1725965991806</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -174,6 +198,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="middleware structured" />
     <MESSAGE value="added bird data in Backend\Data dir" />
-    <option name="LAST_COMMIT_MESSAGE" value="added bird data in Backend\Data dir" />
+    <MESSAGE value="separate dir for fetching methods and database insertion" />
+    <option name="LAST_COMMIT_MESSAGE" value="separate dir for fetching methods and database insertion" />
   </component>
 </project>

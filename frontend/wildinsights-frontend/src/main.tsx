@@ -4,9 +4,13 @@ import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import router from "./routes/router.tsx"
 import './index.css'
+import ItemList from './components/ItemList.tsx'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
+//   <StrictMode>
+//     <RouterProvider router={router} />
+//   </StrictMode>,
+    <StrictMode>
+    <ItemList/>
+    </StrictMode>,
 )
