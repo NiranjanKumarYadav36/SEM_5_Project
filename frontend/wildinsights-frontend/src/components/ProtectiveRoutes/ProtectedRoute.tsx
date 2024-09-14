@@ -12,7 +12,7 @@ const ProtectedRoute = () => {
         const checkToken = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/api/verify-token', {
-                    withCredentials: true, 
+                    withCredentials: true,
                 });
 
                 // Check the status of the response from backend
@@ -45,4 +45,5 @@ const ProtectedRoute = () => {
 };
 
 export default ProtectedRoute;
+
 

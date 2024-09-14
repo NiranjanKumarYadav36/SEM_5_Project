@@ -8,6 +8,37 @@ from django.views.decorators.http import require_GET
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from django.conf import settings
+from django.http import JsonResponse
+from functools import wraps
+
+
+
+class ProtectedView(APIView):
+    def get(self, request):
+        token = request.COOKIES.get('jwt')
+
+        if not token:
+            raise AuthenticationFailed('Unauthenticated!')
+
+        try:
+            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token has expired')
+        except jwt.InvalidTokenError:
+            raise AuthenticationFailed('Invalid token')
+
+        # You can access the user ID from the payload
+        user_id = payload['id']
+
+        # Fetch user from database (example)
+        user = User.objects.get(id=user_id)
+
+        return Response({
+            'message': 'Protected content',
+            'user': user.username
+        })
+        
 
 class RegisterView(APIView):
     def post(self, request):
@@ -83,14 +114,4 @@ class Logout(APIView):
             'message': 'success'
         }
         return response
-
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def verify_token(request):
-    """
-    This view simply checks if the token is valid by requiring the user to be authenticated.
-    If the token is valid, the request passes through and we return a success response.
-    """
-    return Response({'detail': 'Token is valid'}, status=status.HTTP_200_OK)
 
