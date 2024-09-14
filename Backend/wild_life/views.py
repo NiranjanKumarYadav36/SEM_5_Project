@@ -4,7 +4,10 @@ from rest_framework.exceptions import AuthenticationFailed
 from .models import User
 from .serializers import UserSerializer
 import datetime, jwt
-
+from django.views.decorators.http import require_GET
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 
 class RegisterView(APIView):
     def post(self, request):
@@ -19,10 +22,14 @@ class LoginView(APIView):
         username = request.data['username']
         password = request.data['password']
 
-        user = User.objects.get(username=username)
-
-        if user.username is None:
+        if not username or not password:
+            raise AuthenticationFailed('Username and password are required')
+        
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
             raise AuthenticationFailed('User not found')
+        
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect Password')
 
@@ -76,4 +83,14 @@ class Logout(APIView):
             'message': 'success'
         }
         return response
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def verify_token(request):
+    """
+    This view simply checks if the token is valid by requiring the user to be authenticated.
+    If the token is valid, the request passes through and we return a success response.
+    """
+    return Response({'detail': 'Token is valid'}, status=status.HTTP_200_OK)
 

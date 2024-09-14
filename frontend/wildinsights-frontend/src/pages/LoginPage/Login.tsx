@@ -36,7 +36,7 @@ const Login = () => {
     }catch (error: any) {
       if (error.response) {
         // Server responded with a status other than 2xx
-        setError(`Registration failed: ${error.response.data.detail || error.message}`);
+        setError(`Login failed: ${error.response.data.detail || error.message}`);
       } else if (error.request) {
         // Request was made but no response received
         setError('Server did not respond. Please try again later.');
