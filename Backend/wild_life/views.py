@@ -21,7 +21,7 @@ class LoginView(APIView):
 
         user = User.objects.get(username=username)
 
-        if user is None:
+        if user.username is None:
             raise AuthenticationFailed('User not found')
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect Password')
