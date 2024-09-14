@@ -4,17 +4,17 @@ import HomePage from "../pages/HomePage/HomePage";
 import React from "react";
 import Login from "../pages/LoginPage/Login";
 import Register from "../pages/RegisterPage/Register";
-//import ProtectedRoute from "../components/ProtectiveRoutes/ProtectedRoute";
+import ProtectedRoute from "../components/ProtectiveRoutes/ProtectedRoute";
 
 const router = createBrowserRouter([
     {
       path: "/",
-      element: <HomePage/>,//Replace with protectedRoute once backend updates
+      element: <ProtectedRoute/>,//Replace with protectedRoute once backend updates
       //insert loaders here
       children: [
         {
           path:"",
-          element: <div />,
+          element: <HomePage />,
         },
       ],
     },

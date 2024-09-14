@@ -17,6 +17,19 @@ const Register = () => {
   const [passwordVisible2, setPasswordVisible2] = useState(false);
   const [loading, setLoading] = useState(false);  // To manage loading state
   const [error, setError] = useState('');  // To manage error messages
+  // const [usernameError, setUsernameError] = useState('')
+
+  // const checkUsernameAvailability = async (username: String) => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:8000/api/check-username/`, {
+  //       params: { username }
+  //     });
+  //     return response.data.available;
+  //   } catch (error) {
+  //     console.error('Error checking username availability:', error);
+  //     return false;
+  //   }
+  // };
 
   const handleRegister = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -24,18 +37,50 @@ const Register = () => {
     setError('');
 
     // Basic front-end validation
+    // if (!username || !email || !password || !password2) {
+    //   setError("All fields are required.");
+    //   setLoading(false);
+    //   return;
+    // }
+    // if (username.length < 4) {
+    //   setError("Username must be at least 4 characters long.")
+    //   setLoading(false);
+    //   return
+    // }
     if (password !== password2) {
-      setError("Passwords do not match");
+      setError("Passwords do not match.");
       setLoading(false);
       return;
     }
+    // if (password.length < 6) {
+    //   setError("Password must be at least 8 characters long.");
+    //   setLoading(false);
+    //   return;
+    // }
+    // if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    //   setError("Invalid email format.");
+    //   setLoading(false);
+    //   return;
+    // }
+
+    // Check username availability
+    // const isUsernameAvailable = await checkUsernameAvailability(username);
+    // if (!isUsernameAvailable) {
+    //   setUsernameError("Username already exists. Please choose a different one.");
+    //   setLoading(false);
+    //   return;
+    // }
+
 
     try {
-      await axios.post('http://localhost:8000/api/register', {
+      await axios.post('http://localhost:8000/api/register', { 
         username,
         email,
         password,
         password2
+      }, {
+        headers: { 'Content-Type': 'application/json' },  
+        withCredentials: true  
       });
       alert('Registration successful');
       // Reset form after successful registration
@@ -46,12 +91,32 @@ const Register = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.response) {
-        // Server responded with a status other than 2xx
-        setError(`Registration failed: ${error.response.data.detail || error.message}`);
+        console.log(error);
+
+        const errorData = error.response.data;
+        let errorMessage = '';
+
+        if (errorData.username) {
+          errorMessage += `Username: ${errorData.username[0]} `;
+        }
+        if (errorData.email) {
+          errorMessage += `Email: ${errorData.email[0]} `;
+        }
+        if (errorData.password) {
+          errorMessage += `Password: ${errorData.password[0]} `;
+        }
+
+        if (!errorMessage){
+          errorMessage= `Registration failed: ${error.response.data.detail || error.message}`;
+        }
+        setError(errorMessage);
+        
       } else if (error.request) {
+        console.log(error)
         // Request was made but no response received
         setError('Server did not respond. Please try again later.');
       } else {
+        console.log(error)
         // Something else caused the error
         setError(`An error occurred: ${error.message}`);
       }
