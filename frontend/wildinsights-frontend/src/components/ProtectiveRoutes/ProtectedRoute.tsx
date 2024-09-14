@@ -5,7 +5,7 @@ import useHandleLogout from '../Logout/logout';
 
 
 const ProtectedRoute = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState(null);  // null means still checking
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);  // null means still checking
     const handleLogout = useHandleLogout();  
 
     useEffect(() => {
