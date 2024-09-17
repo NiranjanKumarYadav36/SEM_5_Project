@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -7,14 +8,10 @@ import {
   Button,
   Autocomplete,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
 } from "@mui/material";
 import Navbar from "../../components/Navbar/Navbar";
 import SearchIcon from "@mui/icons-material/Search";
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import Filter from "../../components/Filter/filter";
 
 // Define a type for the options that will be returned by the API
 type Option = {
@@ -28,16 +25,10 @@ export default function Explore() {
   const [loading, setLoading] = useState(false); // Loading state
   const [speciesOptions, setSpeciesOptions] = useState<Option[]>([]); // Species options from API
   const [locationOptions, setLocationOptions] = useState<Option[]>([]); // Location recommendation options
-  const [filterOpen, setFilterOpen] = useState(false); // State for managing filter popup
 
-  // Open the filter dialog
-  const handleFilterClick = () => {
-    setFilterOpen(true);
-  };
-
-  // Close the filter dialog
-  const handleFilterClose = () => {
-    setFilterOpen(false);
+  const handleApplyFilters = (filters: any) => {
+    console.log('Applied Filters:', filters);
+    // Perform your API call to fetch filtered data here
   };
 
   // Fetch species options when user types in the species field
@@ -177,57 +168,15 @@ export default function Explore() {
             >
               {loading ? <CircularProgress size={24} /> : "Go"}
             </Button>
+            <Filter onApply={handleApplyFilters} />
           </Box>
           {error && (
             <Typography color="error" sx={{ marginTop: 2 }}>
               {error}
             </Typography>
           )}
+          
         </Box>
-        {/* Filter Button */}
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<FilterAltIcon />}
-          onClick={handleFilterClick}
-          sx={{ padding: "10px 20px"}} // Custom style for the button
-        >
-          Filter
-        </Button>
-        {/* Popup Dialog for Filters */}
-        <Dialog open={filterOpen} onClose={handleFilterClose}>
-          <DialogTitle>Filter Options</DialogTitle>
-          <DialogContent>
-            {/* Add your filter form fields here */}
-            <Typography variant="body1">Choose filter criteria:</Typography>
-
-            {/* Example filter fields */}
-            <TextField
-              margin="normal"
-              id="filterSpecies"
-              label="Filter by Species"
-              fullWidth
-            />
-            <TextField
-              margin="normal"
-              id="filterLocation"
-              label="Filter by Location"
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleFilterClose} color="primary">
-              Cancel
-            </Button>
-            <Button
-              onClick={handleFilterClose}
-              color="primary"
-              variant="contained"
-            >
-              Apply
-            </Button>
-          </DialogActions>
-        </Dialog>
       </Box>
     </Box>
   );
