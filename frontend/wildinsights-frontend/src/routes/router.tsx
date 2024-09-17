@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "../pages/HomePage/HomePage";
-//import { fetchEmptyJSON } from "../pages/HomePage/HomePage";
+import HomePage from "../pages/HomePage/Home";
 import React from "react";
 import Login from "../pages/LoginPage/Login";
 import Register from "../pages/RegisterPage/Register";
 import ProtectedRoute from "../components/ProtectiveRoutes/ProtectedRoute";
+import Explore from "../pages/ExplorePage/explore";
 
 
 const router = createBrowserRouter([
@@ -26,6 +26,17 @@ const router = createBrowserRouter([
     {
       path:"/register",
       element:<Register />
+    },
+    {
+      path:"/explore",
+      element:<ProtectedRoute />,
+      //insert loaders here
+      children: [
+        {
+          path:"",
+          element: <Explore />
+        },
+      ]
     }
 ]);
 
