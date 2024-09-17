@@ -4,7 +4,7 @@ import React from "react";
 import Login from "../pages/LoginPage/Login";
 import Register from "../pages/RegisterPage/Register";
 import ProtectedRoute from "../components/ProtectiveRoutes/ProtectedRoute";
-import Explore from "../pages/ExplorePage/explore";
+import Explore from "../pages/ExplorePage/Explore";
 
 
 const router = createBrowserRouter([
