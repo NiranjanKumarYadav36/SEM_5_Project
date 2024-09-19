@@ -5,30 +5,23 @@ import Login from "../pages/LoginPage/Login";
 import Register from "../pages/RegisterPage/Register";
 import ProtectedRoute from "../components/ProtectiveRoutes/ProtectedRoute";
 import Explore from "../pages/ExplorePage/Explore";
+import PageNotFound from "../pages/PageNotFound/Pagenotfound";
 
 
 const router = createBrowserRouter([
     {
-      path: "/",
-      element: <ProtectedRoute/>,//Replace with protectedRoute once backend updates
+      path: "/",//Homepage
+      element: <ProtectedRoute/>,
       //insert loaders here
       children: [
         {
           path:"",
-          element: <HomePage />,//Add homepage here
+          element: <HomePage />,
         },
       ],
     },
     {
-      path:"/login",
-      element:<Login />,
-    },
-    {
-      path:"/register",
-      element:<Register />
-    },
-    {
-      path:"/explore",
+      path:"/explore",//Explore
       element:<ProtectedRoute />,
       //insert loaders here
       children: [
@@ -37,6 +30,52 @@ const router = createBrowserRouter([
           element: <Explore />
         },
       ]
+    },
+    {
+      path: "/community",
+      element:<ProtectedRoute />,
+      //insert loaders here
+      children: [
+        {
+          path:"/community/people",
+          element: <div />
+        },
+        {
+          path:"/community/projects",
+          element: <div />
+        },
+        {
+          path:"/community/forum",
+          element: <div />
+        },
+      ]
+    },
+    {
+      path:"/user",
+      element:<ProtectedRoute />,
+      //insert loaders here
+      children: [
+        {
+          path:"/user/dashboard",
+          element: <div />
+        },
+        {
+          path:"/user/profile",
+          element: <div />
+        },
+      ]
+    },
+    {
+      path:"/login",//Login
+      element:<Login />,
+    },
+    {
+      path:"/register",//Register
+      element:<Register />
+    },
+    {
+      path:"*",//Any urls that dont exist
+      element:<PageNotFound/>
     }
 ]);
 
