@@ -24,28 +24,29 @@ class Command(BaseCommand):
             try:
                 # Fetch the User instance based on the username from CSV
                 user = User.objects.get(username=row['user_name'])
+                Amphibians.objects.create(
+                    observed_date = row['observed_on'],
+                    time_observed_at = row['time_observed_at'],
+                    created_date = row['created_at'],
+                    updated_date = row['updated_at'],
+                    image = row['image_url'],
+                    description = row['description'],
+                    no_identification_agreement = row['num_identification_agreements'],
+                    no_identification_disagreement = row['num_identification_disagreements'],
+                    location = row['place_guess'],
+                    city = row['place_county_name'],
+                    state = row['place_state_name'],
+                    country = row['place_country_name'],
+                    species_name_guess = row['species_guess'],
+                    scientific_name = row['scientific_name'],
+                    common_name = row['common_name'],
+                    category = row['iconic_taxon_name'],
+                    latitude=row['latitude'],
+                    longitude=row['longitude'],
+                    user=user,
+                )
+                self.stdout.write(self.style.SUCCESS('Success'))
+
             except User.DoesNotExist:
                 self.stdout.write(self.style.ERROR(f"User '{row['user_name']}' does not exist. Skipping row."))
                 continue
-        #     Amphibians.objects.create(
-        #         observed_date = row['observed_on'],
-        #         time_observed_at = row['time_observed_at'],
-        #         created_date = row['created_at'],
-        #         updated_date = row['updated_at'],
-        #         image = row['image_url'],
-        #         description = row['description'],
-        #         no_identification_agreement = row['num_identification_agreements'],
-        #         no_identification_disagreement = row['num_identification_disagreements'],
-        #         location = row['place_guess'],
-        #         city = row['place_county_name'],
-        #         state = row['place_state_name'],
-        #         country = row['place_country_name'],
-        #         species_name_guess = row['species_guess'],
-        #         scientific_name = row['scientific_name'],
-        #         common_name = row['common_name'],
-        #         category = row['iconic_taxon_name'],
-        #         latitude=row['latitude'],
-        #         longitude=row['longitude'],
-        #         user=row['user_name'],
-        #     )
-        # self.stdout.write(self.style.SUCCESS('Success'))
