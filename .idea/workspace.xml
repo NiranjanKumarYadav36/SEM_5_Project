@@ -5,14 +5,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc0482e2-6edc-4332-9d8a-2b8cb8f8d319" name="Changes" comment="added logic for jwt token">
-      <change afterPath="$PROJECT_DIR$/Backend/db.sqlite3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/wildinsights-frontend/src/pages/LoginPage/LoginPage.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/wildinsights-frontend/src/pages/RegisterPage/RegisterPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/WILDLIFE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/WILDLIFE.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/sqlite3.exe" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_amphibians_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/ordering_columns.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Insertion/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Insertion/database_conversion.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Insertion/db.sqlite3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/filtered_amphibians_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/management/commands/import_amphibians.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/mysite/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/mysite/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/wildinsights-frontend/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/wildinsights-frontend/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/1.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/Amphibions_observations.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/Birds_observations.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/Fish_observations.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/Mammals_observation.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/Reptiles_observations.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/birds.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/birds.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/ebird_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/ebird_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/requirements.txtx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Data/Insertion/birds.sqlite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/Data/Insertion/database_conversion.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,30 +63,79 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python.ebird_api.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/COLLEGE/min-project-sem5/WILDLIFE/Backend/Data/BirdData&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.aves_insertion.executor": "Run",
+    "Python.cleaning.executor": "Run",
+    "Python.ebird_api.executor": "Run",
+    "Python.ordering_columns.executor": "Run",
+    "Python.pand_cleaning.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/COLLEGE/Projects/SEM_5_Project/Backend/Data"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\COLLEGE\Projects\SEM_5_Project\Backend\Data" />
       <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Backend\Data\BirdData" />
       <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Data\BirdData" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\COLLEGE\Projects\SEM_5_Project\Backend\wild_life" />
+      <recent name="D:\COLLEGE\Projects\SEM_5_Project\Backend" />
+      <recent name="D:\COLLEGE\Projects\SEM_5_Project\Backend\Data\Fetching\filtered_data" />
       <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Backend\Data\Insertion" />
       <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Backend\Data\Fetching" />
-      <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Backend" />
-      <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\frontend\wildinsights-frontend\src" />
-      <recent name="C:\Users\ANIL KUMAR YADAV\python app\WILDLIFE\Backend\wild_life" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.aves_insertion">
+    <configuration name="aves_insertion" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="WILDLIFE" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Backend/Data/Insertion" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="D:\COLLEGE\Projects\SEM_5_Project\Backend\aves_insertion.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="cleaning" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="WILDLIFE" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Backend/Data/Fetching/rawdata" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Backend/Data/Fetching/rawdata/cleaning.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="ebird_api" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="WILDLIFE" />
       <option name="ENV_FILES" value="" />
@@ -86,8 +158,56 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="ordering_columns" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="WILDLIFE" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Backend/Data/Fetching/filtered_data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Backend/Data/Fetching/filtered_data/ordering_columns.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pand_cleaning" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="WILDLIFE" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Backend/Data/Fetching/filtered_data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Backend/Data/Fetching/filtered_data/pand_cleaning.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.aves_insertion" />
+        <item itemvalue="Python.ordering_columns" />
+        <item itemvalue="Python.pand_cleaning" />
+        <item itemvalue="Python.cleaning" />
         <item itemvalue="Python.ebird_api" />
       </list>
     </recent_temporary>
