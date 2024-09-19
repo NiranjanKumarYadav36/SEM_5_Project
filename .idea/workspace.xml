@@ -5,37 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc0482e2-6edc-4332-9d8a-2b8cb8f8d319" name="Changes" comment="added logic for jwt token">
-      <change afterPath="$PROJECT_DIR$/Backend/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/sqlite3.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_amphibians_observations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/ordering_columns.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Insertion/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Insertion/database_conversion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Insertion/db.sqlite3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/filtered_amphibians_observations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/management/commands/import_amphibians.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_aves_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_fish_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_insects_jan_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_mammals_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_mollusca_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_plants_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_reptiles_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_spiders_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/Mollusca_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/Plants_observations.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/Amphibions_observations.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/Birds_observations.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/Fish_observations.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/Mammals_observation.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/Reptiles_observations.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/birds.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/birds.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/ebird_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/ebird_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/Fetching/requirements.txtx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/Insertion/birds.sqlite" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/Data/Insertion/database_conversion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/wild_life/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/wild_life/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/pand_cleaning.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/pand_cleaning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/Reptiles_Observations.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/Reptiles_Observations.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/cleaning.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/cleaning.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,9 +50,11 @@
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "Python.aves_insertion.executor": "Run",
+    "Python.cleaning (1).executor": "Run",
     "Python.cleaning.executor": "Run",
     "Python.ebird_api.executor": "Run",
     "Python.ordering_columns.executor": "Run",
+    "Python.pand_cleaning (1).executor": "Run",
     "Python.pand_cleaning.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
@@ -91,7 +76,7 @@
       <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Backend\Data\Fetching" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.aves_insertion">
+  <component name="RunManager" selected="Python.pand_cleaning (1)">
     <configuration name="aves_insertion" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="WILDLIFE" />
       <option name="ENV_FILES" value="" />
@@ -114,7 +99,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="cleaning" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="cleaning (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="WILDLIFE" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -123,33 +108,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Backend/Data/Fetching/rawdata" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Backend/Data/Fetching/rawdata/cleaning.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="ebird_api" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="WILDLIFE" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Backend/Data/BirdData" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Backend/Data/BirdData/ebird_api.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/cleaning.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -172,6 +135,28 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Backend/Data/Fetching/filtered_data/ordering_columns.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pand_cleaning (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="WILDLIFE" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/pand_cleaning.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -204,11 +189,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.pand_cleaning (1)" />
+        <item itemvalue="Python.cleaning (1)" />
         <item itemvalue="Python.aves_insertion" />
         <item itemvalue="Python.ordering_columns" />
         <item itemvalue="Python.pand_cleaning" />
-        <item itemvalue="Python.cleaning" />
-        <item itemvalue="Python.ebird_api" />
       </list>
     </recent_temporary>
   </component>

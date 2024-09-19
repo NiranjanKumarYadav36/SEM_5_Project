@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-df = pd.read_csv('filtered_amphibians_observations.csv')
+df = pd.read_csv('filtered_spiders_observations.csv')
 
 df = df.drop(columns=['id'])
 
@@ -37,7 +37,7 @@ for c in df.columns:
 # df.insert(15, 'place_country_name', 'India')
 
 # df = df.iloc[:, [2, 3, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 28, 29, 30, 31, 32, 33, 34]]
-df = df.to_csv('../filtered_data/filtered_amphibians_observations.csv', index=False)
+df = df.to_csv('../filtered_data/filtered_spiders_observations.csv', index=False)
 
 
 
