@@ -29,10 +29,10 @@ class ProtectedView(APIView):
             raise AuthenticationFailed('Invalid token')
 
         # You can access the user ID from the payload
-        user_id = payload['id']
+        user_name = payload['username']
 
         # Fetch user from database (example)
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(username=user_name)
 
         return Response({
             'message': 'Protected content',
@@ -66,7 +66,7 @@ class LoginView(APIView):
 
         # JWT payload
         payload = {
-            'id': user.id,
+            'username': user.username,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),  # Set token expiration time
             'iat': datetime.datetime.utcnow()  # Issued at time
         }
@@ -100,7 +100,7 @@ class UserView(APIView):
             raise AuthenticationFailed('Invalid token')
 
         # Retrieve user from the payload id
-        user = User.objects.get(id=payload['id'])
+        user = User.objects.get(username=payload['username'])
         serializer = UserSerializer(user)
 
         return Response(serializer.data)
