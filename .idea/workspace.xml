@@ -5,20 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc0482e2-6edc-4332-9d8a-2b8cb8f8d319" name="Changes" comment="added logic for jwt token">
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_aves_observations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_fish_observations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_insects_jan_observations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_mammals_observations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_mollusca_observations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_plants_observations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_reptiles_observations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_spiders_observations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/Mollusca_observations.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/Plants_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/data/filtered_aves_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/data/filtered_fish_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/data/filtered_insects_jan_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/data/filtered_mammals_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/data/filtered_mollusca_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/data/filtered_plants_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/data/filtered_protozoa_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/data/filtered_reptiles_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/data/filtered_spiders_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/data/unique_usernames_with_emails.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_protozoa_observations.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/Protozoa_observations.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/data/filtered_amphibians_observations.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/data/filtered_amphibians_observations.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_amphibians_observations.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_amphibians_observations.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_spiders_observations.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/filtered_spiders_observations.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/pand_cleaning.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/pand_cleaning.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/Reptiles_Observations.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/Reptiles_Observations.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/username_and_email.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/filtered_data/username_and_email.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/cleaning.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/Data/Fetching/rawdata/cleaning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/management/commands/importamphibians.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/management/commands/importamphibians.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/wild_life/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/wild_life/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,11 +68,12 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/COLLEGE/Projects/SEM_5_Project/Backend/Data"
+    "last_opened_file_path": "D:/COLLEGE/Projects/SEM_5_Project/Backend/data"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\COLLEGE\Projects\SEM_5_Project\Backend\data" />
       <recent name="D:\COLLEGE\Projects\SEM_5_Project\Backend\Data" />
       <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Backend\Data\BirdData" />
       <recent name="D:\COLLEGE\min-project-sem5\WILDLIFE\Data\BirdData" />
