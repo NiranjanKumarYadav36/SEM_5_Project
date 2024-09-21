@@ -1,7 +1,7 @@
 import polars as pl
 from datetime import datetime, timedelta
 
-df = pl.read_csv('../rawdata/Plants_observations.csv')
+df = pl.read_csv('../rawdata/Amphibians_observations.csv')
 
 today = datetime.today().strftime('%Y-%m-%d')
 time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
@@ -34,7 +34,7 @@ df = df.with_columns([
     pl.col('species_guess').fill_null('Not provided'),
     pl.col('common_name').fill_null('Not provided'),
     pl.col('scientific_name').fill_null('Not provided'),
-    pl.col('iconic_taxon_name').fill_null('Plantae'),
+    pl.col('iconic_taxon_name').fill_null('Amphibia'),
     pl.col('time_observed_at').fill_null(f"{time} UTC"),
 ])
 
@@ -95,7 +95,7 @@ df = df.with_columns([
 #
 #
 #                            #### Writing data to Csv #####
-df.write_csv(file='../filtered_data/filtered_plants_observations.csv', include_header=True)
+df.write_csv(file='../filtered_data/filtered_amphibians_observations.csv', include_header=True)
 
 
 print(df.select('observed_on', 'created_at', 'updated_at', 'time_observed_at'))
