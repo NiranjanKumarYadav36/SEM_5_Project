@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -9,25 +8,28 @@ import {
   Autocomplete,
   CircularProgress,
 } from "@mui/material";
-import Navbar from "../../components/Navbar/Navbar";
 import SearchIcon from "@mui/icons-material/Search";
-import Filter from "../../components/Filter/filter";
+import Filter from "../../../components/Filter/filter";
 
-// Define a type for the options that will be returned by the API
 type Option = {
   name: string;
 };
 
-export default function Explore() {
+interface SearchComponentProps {
+  onSearch: (species: string, location: string) => void;
+}
+
+const SearchBar: React.FC<SearchComponentProps> = ({ onSearch }) => {
   const [species, setspecies] = useState("");
   const [location, setlocation] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [speciesOptions, setSpeciesOptions] = useState<Option[]>([]);
+  const [locationOptions, setLocationOptions] = useState<Option[]>([]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // Loading state
-  const [speciesOptions, setSpeciesOptions] = useState<Option[]>([]); // Species options from API
-  const [locationOptions, setLocationOptions] = useState<Option[]>([]); // Location recommendation options
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleApplyFilters = (filters: any) => {
-    console.log('Applied Filters:', filters);
+    console.log("Applied Filters:", filters);
     // Perform your API call to fetch filtered data here
   };
 
@@ -51,6 +53,26 @@ export default function Explore() {
     fetchSpecies();
   }, [species]);
 
+  // Fetch species options when user types in the species field
+  useEffect(() => {
+    if (species.length < 3) return;
+
+    const fetchSpecies = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `https://api.example.com/species?query=${species}` // Replace with your API endpoint
+        );
+        setSpeciesOptions(response.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSpecies();
+  }, [species]);
+
   // Fetch location options when user types in the location field
   useEffect(() => {
     if (location.length < 3) return;
@@ -59,9 +81,9 @@ export default function Explore() {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://api.example.com/locations?query=${location}` //replace with api endpoints
+          `https://api.example.com/locations?query=${location}` // Replace with your API endpoint
         );
-        setLocationOptions(response.data); // Assuming API returns an array of location options
+        setLocationOptions(response.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -72,22 +94,18 @@ export default function Explore() {
   }, [location]);
 
   // Handle search form submission
-  const handleSearch = (e: { preventDefault: () => void }) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // Perform search based on selected species and location
     if (!species && !location) {
       setError("No input found");
       return;
     }
     setError("");
-    // Make the actual search request or perform any action
-    console.log("Search with species:", species, "and location:", location);
+    onSearch(species, location);
   };
 
   return (
-    <Box>
-      <Navbar />
-      <Box
+    <Box
         display={"flex"}
         alignItems={"center"}
         justifyContent={"space-around"}
@@ -175,9 +193,9 @@ export default function Explore() {
               {error}
             </Typography>
           )}
-          
         </Box>
-      </Box>
     </Box>
   );
-}
+};
+
+export default SearchBar;

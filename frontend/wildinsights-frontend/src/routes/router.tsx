@@ -4,8 +4,12 @@ import React from "react";
 import Login from "../pages/LoginPage/Login";
 import Register from "../pages/RegisterPage/Register";
 import ProtectedRoute from "../components/ProtectiveRoutes/ProtectedRoute";
-import Explore from "../pages/ExplorePage/Explore";
+import Explore from "../pages/Explore/Explore/Explore";
 import PageNotFound from "../pages/PageNotFound/Pagenotfound";
+import Identifiers from "../pages/Explore/Identifiers/identifiers";
+import Observers from "../pages/Explore/Observers/observers";
+import Species from "../pages/Explore/Species/species";
+//import exploreLoader from "../components/Loaders/ExploreLoader/exploreloader";
 
 
 const router = createBrowserRouter([
@@ -27,7 +31,20 @@ const router = createBrowserRouter([
       children: [
         {
           path:"",
-          element: <Explore />
+          element: <Explore />,
+          //loader: exploreLoader,
+        },
+        {
+          path:"/explore/species",
+          element: <Species />,
+        },
+        {
+          path:"/explore/identifiers",
+          element: <Identifiers />,
+        },
+        {
+          path:"/explore/observers",
+          element: <Observers />,
         },
       ]
     },
