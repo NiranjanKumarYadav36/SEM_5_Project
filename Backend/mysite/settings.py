@@ -85,6 +85,14 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': BASE_DIR / 'db.sqlite3',
+     }
+ }
+
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -93,8 +101,16 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # }
 
 
-DATABASES = {
+'''DATABASES = {
     'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'wildlife',  # Your database name
+        'CLIENT': {
+            'host': 'localhost',  # Localhost for local MongoDB instance
+            'port': 27017,        # Default port for MongoDB
+            'username': '',        # Leave blank if not using authentication
+            'password': '',        # Leave blank if not using authentication
+        }
         'ENGINE': 'djongo',
         'NAME': 'wildlife',  # Your database name
         'CLIENT': {
@@ -105,7 +121,7 @@ DATABASES = {
         }
     }
 }
-
+'''
 
 
 
