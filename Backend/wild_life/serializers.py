@@ -2,7 +2,7 @@ from rest_framework.exceptions import ValidationError, AuthenticationFailed
 from django.core.validators import validate_email
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
-from .models import User
+from .models import *
 
 
 
@@ -56,3 +56,31 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+
+class HomePageSerializer(serializers.Serializer):
+    common_name = serializers.CharField()
+    image = serializers.CharField()
+
+
+
+
+class AllSpeciesSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = All_Species
+        fields = '__all__'
+
+
+class ObserversCountSerializers(serializers.Serializer):
+    username = serializers.CharField()
+    count = serializers.IntegerField()
+
+
+class SpeciesCountSerializers(serializers.Serializer):
+    common_name = serializers.CharField(max_length=255)
+    scientific_name = serializers.CharField(max_length=255)
+    image = serializers.CharField(required=False)  
+    observations_count = serializers.IntegerField()
+
+
