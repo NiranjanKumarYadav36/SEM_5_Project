@@ -9,7 +9,7 @@ import PageNotFound from "../pages/PageNotFound/Pagenotfound";
 import Identifiers from "../pages/Explore/Identifiers/identifiers";
 import Observers from "../pages/Explore/Observers/observers";
 import Species from "../pages/Explore/Species/species";
-//import exploreLoader from "../components/Loaders/ExploreLoader/exploreloader";
+import exploreLoader from "../components/Loaders/ExploreLoader/exploreloader";
 
 
 const router = createBrowserRouter([
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
         {
           path:"",
           element: <Explore />,
-          //loader: exploreLoader,
+          loader: exploreLoader,
         },
         {
           path:"/explore/species",

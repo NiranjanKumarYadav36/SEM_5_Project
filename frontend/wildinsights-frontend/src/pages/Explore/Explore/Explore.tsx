@@ -2,13 +2,14 @@ import React from "react";
 import { Box } from "@mui/material";
 import Navbar from "../../../components/Navbar/Navbar";
 import Maps from "../../../components/GoogleMaps/googlemaps";
-//import { useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import NavigationButtons from "../../../components/Explore/NavigationButton/navigationbutton";
 import SearchBar from "../../../components/Explore/SearchBar/searchbar";
 import Footer from "../../../components/Footer/footer";
 
 export default function Explore() {
-  //const data = useLoaderData();
+  const data = useLoaderData();
+  console.log(data);
 
   const handleSearch = (species: string, location: string) => {
     console.log("Search with species:", species, "and location:", location);

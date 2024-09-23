@@ -21,8 +21,7 @@ const ProtectedRoute = () => {
                 } else {
                     handleLogout();  // If token is invalid, log the user out
                 }
-            } catch (error) {
-                console.error('Token validation failed', error);
+            } catch {
                 handleLogout();  // If token validation fails, log the user out
             }
         };
