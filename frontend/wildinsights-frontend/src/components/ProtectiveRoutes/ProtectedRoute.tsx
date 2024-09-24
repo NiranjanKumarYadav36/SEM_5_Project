@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import axios from 'axios';
+import axiosclient from '../Apiclient/axiosclient';
 import useHandleLogout from '../Logout/logout'; 
+import LoadingScreen from '../LoadingScreen/Loading';
 
 
 const ProtectedRoute = () => {
@@ -11,10 +12,7 @@ const ProtectedRoute = () => {
     useEffect(() => {
         const checkToken = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/verify-token', {
-                    withCredentials: true,
-                });
-
+                const response = await axiosclient.get('/verify-token');
                 // Check the status of the response from backend
                 if (response.status === 200) {
                     setIsAuthenticated(true);  // Token is valid
@@ -31,7 +29,7 @@ const ProtectedRoute = () => {
 
     // While token check is still in progress
     if (isAuthenticated === null) {
-        return <div>Loading...</div>;  // You can show a loading spinner here
+        return <LoadingScreen />; 
     }
 
     // If not authenticated, redirect to login page

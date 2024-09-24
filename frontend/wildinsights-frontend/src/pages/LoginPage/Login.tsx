@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import {
   Container,
@@ -20,6 +19,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import HttpsIcon from "@mui/icons-material/Https";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import axiosclient from "../../components/Apiclient/axiosclient";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -41,17 +41,12 @@ const Login = () => {
       setError("Username and password are required");
       return;
     }
-
     try {
-      await axios.post(
-        "http://localhost:8000/api/login",
+      await axiosclient.post(
+        "/login", // Use relative path since baseURL is already defined in axiosclient
         {
           username, // Passing data here directly
           password,
-        },
-        {
-          headers: { "Content-Type": "application/json" }, // This is the correct place for headers
-          withCredentials: true, // Use `withCredentials` instead of `credentials`
         }
       );
       navigate("/");
@@ -66,16 +61,14 @@ const Login = () => {
         // Request was made but no response received
         setError("Server did not respond. Please try again later.");
       } else {
-        // Something else caused the error
         setError(`An error occurred: ${error.message}`);
       }
     }
   };
 
   const handleForgotPassword = () => {
-    // Here you can implement the logic to send the password reset email
     console.log("Email for password reset:", email);
-    setForgotPasswordOpen(false); // Close the dialog after submission
+    setForgotPasswordOpen(false);
   };
 
   return (
