@@ -80,8 +80,8 @@ class HomePageSerializer(serializers.Serializer):
 
 class AllSpeciesSerializers(serializers.ModelSerializer):
     image = serializers.URLField()    
-    latitude = serializers.DecimalField(max_digits=14, decimal_places=10, null=True, blank=True)
-    longitude = serializers.DecimalField(max_digits=14, decimal_places=10, null=True, blank=True)
+    latitude = serializers.DecimalField(max_digits=14, decimal_places=10,  allow_null=True, required=False)
+    longitude = serializers.DecimalField(max_digits=14, decimal_places=10,  allow_null=True, required=False)
     
     class Meta:
         model = All_Species
