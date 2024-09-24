@@ -147,7 +147,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = Protozoa.objects.values('image','latitude','longitude','user_id')
+        total_species = All_Species.objects.values('image','latitude','longitude','user_id')
         
         
         # Serialize the data
