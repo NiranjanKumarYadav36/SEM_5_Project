@@ -86,8 +86,26 @@ class AllSpeciesSerializers(serializers.ModelSerializer):
     class Meta:
         model = All_Species
         fields = ['image', 'latitude', 'longitude', 'user_id']
+        
+    
+    
+    def to_representation(self, instance):
+        # Use the default serialization
+        representation = super().to_representation(instance)
 
+        # Convert latitude and longitude to float
+        representation['latitude'] = float(representation['latitude']) if representation['latitude'] is not None else None
+        representation['longitude'] = float(representation['longitude']) if representation['longitude'] is not None else None
 
+        return representation
+    
+    
+    
+    
+    
+    
+    
+    
 class ObserversCountSerializers(serializers.Serializer):
     username = serializers.CharField()
     count = serializers.IntegerField()
