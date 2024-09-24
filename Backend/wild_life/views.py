@@ -147,7 +147,7 @@ class ExplorePageView(BaseProtectedview):
         # Return the serialized data in the response
         response = {
             'mesaage': 'Explore page content',
-            'data': list(total_species),
+            'data': serializer.data,
             'user': user.username,
         }
         
@@ -176,7 +176,7 @@ class ObserversCountView(BaseProtectedview):
         if serializer.is_valid():
             response = {
                 'message': 'Observers and their count',
-                'count': serializer.data,
+                'data': serializer.data,
                 'length': len(observations_count),
                 'user': user.username,
             }
@@ -210,7 +210,7 @@ class SpeciesCountView(BaseProtectedview):
 
         response = {
             'message': 'Species and their count',
-            'count': serializer.data,  # Serializer data contains the species count details
+            'data': serializer.data,  # Serializer data contains the species count details
             'length': len(species_count),
             'user': user.username,
         }

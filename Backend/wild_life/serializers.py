@@ -67,9 +67,11 @@ class HomePageSerializer(serializers.Serializer):
 
 
 class AllSpeciesSerializers(serializers.ModelSerializer):
+    image = serializers.URLField()    
+    
     class Meta:
         model = All_Species
-        fields = '__all__'
+        fields = ['image', 'latitude', 'longitude', 'user_id']
 
 
 class ObserversCountSerializers(serializers.Serializer):
