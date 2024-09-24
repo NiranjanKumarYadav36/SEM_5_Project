@@ -85,43 +85,43 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-
 DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': BASE_DIR / 'db.sqlite3',
+     }
+ }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
+'''DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'wildlife',  # Your database name
+        'CLIENT': {
+            'host': 'localhost',  # Localhost for local MongoDB instance
+            'port': 27017,        # Default port for MongoDB
+            'username': '',        # Leave blank if not using authentication
+            'password': '',        # Leave blank if not using authentication
+        }
+        'ENGINE': 'djongo',
+        'NAME': 'wildlife',  # Your database name
+        'CLIENT': {
+            'host': 'localhost',  # Localhost for local MongoDB instance
+            'port': 27017,        # Default port for MongoDB
+            'username': '',        # Leave blank if not using authentication
+            'password': '',        # Leave blank if not using authentication
+        }
     }
 }
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME': 'wildlife',  # Your database name
-#         'CLIENT': {
-#             'host': 'localhost',  # Localhost for local MongoDB instance
-#             'port': 27017,        # Default port for MongoDB
-#             'username': '',        # Leave blank if not using authentication
-#             'password': '',        # Leave blank if not using authentication
-#         }
-#     }
-# }
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME': 'wildlife',
-#         'ENFORCE_SCHEMA': False,
-#         'CLIENT': {
-#             'host': 'localhost',
-#             'port': 27017,
-#             'username': '',
-#             'password': '',
-#         }
-#     }
-# }
-
+'''
 
 
 
@@ -139,6 +139,20 @@ DATABASES = {
 #     }
 # }
 
+
+
+'''DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'wild',  # Your MongoDB database name
+        'CLIENT': {
+            'host': 'mongodb+srv://admin:q5tDwiZDPueNbL3@cluster0.oomr3.mongodb.net/wild?retryWrites=true&w=majority',
+            'username': 'admin', 
+            'password': 'q5tDwiZDPueNbL3',
+        }
+    }
+}
+'''
 
 
 

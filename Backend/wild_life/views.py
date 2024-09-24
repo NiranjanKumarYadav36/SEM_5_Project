@@ -113,7 +113,7 @@ class HomePageView(BaseProtectedview):
         
         for i in num_list:
             try:
-                speices = Amphibia.objects.get(id=i)
+                speices = All_Species.objects.get(id=i)
                 
                 if speices.image and speices.common_name:
                     speices_image.append({
@@ -139,7 +139,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = Amphibia.objects.all()
+        total_species = All_Species.objects.values('image','latitude','longitude','user_id')
         
         # Serialize the data
         serializer = AllSpeciesSerializers(total_species, many=True) # many required when serializing multiple reocrds
@@ -147,7 +147,7 @@ class ExplorePageView(BaseProtectedview):
         # Return the serialized data in the response
         response = {
             'mesaage': 'Explore page content',
-            'data': serializer.data,
+            'data': list(total_species),
             'user': user.username,
         }
         
@@ -162,7 +162,7 @@ class ObserversCountView(BaseProtectedview):
         observations_count = []
 
         for u in all_users:
-            count = Amphibia.objects.filter(user_id=u.username).count()
+            count = All_Species.objects.filter(user_id=u.username).count()
             observations_count.append({
                 'username': u.username,
                 'count': count,
@@ -176,7 +176,7 @@ class ObserversCountView(BaseProtectedview):
         if serializer.is_valid():
             response = {
                 'message': 'Observers and their count',
-                'data': serializer.data,
+                'count': serializer.data,
                 'length': len(observations_count),
                 'user': user.username,
             }
@@ -190,13 +190,13 @@ class SpeciesCountView(BaseProtectedview):
         user = self.get_user_from_token()
 
         # Group species by common_name and count the occurrences
-        species = Amphibia.objects.values('common_name', 'scientific_name').annotate(observations_count=Count('common_name'))
+        species = All_Species.objects.values('common_name', 'scientific_name').annotate(observations_count=Count('common_name'))
 
         species_count = []
         
         for s in species:
             # Fetch species details including the image based on common_name
-            species_details = Amphibia.objects.filter(common_name=s['common_name']).first()  # Get the first instance for the common_name
+            species_details = All_Species.objects.filter(common_name=s['common_name']).first()  # Get the first instance for the common_name
             
             species_count.append({
                 'common_name': s['common_name'],
@@ -210,14 +210,9 @@ class SpeciesCountView(BaseProtectedview):
 
         response = {
             'message': 'Species and their count',
-            'data': serializer.data,  # Serializer data contains the species count details
+            'count': serializer.data,  # Serializer data contains the species count details
             'length': len(species_count),
             'user': user.username,
         }
         
         return Response(response)
-
-
-
-
-    

@@ -34,18 +34,18 @@ class UserSerializer(serializers.ModelSerializer):
             raise ValidationError("Invalid email format.")
         
         if User.objects.filter(email=value).exists():
-            raise AuthenticationFailed("Email already registered. Please use a different email address.")
+            raise ValidationError("Email already registered. Please use a different email address.")
         return value
     
     
     def validate_password(self, value):
         if not value:
-            raise AuthenticationFailed("Password is required!")
+            raise ValidationError("Password is required!")
         
         try:
             validate_password(value)
-        except AuthenticationFailed as e:
-            raise AuthenticationFailed(e.messages)
+        except ValidationError as e:
+            raise ValidationError(e.messages)
         return value
     
     
@@ -82,5 +82,3 @@ class SpeciesCountSerializers(serializers.Serializer):
     scientific_name = serializers.CharField(max_length=255)
     image = serializers.CharField(required=False)  
     observations_count = serializers.IntegerField()
-
-
