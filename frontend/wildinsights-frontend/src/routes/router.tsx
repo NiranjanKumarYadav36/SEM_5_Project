@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomePage from "../pages/HomePage/Home";
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import Login from "../pages/LoginPage/Login";
 import Register from "../pages/RegisterPage/Register";
 import ProtectedRoute from "../components/ProtectiveRoutes/ProtectedRoute";
-import Explore from "../pages/Explore/Explore/Explore";
 import PageNotFound from "../pages/PageNotFound/Pagenotfound";
 import Identifiers from "../pages/Explore/Identifiers/identifiers";
 import Observers from "../pages/Explore/Observers/observers";
 import Species from "../pages/Explore/Species/species";
-import exploreLoader from "../components/Loaders/ExploreLoader/exploreloader";
+import LoadingScreen from "../components/LoadingScreen/Loading";
 
+const Explore = lazy(() => import("../pages/Explore/Explore/Explore"));
 
 const router = createBrowserRouter([
     {
@@ -31,8 +31,11 @@ const router = createBrowserRouter([
       children: [
         {
           path:"",
-          element: <Explore />,
-          loader: exploreLoader,
+          element: (
+            <Suspense fallback={<LoadingScreen />}>
+              <Explore />
+            </Suspense>
+          ),
         },
         {
           path:"/explore/species",
