@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (RegisterView, LoginView, ExplorePageView , Logout, ProtectedView, HomePageView, ObserversCountView, SpeciesCountView)
+from .views import (RegisterView, LoginView, ExplorePageView , Logout, ProtectedView, HomePageView, ObserversCountView, SpeciesCountView, IdentifiersView, UserProfileView)
 
 urlpatterns = [
     path('verify-token', ProtectedView.as_view(), name='verify-token'),
@@ -12,5 +12,10 @@ urlpatterns = [
     path('explore', ExplorePageView.as_view(), name='explore'),
     path('total-observers', ObserversCountView.as_view(), name='total-observers'),
     path('species-count', SpeciesCountView.as_view(), name='species-count'),
+    path('identifiers', IdentifiersView.as_view(), name='identifiers'),
     
+    path('user_profile',UserProfileView.as_view(), name='user_prfile'),
 ]
+
+
+

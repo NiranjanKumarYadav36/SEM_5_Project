@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password', 'last_login']
         
     def validate_username(self, value):     
         if not value:
@@ -84,3 +84,9 @@ class SpeciesCountSerializers(serializers.Serializer):
     scientific_name = serializers.CharField(max_length=255)
     image = serializers.CharField(required=False)  
     observations_count = serializers.IntegerField()
+    
+class IdentifiersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'identifications']
+        

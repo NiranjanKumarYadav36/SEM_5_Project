@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .models import *
-from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers, HomePageSerializer)
+from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers, HomePageSerializer, IdentifiersSerializer)
 import datetime, jwt
 from django.views.decorators.http import require_GET
 from rest_framework.decorators import api_view, permission_classes
@@ -14,6 +14,8 @@ from django.http import JsonResponse
 from functools import wraps
 from django.db.models import Count
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Sum
+from django.utils import timezone
 
 class BaseProtectedview(APIView):
     def get_user_from_token(self):
@@ -66,6 +68,12 @@ class LoginView(APIView):
         
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect Password')
+        
+        
+         # Update last_login field
+        user.last_login = datetime.datetime.today().date() # Update last_login to current time
+        user.save()  # Save the user instance to persist the change
+        
 
         # JWT payload
         payload = {
@@ -189,21 +197,25 @@ class SpeciesCountView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
 
-        # Group species by common_name and count the occurrences
-        species = All_Species.objects.values('common_name', 'scientific_name').annotate(observations_count=Count('common_name'))
-
-        species_count = []
+        models_name = [Amphibia, Plantae, Protozoa, Aves, Actinopterygii, Insecta]
         
-        for s in species:
-            # Fetch species details including the image based on common_name
-            species_details = All_Species.objects.filter(common_name=s['common_name']).first()  # Get the first instance for the common_name
+        species_count = []
+    
+        for i in models_name:
+            # Group species by common_name and count the occurrences
+            species = i.objects.values('common_name', 'scientific_name').annotate(observations_count=Count('common_name'))
+
             
-            species_count.append({
-                'common_name': s['common_name'],
-                'scientific_name': s['scientific_name'],
-                'image': species_details.image,  # Pass image as a URL
-                'observations_count': s['observations_count'],  # Attach count of occurrences
-            })
+            for s in species:
+                # Fetch species details including the image based on common_name
+                species_details = i.objects.filter(common_name=s['common_name']).first()  # Get the first instance for the common_name
+                
+                species_count.append({
+                    'common_name': s['common_name'],
+                    'scientific_name': s['scientific_name'],
+                    'image': species_details.image,  # Pass image as a URL
+                    'observations_count': s['observations_count'],  # Attach count of occurrences
+                })
 
         # Use the serializer to serialize the response data
         serializer = SpeciesCountSerializers(species_count, many=True)
@@ -213,6 +225,53 @@ class SpeciesCountView(BaseProtectedview):
             'data': serializer.data,  # Serializer data contains the species count details
             'length': len(species_count),
             'user': user.username,
+        }
+        
+        return Response(response)
+
+
+class IdentifiersView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
+
+        identifiers = User.objects.all().values('username', 'identifications').order_by('-identifications')
+
+        total_identifications = User.objects.aggregate(total=Sum('identifications'))['total'] or 0
+
+        serializer = IdentifiersSerializer(identifiers, many=True)
+
+        response = {
+            'message': 'Users and their identifiers count',
+            'data': serializer.data,
+            'total_identifications': total_identifications,
+            'user': user.username
+        }
+
+        return Response(response)
+
+
+class UserProfileView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
+        
+        # User.objects.datetimes
+        
+        observations = All_Species.objects.filter(user_id=user.username).count()
+        
+        # Format dates to remove "T"
+        date_joined = user.date_joined.date().isoformat().replace('T', ' ')
+        last_active = user.last_login.date().isoformat().replace('T', ' ')
+
+        data = {
+            'observations': observations,
+            'username': user.username,
+            'date_joined': date_joined,
+            'last_active': last_active,
+        }
+        
+        response = {
+            'message': 'user profile details',
+            'data': data
         }
         
         return Response(response)

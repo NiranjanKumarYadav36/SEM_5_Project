@@ -4,14 +4,17 @@ from datetime import datetime
 from django.utils.translation import gettext as _
 
 class User(AbstractUser):
+    last_login = models.DateTimeField(null=True, blank=True, default=None)
     username = models.CharField(max_length=100, unique=True, primary_key=True)
     email = models.EmailField(max_length=255, unique=True)
     password = models.CharField(max_length=255, )
+    identifications = models.BigIntegerField(default=0)
 
     REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.username
+    
     
 class All_Species(models.Model):
     observed_date = models.DateField(_('Observed Date'), null=False)
@@ -46,6 +49,7 @@ class All_Species(models.Model):
     def __str__(self):
         return f"{self.species_name_guess} observed by {self.user}"
 
+# Amphibians
 class Amphibia(models.Model):
     observed_date = models.DateField(_('Observed Date'), null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
