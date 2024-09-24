@@ -9,6 +9,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=255, unique=True)
     password = models.CharField(max_length=255, )
     identifications = models.BigIntegerField(default=0)
+    about = models.TextField(max_length=1000, null=True, blank=True)
 
     REQUIRED_FIELDS = []
 

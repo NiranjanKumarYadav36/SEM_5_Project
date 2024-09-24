@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .models import *
-from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers, HomePageSerializer, IdentifiersSerializer)
+from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers, HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer)
 import datetime, jwt
 from django.views.decorators.http import require_GET
 from rest_framework.decorators import api_view, permission_classes
@@ -267,6 +267,7 @@ class UserProfileView(BaseProtectedview):
             'username': user.username,
             'date_joined': date_joined,
             'last_active': last_active,
+            'identified': user.identifications,
         }
         
         response = {
@@ -275,3 +276,39 @@ class UserProfileView(BaseProtectedview):
         }
         
         return Response(response)
+
+
+
+class ProfileUpdateView(BaseProtectedview):
+    def post(self, request):
+        # Get the user from the token
+        user = self.get_user_from_token()
+        
+        
+        about = request.data.get('about', None)  
+
+        if about is None:
+            return Response({"error": "The 'about' field is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user.about = about
+            user.save()
+
+            serializer = UserProfileUpdateSerializer(user)
+            
+            return Response({
+                "success": "Profile updated successfully.",
+                "user": serializer.data  
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            # Handle any unexpected errors during the save process
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+# class SpeciesDetailsView(BaseProtectedview):
+#     def get(self, request):
+#         user = self.get_user_from_token()
+        
+        

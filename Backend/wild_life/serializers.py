@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'last_login']
+        fields = ['username', 'email', 'password', 'last_login', 'about']
         
     def validate_username(self, value):     
         if not value:
@@ -58,6 +58,18 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    about = serializers.CharField(required=False, allow_blank=True)
+    
+    class Meta:
+        model = User
+        fields = ['about']  # Only include fields you want to update
+    
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 class HomePageSerializer(serializers.Serializer):
     common_name = serializers.CharField()
@@ -68,6 +80,8 @@ class HomePageSerializer(serializers.Serializer):
 
 class AllSpeciesSerializers(serializers.ModelSerializer):
     image = serializers.URLField()    
+    latitude = serializers.DecimalField(max_digits=14, decimal_places=10, null=True, blank=True)
+    longitude = serializers.DecimalField(max_digits=14, decimal_places=10, null=True, blank=True)
     
     class Meta:
         model = All_Species
