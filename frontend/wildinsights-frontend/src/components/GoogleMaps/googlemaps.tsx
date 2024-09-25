@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box } from "@mui/material";
-import {
-  useJsApiLoader,
-  GoogleMap,
-  Marker,
-  InfoWindow,
-} from "@react-google-maps/api";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axiosclient from "../Apiclient/axiosclient";
 import LoadingScreen from "../LoadingScreen/Loading";
-
-const center = { lat: 20.5937, lng: 78.9629 };
+import {
+  AdvancedMarker,
+  APIProvider,
+  Map,
+  useMap,
+} from "@vis.gl/react-google-maps";
+import { MarkerClusterer, type Marker } from "@googlemaps/markerclusterer"; // Ensure correct Marker import
 
 interface ObservationData {
   image: URL;
@@ -20,24 +19,16 @@ interface ObservationData {
 }
 
 const Maps: React.FC = () => {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
-  });
-
   const [data, setData] = useState<ObservationData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [zoomLevel, setZoomLevel] = useState(4);
-  const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [selectedMarker, setSelectedMarker] = useState<ObservationData | null>(null);
 
   // Fetch data inside useEffect to load on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axiosclient.get("/explore");
-        console.log(response.data.data)
+        console.log(response.data.data);
         setData(response.data.data || []); // Set to an empty array if data is null or undefined
       } catch (err) {
         setError("Failed to load data.");
@@ -49,14 +40,6 @@ const Maps: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleMarkerClick = (item: ObservationData) => {
-    setSelectedMarker(item);
-  };
-
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
-
   if (loading) {
     return <LoadingScreen />;
   }
@@ -66,42 +49,83 @@ const Maps: React.FC = () => {
   }
 
   return (
-    <Box sx={{ position:"relative", height: "600px", width: "100%" }}>
-      <GoogleMap
-        mapContainerStyle={{ width: "100%", height: "100%" }}
-        center={center}
-        zoom={zoomLevel}
-        onLoad={(map) => setMap(map)}
-      >
-        {data.length === 0 ? (
-          <div>No data available.</div>
-        ) : (
-          data.map((item, index) => (
-            <Marker
-              key={index}
-              position={{ lat: item.latitude, lng: item.longitude }}
-              onClick={() => handleMarkerClick(item)}
-            />
-          ))
-        )}
-
-        {selectedMarker && (
-          <InfoWindow
-            position={{
-              lat: selectedMarker.latitude,
-              lng: selectedMarker.longitude,
-            }}
-            onCloseClick={() => setSelectedMarker(null)}
-          >
-            <div style={{ textAlign: "center" }}>
-              <img src={selectedMarker.image.toString()} alt={selectedMarker.username} style={{ width: '100px', height: 'auto' }} />
-              <p>{selectedMarker.username}</p>
-            </div>
-          </InfoWindow>
-        )}
-      </GoogleMap>
-    </Box>
+    <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
+      <Box sx={{ height: "600px", width: "100%" }}>
+        <Map
+          zoom={5}
+          center={{ lat: 20.5937, lng: 78.9629 }}
+          mapId={import.meta.env.VITE_GOOGLE_MAPS_ID}
+          gestureHandling="cooperative"
+          zoomControl={true}
+        >
+          <Markers
+            points={data.map((item, index) => ({
+              lat: item.latitude,
+              lng: item.longitude,
+              key: `${item.username}-${index}`, // Generate unique keys
+              ...item,
+            }))}
+          />
+        </Map>
+      </Box>
+    </APIProvider>
   );
 };
 
 export default Maps;
+
+// Updated types for points
+type Point = {
+  lat: number;
+  lng: number;
+  key: string;
+  image: URL;
+  username: string;
+};
+
+type Props = { points: Point[] };
+
+const Markers = ({ points }: Props) => {
+  const map = useMap();
+  const [markers, setMarkers] = useState<{ [key: string]: Marker }>({});
+  const clusterer = useRef<MarkerClusterer | null>(null);
+
+  useEffect(() => {
+    if (!map) return;
+    if (!clusterer.current) {
+      clusterer.current = new MarkerClusterer({ map });
+    }
+  }, [map]);
+
+  useEffect(() => {
+    clusterer.current?.clearMarkers();
+    clusterer.current?.addMarkers(Object.values(markers));
+  }, [markers]);
+
+  const setMarkerRef = (marker: Marker | null, key: string) => {
+    if (marker && markers[key]) return;
+    if (!marker && !markers[key]) return;
+
+    setMarkers((prev) => {
+      if (marker) {
+        return { ...prev, [key]: marker };
+      } else {
+        const newMarkers = { ...prev };
+        delete newMarkers[key];
+        return newMarkers;
+      }
+    });
+  };
+
+  return (
+    <>
+      {points.map((point) => (
+        <AdvancedMarker
+          position={{ lat: point.lat, lng: point.lng }} // Correct position format
+          key={point.key}
+          ref={(marker) => setMarkerRef(marker as unknown as Marker, point.key)} // Type casting to Marker
+        />
+      ))}
+    </>
+  );
+};

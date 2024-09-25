@@ -15,12 +15,10 @@ import theme from "./components/Themes/Theme.tsx";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <CssBaseline />
         <RouterProvider router={router} />
       </QueryClientProvider>
     </ThemeProvider>
-  </StrictMode>
 );
