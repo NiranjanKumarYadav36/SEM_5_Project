@@ -9,6 +9,7 @@ import Identifiers from "../pages/Explore/Identifiers/identifiers";
 import Observers from "../pages/Explore/Observers/observers";
 import Species from "../pages/Explore/Species/species";
 import LoadingScreen from "../components/LoadingScreen/Loading";
+import UserProfile  from "../pages/User/Profile/profile";
 
 const Explore = lazy(() => import("../pages/Explore/Explore/Explore"));
 
@@ -81,7 +82,7 @@ const router = createBrowserRouter([
         },
         {
           path:"/user/profile",
-          element: <div />
+          element: <UserProfile />
         },
       ]
     },
