@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import axiosclient from "../Apiclient/axiosclient";
 import LoadingScreen from "../LoadingScreen/Loading";
 import {
   AdvancedMarker,
@@ -10,35 +8,10 @@ import {
   useMap,
 } from "@vis.gl/react-google-maps";
 import { MarkerClusterer, type Marker } from "@googlemaps/markerclusterer"; // Ensure correct Marker import
-
-interface ObservationData {
-  image: URL;
-  latitude: number;
-  longitude: number;
-  username: string;
-}
+import { useObservationData } from "../Explore/DataFetcher/observationdata";
 
 const Maps: React.FC = () => {
-  const [data, setData] = useState<ObservationData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Fetch data inside useEffect to load on component mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosclient.get("/explore");
-        console.log(response.data.data);
-        setData(response.data.data || []); // Set to an empty array if data is null or undefined
-      } catch (err) {
-        setError("Failed to load data.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { data, loading, error } = useObservationData();
 
   if (loading) {
     return <LoadingScreen />;
@@ -50,13 +23,12 @@ const Maps: React.FC = () => {
 
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-      <Box sx={{ height: "600px", width: "100%" }}>
+      <div style={{ height: "600px", width: "100%" }}>
         <Map
-          zoom={5}
-          center={{ lat: 20.5937, lng: 78.9629 }}
+          defaultZoom={5}
+          defaultCenter={{ lat: 20.5937, lng: 78.9629 }}
           mapId={import.meta.env.VITE_GOOGLE_MAPS_ID}
-          gestureHandling="cooperative"
-          zoomControl={true}
+          gestureHandling= {"greedy"} // Override passive behavior to allow zoom
         >
           <Markers
             points={data.map((item, index) => ({
@@ -67,7 +39,7 @@ const Maps: React.FC = () => {
             }))}
           />
         </Map>
-      </Box>
+      </div>
     </APIProvider>
   );
 };
@@ -81,6 +53,8 @@ type Point = {
   key: string;
   image: URL;
   username: string;
+  category: string;
+  common_name: string;
 };
 
 type Props = { points: Point[] };
