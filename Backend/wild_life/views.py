@@ -245,29 +245,29 @@ class IdentifiersView(BaseProtectedview):
 class UserProfileView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
-        
-        # User.objects.datetimes
-        
+                
         observations = All_Species.objects.filter(user_id=user.username).count()
         
-        # Format dates to remove "T"
-        date_joined = user.date_joined.date().isoformat().replace('T', ' ')
-        last_active = user.last_login.date().isoformat().replace('T', ' ')
+        date_joined = user.date_joined.date()
+        last_active = user.last_login.date()
 
+        identified_count = user.identifications
+        
         data = {
             'observations': observations,
             'username': user.username,
             'date_joined': date_joined,
             'last_active': last_active,
-            'identified': user.identifications,
+            'identifications': identified_count, 
+            'bio': user.about
         }
-        
+
         response = {
-            'message': 'user profile details',
+            'message': 'User profile details',
             'data': data
         }
-        
-        return Response(response)
+
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class ProfileUpdateView(BaseProtectedview):
