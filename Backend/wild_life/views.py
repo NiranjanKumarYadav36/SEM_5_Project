@@ -3,19 +3,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .models import *
-from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers, HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer)
+from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers,
+                          HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer)
 import datetime, jwt
-from django.views.decorators.http import require_GET
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from django.conf import settings
-from django.http import JsonResponse
-from functools import wraps
 from django.db.models import Count
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum
-from django.utils import timezone
+from decimal import Decimal
 
 class BaseProtectedview(APIView):
     def get_user_from_token(self):
@@ -147,7 +142,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = All_Species.objects.values('image','latitude','longitude','user_id')
+        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')
         
         
         # Serialize the data
@@ -198,23 +193,19 @@ class SpeciesCountView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
 
-        models_name = [Amphibia, Plantae, Protozoa, Aves, Actinopterygii, Insecta]
+        models_name = [Amphibia, Plantae, Protozoa, Aves, Actinopterygii, Insecta, Arachnida, Mammalia, Mollusca, Reptilia]
         
         species_count = []
-    
-        for i in models_name:
-            # Group species by common_name and count the occurrences
-            species = i.objects.values('common_name', 'scientific_name').annotate(observations_count=Count('common_name'))
 
-            
+        for model in models_name:
+            # Group species by common_name and count the occurrences
+            species = model.objects.values('common_name', 'scientific_name', 'image').annotate(observations_count=Count('common_name'))
+
             for s in species:
-                # Fetch species details including the image based on common_name
-                species_details = i.objects.filter(common_name=s['common_name']).first()  # Get the first instance for the common_name
-                
                 species_count.append({
                     'common_name': s['common_name'],
                     'scientific_name': s['scientific_name'],
-                    'image': species_details.image,  # Pass image as a URL
+                    'image': s['image'],  # Directly access image from values()
                     'observations_count': s['observations_count'],  # Attach count of occurrences
                 })
 
@@ -279,7 +270,6 @@ class UserProfileView(BaseProtectedview):
         return Response(response)
 
 
-
 class ProfileUpdateView(BaseProtectedview):
     def post(self, request):
         # Get the user from the token
@@ -308,8 +298,73 @@ class ProfileUpdateView(BaseProtectedview):
 
 
 
-# class SpeciesDetailsView(BaseProtectedview):
-#     def get(self, request):
-#         user = self.get_user_from_token()
-        
-        
+class SpeciesDetailsView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
+
+        latitude = request.GET.get('latitude')
+        longitude = request.GET.get('longitude')
+        common_name = request.GET.get('common_name')
+        category = request.GET.get('category')
+
+        if not all([latitude, longitude, common_name, category]):
+            return Response({'message': 'Missing query parameters'}, status=400)
+
+        species_details = []
+
+        category_model_mapping = {
+            'Amphibia': Amphibia,
+            'Actinopterygii': Actinopterygii,
+            'Aves': Aves,
+            'Plantae': Plantae,
+            'Mollusca': Mollusca,
+            'Mammalia': Mammalia,
+            'Protozoa': Protozoa,
+            'Insecta': Insecta,
+            'Arachnida': Arachnida,
+            'Reptilia': Reptilia,
+        }
+
+
+        try:
+            latitude = Decimal(latitude)
+            longitude = Decimal(longitude)
+        except (TypeError, ValueError):
+            return Response({'message': 'Invalid latitude or longitude'}, status=400)
+
+
+        model = category_model_mapping.get(category)
+        if not model:
+            return Response({'message': 'Invalid category'}, status=400)
+
+
+        species = model.objects.filter(common_name=common_name, latitude=latitude, longitude=longitude).first()
+
+        if species:
+            species_details.append({
+                'common_name': species.common_name,
+                'scientific_name': species.scientific_name,
+                'species_name_guess': species.species_name_guess,
+                'image': species.image.url,
+                'latitude': species.latitude,
+                'longitude': species.longitude,
+                'observed_date': species.observed_date,
+                'time_of_observation': species.time_observed_at,
+                'no_identification_agreement': species.no_identification_agreement,
+                'no_identification_disagreement': species.no_identification_disagreement,
+                'city': species.city,
+                'location': species.location,
+                'state': species.state,
+                'country': species.country,
+                'uploaded_by': species.user.username if species.user else 'Unknown'  # Convert User to string (username)
+            })
+        else:
+            return Response({'message': 'Species not found'}, status=404)
+
+        response = {
+            'message': 'Species details fetched successfully',
+            'data': species_details,
+            'user': user.username,
+        }
+
+        return Response(response)

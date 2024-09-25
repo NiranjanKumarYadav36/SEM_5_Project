@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import (RegisterView, LoginView, ExplorePageView , Logout, ProtectedView, HomePageView, ObserversCountView, SpeciesCountView, IdentifiersView, UserProfileView, ProfileUpdateView)
+from .views import (RegisterView, LoginView, ExplorePageView , Logout, ProtectedView, 
+                    HomePageView, ObserversCountView, SpeciesCountView, IdentifiersView, 
+                    UserProfileView, ProfileUpdateView, SpeciesDetailsView)
 
 urlpatterns = [
     path('verify-token', ProtectedView.as_view(), name='verify-token'),
@@ -16,6 +18,8 @@ urlpatterns = [
     
     path('user_profile', UserProfileView.as_view(), name='user_prfile'),
     path('profile_update', ProfileUpdateView.as_view(), name='profile_update'),
+    
+    path('species_details/', SpeciesDetailsView.as_view(), name='species_details')
     
 ]
 
