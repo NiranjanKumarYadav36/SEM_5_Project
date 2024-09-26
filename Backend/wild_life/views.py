@@ -356,7 +356,7 @@ class SpeciesDetailsView(BaseProtectedview):
                 'location': species.location,
                 'state': species.state,
                 'country': species.country,
-                'uploaded_by': species.user.username if species.user else 'Unknown'  # Convert User to string (username)
+                'uploaded_by': species.user.username if species.user else 'Unknown'  
             })
         else:
             return Response({'message': 'Species not found'}, status=404)
