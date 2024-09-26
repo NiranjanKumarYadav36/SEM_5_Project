@@ -21,7 +21,7 @@ export default function Explore() {
         <NavigationButtons />
       </Box>
       <Box sx={{ position:"relative", height: "600px", width: "100%" }}>
-        <Maps /> {/* Render Map without data prop */}
+        <Maps />
       </Box>
       <Footer />
     </Box>
