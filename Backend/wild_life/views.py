@@ -108,7 +108,7 @@ class HomePageView(BaseProtectedview):
         
         num_list = []
         for i in range(5):
-            num = random.randint(1, 1000)
+            num = random.randint(1, 520000)
             num_list.append(num)
         
         print(num_list)
@@ -317,7 +317,6 @@ class ProfileUpdateView(BaseProtectedview):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
 class SpeciesDetailsView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
@@ -388,3 +387,4 @@ class SpeciesDetailsView(BaseProtectedview):
         }
 
         return Response(response)
+
