@@ -7,3 +7,6 @@
 /.myenv/
 
 db.sqlite3
+
+
+wild_life/migrations

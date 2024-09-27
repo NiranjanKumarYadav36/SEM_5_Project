@@ -7,20 +7,21 @@ interface ObserverData {
   count: number;
 }
 
-export const observerdata = () => {
-  const [observers, setObservers] = useState<ObserverData[]>([]);
+export const useObserverData = () => {
+  const [data, setData] = useState<ObserverData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
   const fetchData = async (pageNumber: number) => {
+    setLoading(true);
     try {
-      const response = await axiosclient.get(`/observers?page=${pageNumber}&limit=10`);
-      const newObservers = response.data.data || [];
-      
-      setObservers(prev => [...prev, ...newObservers]);
-      setHasMore(newObservers.length > 0); // Check if more data is available
+      const response = await axiosclient.get(`/total-observers?page=${pageNumber}&page_size=10`);
+      const newData = response.data.results || []; // Use 'results' from the paginated response
+
+      setData((prevData) => [...prevData, ...newData]); // Append new data to existing data
+      setHasMore(response.data.next !== null); // Check if there's a next page
     } catch (err) {
       setError("Failed to load data.");
     } finally {
@@ -29,14 +30,15 @@ export const observerdata = () => {
   };
 
   useEffect(() => {
-    fetchData(page);
+    fetchData(page); // Fetch data when the component mounts or when the page changes
   }, [page]);
 
+  // Function to load more data by incrementing the page number
   const loadMore = () => {
-    if (hasMore) {
-      setPage(prev => prev + 1); // Increment page to load more data
+    if (hasMore && !loading) {
+      setPage((prevPage) => prevPage + 1);
     }
   };
 
-  return { observers, loading, error, loadMore };
+  return { data, loading, error, loadMore, hasMore };
 };

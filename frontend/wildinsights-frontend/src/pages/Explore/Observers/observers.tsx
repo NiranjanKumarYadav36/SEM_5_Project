@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Box, Typography, List, ListItem, ListItemText } from "@mui/material";
 import Navbar from "../../../components/Navbar/Navbar";
 import NavigationButtons from "../../../components/Explore/NavigationButton/navigationbutton";
 import SearchBar from "../../../components/Explore/SearchBar/searchbar";
 import Footer from "../../../components/Footer/footer";
-import { observerdata } from "../../../components/Loaders/ExploreLoader/ObserversLoader/observerloader";
+import { useObserverData } from "../../../components/Loaders/ExploreLoader/ObserversLoader/observerloader"; // Import the custom hook
 import LoadingScreen from "../../../components/LoadingScreen/Loading";
 
 interface ObserverData {
@@ -14,21 +14,17 @@ interface ObserverData {
 }
 
 export default function Observers() {
-  const { data, loading, error, loadMore } = observerdata();
-  const [observers, setObservers] = useState<ObserverData[]>([]);
+  // Use the custom hook to get paginated observer data
+  const { data, loading, error, loadMore, hasMore } = useObserverData();
   const observerListRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (data) {
-      setObservers(prevObservers => [...prevObservers, ...data]); // Append new data
-    }
-  }, [data]);
-
+  // Handle the search functionality (currently a placeholder)
   const handleSearch = (species: string, location: string) => {
     console.log("Search with species:", species, "and location:", location);
     // Handle your search logic here
   };
 
+  // Infinite scroll handler
   const handleScroll = () => {
     if (
       observerListRef.current &&
@@ -39,6 +35,7 @@ export default function Observers() {
     }
   };
 
+  // Attach and detach the scroll event listener
   useEffect(() => {
     const currentObserverListRef = observerListRef.current;
     if (currentObserverListRef) {
@@ -51,12 +48,14 @@ export default function Observers() {
     };
   }, []);
 
-  if (loading && observers.length === 0) {
+  // Show loading screen if the data is still being loaded initially
+  if (loading && data.length === 0) {
     return <LoadingScreen />;
   }
 
+  // Show an error message if there's an error
   if (error) {
-    return <div>{error}</div>; // Display error if loading fails
+    return <div>{error}</div>;
   }
 
   return (
@@ -71,7 +70,7 @@ export default function Observers() {
         sx={{ maxHeight: "70vh", overflowY: "auto", padding: "10px" }}
       >
         <List>
-          {observers.map((observer: any, index: number) => (
+          {data.map((observer: ObserverData, index: number) => (
             <ListItem key={index}>
               <ListItemText
                 primary={observer.username || "Unknown Observer"}
@@ -80,7 +79,12 @@ export default function Observers() {
             </ListItem>
           ))}
         </List>
-        {loading && <Typography>Loading more observers...</Typography>}
+        {/* Display loading indicator at the bottom when more data is loading */}
+        {loading && (
+          <Typography sx={{ textAlign: "center", padding: "10px" }}>
+            Loading more observers...
+          </Typography>
+        )}
       </Box>
 
       <Footer />

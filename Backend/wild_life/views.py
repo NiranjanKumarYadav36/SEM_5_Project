@@ -11,6 +11,7 @@ from django.db.models import Count
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum
 from decimal import Decimal
+from rest_framework.pagination import PageNumberPagination
 
 class BaseProtectedview(APIView):
     def get_user_from_token(self):
@@ -107,7 +108,7 @@ class HomePageView(BaseProtectedview):
         
         num_list = []
         for i in range(5):
-            num = random.randint(1, 1000)
+            num = random.randint(1, 520000)
             num_list.append(num)
         
         print(num_list)
@@ -158,36 +159,47 @@ class ExplorePageView(BaseProtectedview):
         return Response(response)
 
 
+class CustomPagination(PageNumberPagination):
+    page_size = 10  
+    page_size_query_param = 'page_size'
+    max_page_size = 100  
+    
+    def get_paginated_response(self, data):
+        return Response({
+            'count': self.page.paginator.count,
+            'total_pages': self.page.paginator.num_pages,
+            'current_page': self.page.number,
+            'next': self.get_next_link(),
+            'previous': self.get_previous_link(),
+            'results': data
+        })
+    
 class ObserversCountView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
-        
-        all_users = User.objects.all()
-        observations_count = []
 
-        for u in all_users:
-            count = All_Species.objects.filter(user_id=u.username).count()
-            observations_count.append({
-                'username': u.username,
-                'count': count,
-            })  
-        
-        
-        # Pass the observations_count to the serializer
-        serializer = ObserversCountSerializers(data=observations_count, many=True)
-        
-        
-        if serializer.is_valid():
-            response = {
-                'message': 'Observers and their count',
-                'data': serializer.data,
-                'length': len(observations_count),
-                'user': user.username,
-            }
-            return Response(response)
-        
-        return Response(serializer.errors, status=400)
-    
+        observations_count = (
+            All_Species.objects
+            .values('user_id')                           
+            .annotate(observation_count=Count('id'))     
+            .order_by('-observation_count')                         
+        )
+
+        observations_list = [
+            {'username': item['user_id'], 'count': item['observation_count']}
+            for item in observations_count
+        ]
+
+
+        # Apply pagination to the results
+        paginator = CustomPagination()
+        paginated_data = paginator.paginate_queryset(observations_list, request)
+
+
+        serializer = ObserversCountSerializers(paginated_data, many=True)
+
+        return paginator.get_paginated_response(serializer.data)
+
 
 class SpeciesCountView(BaseProtectedview):
     def get(self, request):
@@ -230,8 +242,15 @@ class IdentifiersView(BaseProtectedview):
 
         total_identifications = User.objects.aggregate(total=Sum('identifications'))['total'] or 0
 
+        
+        # Apply pagination to the results
+        paginator = CustomPagination()
+        paginated_data = paginator.paginate_queryset(identifiers, request)
+
+        
         serializer = IdentifiersSerializer(identifiers, many=True)
 
+        
         response = {
             'message': 'Users and their identifiers count',
             'data': serializer.data,
@@ -239,7 +258,8 @@ class IdentifiersView(BaseProtectedview):
             'user': user.username
         }
 
-        return Response(response)
+        return paginator.get_paginated_response(serializer.data)
+
 
 
 class UserProfileView(BaseProtectedview):
@@ -355,7 +375,7 @@ class SpeciesDetailsView(BaseProtectedview):
                 'location': species.location,
                 'state': species.state,
                 'country': species.country,
-                'uploaded_by': species.user.username if species.user else 'Unknown'  # Convert User to string (username)
+                'uploaded_by': species.user.username if species.user else 'Unknown'  
             })
         else:
             return Response({'message': 'Species not found'}, status=404)
@@ -367,3 +387,4 @@ class SpeciesDetailsView(BaseProtectedview):
         }
 
         return Response(response)
+

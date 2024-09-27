@@ -6,6 +6,28 @@ from django.conf import settings
 import random
 from django.db import transaction
 
+
+# class Command(BaseCommand):
+#     help = "Getting state name from All_Species model"
+    
+#     def handle(self, *args,  **kwargs):
+
+#         data_dir = os.path.join(settings.BASE_DIR, 'data')
+#         csv_file_path = os.path.join(data_dir, 'wild_life_all_species.csv')
+
+#         df = pd.read_csv(csv_file_path)
+        
+#         uniue_state_value = df['state'].unique()
+
+#         print(sorted(uniue_state_value))
+
+        
+#         unique_state_df = pd.DataFrame(uniue_state_value, columns=['state'])
+#         output_file_path = os.path.join(data_dir, 'state_list.csv')
+#         unique_state_df.to_csv(output_file_path, index=False, header=False)        
+
+
+
 class Command(BaseCommand):
     help = "Import data from CSV file and create Amphibians entries"
 
