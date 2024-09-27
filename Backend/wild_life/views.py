@@ -297,7 +297,6 @@ class ProfileUpdateView(BaseProtectedview):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
 class SpeciesDetailsView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
