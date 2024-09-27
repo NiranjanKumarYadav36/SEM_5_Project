@@ -143,7 +143,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = Protozoa.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')
+        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')[:40000:4]
         
         
         # Serialize the data
@@ -160,7 +160,6 @@ class ExplorePageView(BaseProtectedview):
 
 
 class CustomPagination(PageNumberPagination):
-    page_size = 10  
     page_size_query_param = 'page_size'
     max_page_size = 100  
     
@@ -173,6 +172,7 @@ class CustomPagination(PageNumberPagination):
             'previous': self.get_previous_link(),
             'results': data
         })
+    
     
 class ObserversCountView(BaseProtectedview):
     def get(self, request):
@@ -240,26 +240,12 @@ class IdentifiersView(BaseProtectedview):
 
         identifiers = User.objects.all().values('username', 'identifications').order_by('-identifications')
 
-        total_identifications = User.objects.aggregate(total=Sum('identifications'))['total'] or 0
-
-        
-        # Apply pagination to the results
         paginator = CustomPagination()
         paginated_data = paginator.paginate_queryset(identifiers, request)
 
-        
-        serializer = IdentifiersSerializer(identifiers, many=True)
-
-        
-        response = {
-            'message': 'Users and their identifiers count',
-            'data': serializer.data,
-            'total_identifications': total_identifications,
-            'user': user.username
-        }
+        serializer = IdentifiersSerializer(paginated_data, many=True)
 
         return paginator.get_paginated_response(serializer.data)
-
 
 
 class UserProfileView(BaseProtectedview):
