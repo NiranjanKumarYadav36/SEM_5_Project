@@ -225,14 +225,12 @@ class SpeciesCountView(BaseProtectedview):
         # Use the serializer to serialize the response data
         serializer = SpeciesCountSerializers(species_count, many=True)
 
-        response = {
-            'message': 'Species and their count',
-            'data': serializer.data,  # Serializer data contains the species count details
-            'length': len(species_count),
-            'user': user.username,
-        }
+        # Paginate the results
+        paginator = CustomPagination()
+        paginated_species = paginator.paginate_queryset(serializer.data, request)
         
-        return Response(response)
+        
+        return paginator.get_paginated_response(paginated_species)
 
 
 class IdentifiersView(BaseProtectedview):
@@ -245,15 +243,8 @@ class IdentifiersView(BaseProtectedview):
         paginated_data = paginator.paginate_queryset(identifiers, request)
 
         
-        serializer = IdentifiersSerializer(identifiers, many=True)
+        serializer = IdentifiersSerializer(paginated_data, many=True)
 
-        
-        response = {
-            'message': 'Users and their identifiers count',
-            'data': serializer.data,
-            'total_identifications': total_identifications,
-            'user': user.username
-        }
 
         return paginator.get_paginated_response(serializer.data)
 

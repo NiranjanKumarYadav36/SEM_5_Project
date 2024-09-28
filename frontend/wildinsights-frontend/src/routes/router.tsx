@@ -10,6 +10,7 @@ import Observers from "../pages/Explore/Observers/observers";
 import Species from "../pages/Explore/Species/species";
 import LoadingScreen from "../components/LoadingScreen/Loading";
 import UserProfile  from "../pages/User/Profile/profile";
+import UserDashboard from "../pages/User/Dashboard/dashboard";
 
 const Explore = lazy(() => import("../pages/Explore/Explore/Explore"));
 
@@ -78,7 +79,7 @@ const router = createBrowserRouter([
       children: [
         {
           path:"/user/dashboard",
-          element: <div />
+          element: <UserDashboard />
         },
         {
           path:"/user/profile",
