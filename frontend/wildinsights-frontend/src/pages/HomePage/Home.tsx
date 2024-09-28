@@ -6,15 +6,15 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/footer";
 
 // Importing images for the How It Works section
-import recordObservationImage from '../../assets/images/record_observation.png';
-import shareWithNaturalistsImage from '../../assets/images/share_with_naturalists.png';
-import discussFindingsImage from '../../assets/images/discuss_findings.png';
-import natureFeature1 from "../../assets/images/nature_feature1.png"; // Image 1
-import natureFeature2 from "../../assets/images/nature_feature2.png"; // Image 2
-import natureFeature3 from "../../assets/images/nature_feature3.png"; // Image 3
-import natureFeature4 from "../../assets/images/nature_feature4.png"; // Image 4
-import natureFeature5 from "../../assets/images/nature_feature5.png"; // Image 5
-import natureFeature6 from "../../assets/images/nature_feature6.png"; // Image 6
+import recordObservationImage from '../../assets/Homepage/record_observation.png';
+import shareWithNaturalistsImage from '../../assets/Homepage/share_with_naturalists.png';
+import discussFindingsImage from '../../assets/Homepage/discuss_findings.png';
+import natureFeature1 from "../../assets/Homepage/nature_feature1.png"; // Image 1
+import natureFeature2 from "../../assets/Homepage/nature_feature2.png"; // Image 2
+import natureFeature3 from "../../assets/Homepage/nature_feature3.png"; // Image 3
+import natureFeature4 from "../../assets/Homepage/nature_feature4.png"; // Image 4
+import natureFeature5 from "../../assets/Homepage/nature_feature5.png"; // Image 5
+import natureFeature6 from "../../assets/Homepage/nature_feature6.png"; // Image 6
 
 // Define the type for the image gallery items
 interface ImageGalleryItem {
