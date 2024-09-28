@@ -39,11 +39,18 @@ function UserProfile() {
         fetchData();
     }, []); // Fetch once on mount
 
-    const handleBioSubmit = () => {
+    const handleBioSubmit = async () => {
         setIsEditing(false);
-        setBioMessage("Bio submitted successfully!");
-        console.log("Bio submitted:", bio);
+        try {
+            const response = await axios.post('/user_profile/update', { about: bio }); // Change to 'about' field
+            setBioMessage("Bio submitted successfully!");
+            console.log("Bio submitted successfully. Response:", response);
+        } catch (error) {
+            setBioMessage("Error submitting bio.");
+            console.error("Error updating bio:", error.response ? error.response.data : error.message);
+        }
     };
+    
 
     return (
         <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -151,7 +158,6 @@ function UserProfile() {
                                         <Button variant="contained" onClick={handleBioSubmit}>
                                             Submit
                                         </Button>
-                                        {bioMessage && <Typography color="success.main">{bioMessage}</Typography>}
                                     </>
                                 ) : (
                                     <>
@@ -165,6 +171,7 @@ function UserProfile() {
                                         >
                                             Edit Bio
                                         </Button>
+                                        {bioMessage && <Typography color="success.main">{bioMessage}</Typography>}
                                     </>
                                 )}
                             </Box>

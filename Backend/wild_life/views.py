@@ -278,9 +278,7 @@ class UserProfileView(BaseProtectedview):
 
 class ProfileUpdateView(BaseProtectedview):
     def post(self, request):
-        # Get the user from the token
         user = self.get_user_from_token()
-        
         
         about = request.data.get('about', None)  
 
@@ -299,7 +297,6 @@ class ProfileUpdateView(BaseProtectedview):
             }, status=status.HTTP_200_OK)
 
         except Exception as e:
-            # Handle any unexpected errors during the save process
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

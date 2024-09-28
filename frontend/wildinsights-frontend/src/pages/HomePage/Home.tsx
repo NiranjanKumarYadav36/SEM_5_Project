@@ -197,7 +197,7 @@ function HomePage() {
       {/* How It Works Section */}
       <Box sx={{ py: 4, backgroundColor: '#f9f9f9' }}>
         <Typography variant="h4" align="center" gutterBottom>
-          Nature At Your Fingerprints
+          How It Works
         </Typography>
         <Grid container justifyContent="center" spacing={2} sx={{ position: 'relative' }}>
           {howItWorksItems.map((item, index) => (
@@ -225,7 +225,7 @@ function HomePage() {
       {/* Nature Features Section */}
       <Box sx={{ py: 4, backgroundColor: '#74ac0020' }}>
         <Typography variant="h4" align="center" gutterBottom>
-          Explore Nature Features
+          Nature At Your Fingertips
         </Typography>
         <Grid container justifyContent="center" spacing={2}>
           {natureFeatures.map((feature) => (

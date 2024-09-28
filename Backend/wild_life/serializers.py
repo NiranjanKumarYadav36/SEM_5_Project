@@ -64,18 +64,17 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['about']  # Only include fields you want to update
-    
+
     def update(self, instance, validated_data):
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
         return instance
+    
 
 class HomePageSerializer(serializers.Serializer):
     common_name = serializers.CharField()
     image = serializers.CharField()
-
-
 
 
 class AllSpeciesSerializers(serializers.ModelSerializer):
@@ -100,12 +99,6 @@ class AllSpeciesSerializers(serializers.ModelSerializer):
         return representation
     
     
-    
-    
-    
-    
-    
-    
 class ObserversCountSerializers(serializers.Serializer):
     username = serializers.CharField()
     count = serializers.IntegerField()
@@ -116,6 +109,7 @@ class SpeciesCountSerializers(serializers.Serializer):
     scientific_name = serializers.CharField(max_length=255)
     image = serializers.CharField(required=False)  
     observations_count = serializers.IntegerField()
+    
     
 class IdentifiersSerializer(serializers.ModelSerializer):
     class Meta:
