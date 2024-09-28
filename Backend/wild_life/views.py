@@ -412,25 +412,20 @@ class SpeciesDetailsView(BaseProtectedview):
         return Response(response)
     
     
-
-from django.db.models import Count, F
-from rest_framework.response import Response
-
 class CoummnityPeopleView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
 
-        # Fetch top 10 users with their observation count and user details
         observations_count = (
             All_Species.objects
-            .select_related('user')  # Assuming All_Species has a ForeignKey to User
+            .select_related('user')  
             .values('user_id')
             .annotate(
                 observations_count=Count('id'),
                 identifications=F('user__identifications'),
                 last_login=F('user__last_login')
             )
-            .order_by('-identifications', '-last_login', '-observations_count')[:10]  # Order by identifications, last_login, and observations_count
+            .order_by('-identifications', '-last_login', '-observations_count')[:10]  
         )
 
         observations_list = [
