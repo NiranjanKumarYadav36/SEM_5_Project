@@ -84,7 +84,7 @@ function UserDashboard() {
                   padding: "6px 16px",
                   display: "flex", // Use flex to align icon and label
                   alignItems: "center", // Center the icon and text vertically
-                  color: activeItem === item.label ? "#4CAF50" : "#555",
+                  color: activeItem === item.label ? "#337ab7" : "#337ab7",
                   fontWeight: activeItem === item.label ? "bold" : "normal",
                   border: activeItem === item.label
                     ? "2px solid #4CAF50"

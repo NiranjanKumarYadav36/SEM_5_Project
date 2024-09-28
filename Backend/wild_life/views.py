@@ -12,6 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum
 from decimal import Decimal
 from rest_framework.pagination import PageNumberPagination
+from django.core.paginator import Paginator
 
 class BaseProtectedview(APIView):
     def get_user_from_token(self):
@@ -202,35 +203,35 @@ class ObserversCountView(BaseProtectedview):
         return paginator.get_paginated_response(serializer.data)
 
 
-class SpeciesCountView(BaseProtectedview):
-    def get(self, request):
-        user = self.get_user_from_token()
+# class SpeciesCountView(BaseProtectedview):
+#     def get(self, request):
+#         user = self.get_user_from_token()
 
-        models_name = [Amphibia, Plantae, Protozoa, Aves, Actinopterygii, Insecta, Arachnida, Mammalia, Mollusca, Reptilia]
+#         models_name = [Amphibia, Plantae, Protozoa, Aves, Actinopterygii, Insecta, Arachnida, Mammalia, Mollusca, Reptilia]
         
-        species_count = []
+#         species_count = []
 
-        for model in models_name:
-            # Group species by common_name and count the occurrences
-            species = model.objects.values('common_name', 'scientific_name', 'image').annotate(observations_count=Count('common_name'))
+#         for model in models_name:
+#             # Group species by common_name and count the occurrences
+#             species = model.objects.values('common_name', 'scientific_name', 'image').annotate(observations_count=Count('common_name'))
 
-            for s in species:
-                species_count.append({
-                    'common_name': s['common_name'],
-                    'scientific_name': s['scientific_name'],
-                    'image': s['image'],  # Directly access image from values()
-                    'observations_count': s['observations_count'],  # Attach count of occurrences
-                })
+#             for s in species:
+#                 species_count.append({
+#                     'common_name': s['common_name'],
+#                     'scientific_name': s['scientific_name'],
+#                     'image': s['image'],  # Directly access image from values()
+#                     'observations_count': s['observations_count'],  # Attach count of occurrences
+#                 })
 
-        # Use the serializer to serialize the response data
-        serializer = SpeciesCountSerializers(species_count, many=True)
+#         # Use the serializer to serialize the response data
+#         serializer = SpeciesCountSerializers(species_count, many=True)
 
-        # Paginate the results
-        paginator = CustomPagination()
-        paginated_species = paginator.paginate_queryset(serializer.data, request)
+#         # Paginate the results
+#         paginator = CustomPagination()
+#         paginated_species = paginator.paginate_queryset(serializer.data, request)
         
         
-        return paginator.get_paginated_response(paginated_species)
+#         return paginator.get_paginated_response(paginated_species)
 
 
 class IdentifiersView(BaseProtectedview):
@@ -371,3 +372,17 @@ class SpeciesDetailsView(BaseProtectedview):
         }
 
         return Response(response)
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+

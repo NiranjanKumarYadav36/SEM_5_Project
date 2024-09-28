@@ -16,7 +16,7 @@ export const useSpeciesData = () => {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1); // Add page state for pagination
   const [hasMore, setHasMore] = useState(true); // Track if there's more data to load
-  const itemsPerPage = 25; // Number of items per page (you can adjust this)
+  const itemsPerPage = 12; // Number of items per page (you can adjust this)
 
   // Fetch paginated data
   const fetchData = async (pageNumber: number) => {
