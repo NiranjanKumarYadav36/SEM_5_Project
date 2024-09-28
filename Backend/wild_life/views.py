@@ -143,7 +143,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = Mammalia.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')
+        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')[:40000:4]
         
         
         # Serialize the data
@@ -173,6 +173,7 @@ class CustomPagination(PageNumberPagination):
             'results': data
         })
 
+    
     
 class ObserversCountView(BaseProtectedview):
     def get(self, request):
@@ -240,16 +241,19 @@ class IdentifiersView(BaseProtectedview):
 
         identifiers = User.objects.all().values('username', 'identifications').order_by('-identifications')
 
-        total_identifications = User.objects.aggregate(total=Sum('identifications'))['total'] or 0
-
-        
-        # Apply pagination to the results
         paginator = CustomPagination()
         paginated_data = paginator.paginate_queryset(identifiers, request)
 
         
-        serializer = IdentifiersSerializer(paginated_data, many=True)
+        serializer = IdentifiersSerializer(identifiers, many=True)
 
+        
+        response = {
+            'message': 'Users and their identifiers count',
+            'data': serializer.data,
+            'total_identifications': total_identifications,
+            'user': user.username
+        }
 
         return paginator.get_paginated_response(serializer.data)
 
@@ -284,9 +288,7 @@ class UserProfileView(BaseProtectedview):
 
 class ProfileUpdateView(BaseProtectedview):
     def post(self, request):
-        # Get the user from the token
         user = self.get_user_from_token()
-        
         
         about = request.data.get('about', None)  
 
@@ -305,7 +307,6 @@ class ProfileUpdateView(BaseProtectedview):
             }, status=status.HTTP_200_OK)
 
         except Exception as e:
-            # Handle any unexpected errors during the save process
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

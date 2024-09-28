@@ -17,7 +17,7 @@ urlpatterns = [
     path('identifiers', IdentifiersView.as_view(), name='identifiers'),
     
     path('user_profile', UserProfileView.as_view(), name='user_prfile'),
-    path('profile_update', ProfileUpdateView.as_view(), name='profile_update'),
+    path('user_profile/update', ProfileUpdateView.as_view(), name='profile_update'),
     
     path('species_details/', SpeciesDetailsView.as_view(), name='species_details')
     
