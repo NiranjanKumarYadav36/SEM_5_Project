@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Grid, IconButton } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";

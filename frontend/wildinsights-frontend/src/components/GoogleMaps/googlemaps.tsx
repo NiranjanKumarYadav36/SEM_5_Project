@@ -12,6 +12,7 @@ import { useObservationData } from "../Explore/DataFetcher/observationdata";
 
 const Maps: React.FC = () => {
   const { data, loading, error } = useObservationData();
+  console.log(data);
 
   if (loading) {
     return <LoadingScreen />;

@@ -172,6 +172,7 @@ class CustomPagination(PageNumberPagination):
             'previous': self.get_previous_link(),
             'results': data
         })
+
     
     
 class ObserversCountView(BaseProtectedview):
@@ -243,7 +244,16 @@ class IdentifiersView(BaseProtectedview):
         paginator = CustomPagination()
         paginated_data = paginator.paginate_queryset(identifiers, request)
 
-        serializer = IdentifiersSerializer(paginated_data, many=True)
+        
+        serializer = IdentifiersSerializer(identifiers, many=True)
+
+        
+        response = {
+            'message': 'Users and their identifiers count',
+            'data': serializer.data,
+            'total_identifications': total_identifications,
+            'user': user.username
+        }
 
         return paginator.get_paginated_response(serializer.data)
 
@@ -370,4 +380,3 @@ class SpeciesDetailsView(BaseProtectedview):
         }
 
         return Response(response)
-
