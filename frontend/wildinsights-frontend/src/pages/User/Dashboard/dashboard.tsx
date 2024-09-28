@@ -9,6 +9,8 @@ import WorkIcon from '@mui/icons-material/Work';
 import Navbar from "../../../components/Navbar/Navbar";
 import Footer from "../../../components/Footer/footer";
 import axios from "../../../components/Apiclient/axiosclient";
+import Done from "@mui/icons-material/Done";
+
 
 function UserDashboard() {
   // State to track the active item
@@ -35,10 +37,10 @@ function UserDashboard() {
   // List of navigation items with labels, paths, and icons
   const navItems = [
     { label: "Home", path: "/", icon: <HomeIcon /> },
-    { label: "Profile", path: "/user/dashboard", icon: <PersonIcon /> },
-    { label: "Observations", path: "/observations", icon: <VisibilityIcon /> },
+    { label: "Profile", path: "/user/profile", icon: <PersonIcon /> },
+    { label: "Observations", path: "/user/dashboard", icon: <VisibilityIcon /> },
     { label: "Edit Observations", path: "/edit-observations", icon: <EditIcon /> },
-    { label: "Identifications", path: "/identifications", icon: <EditIcon /> },
+    { label: "Identifications", path: "/identifications", icon: <Done /> },
     { label: "Projects", path: "/community/projects", icon: <WorkIcon /> }
   ];
 
@@ -66,7 +68,7 @@ function UserDashboard() {
           }}
         >
           <Avatar
-            src="https://via.placeholder.com/150" // Replace with actual profile image source
+            src="https://via.placeholder.com" // Replace with actual profile image source
             alt="Profile Image"
             sx={{ width: 56, height: 56, mr: 2 }} // Styling for avatar size and spacing
           />

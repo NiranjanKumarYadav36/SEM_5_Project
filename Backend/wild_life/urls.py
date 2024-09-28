@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (RegisterView, LoginView, ExplorePageView , Logout, ProtectedView, 
                     HomePageView, ObserversCountView, SpeciesCountView, IdentifiersView, 
                     UserProfileView, ProfileUpdateView, SpeciesDetailsView, DashboardView,
-                    CoummnityPeopleView)
+                    CoummnityPeopleView, SpeciesIdentificationListView)
 
 urlpatterns = [
     path('verify-token', ProtectedView.as_view(), name='verify-token'),
@@ -19,11 +19,14 @@ urlpatterns = [
     
     path('user_profile', UserProfileView.as_view(), name='user_prfile'),
     path('user_profile/update', ProfileUpdateView.as_view(), name='profile_update'),
+    
     path('user_dashboard', DashboardView.as_view(), name="user_dashboard"),
     
     path('species_details/', SpeciesDetailsView.as_view(), name='species_details'),
     
-    path('community/people', CoummnityPeopleView.as_view(), name='community/people')
+    path('community/people', CoummnityPeopleView.as_view(), name='community/people'),
+    
+    path('species_identifications/', SpeciesIdentificationListView.as_view(), name='species_identifications')
     
 ]
 

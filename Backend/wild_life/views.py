@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .models import *
 from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers,
-                          HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer)
+                          HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer, SpeciesIdentifications)
 import datetime, jwt
 from rest_framework import status
 from django.db.models import Count, Subquery, OuterRef, F
@@ -13,6 +13,7 @@ from django.db.models import Sum
 from decimal import Decimal
 from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
+
 
 class BaseProtectedview(APIView):
     def get_user_from_token(self):
@@ -114,6 +115,7 @@ class DashboardView(BaseProtectedview):
         
         return Response(response)
 
+
 class HomePageView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
@@ -185,7 +187,6 @@ class CustomPagination(PageNumberPagination):
             'results': data
         })
 
-    
     
 class ObserversCountView(BaseProtectedview):
     def get(self, request):
@@ -315,7 +316,6 @@ class UserProfileView(BaseProtectedview):
         return Response(response, status=status.HTTP_200_OK)
 
 
-
 class ProfileUpdateView(BaseProtectedview):
     def post(self, request):
         user = self.get_user_from_token()
@@ -411,7 +411,7 @@ class SpeciesDetailsView(BaseProtectedview):
 
         return Response(response)
     
-    
+ 
 class CoummnityPeopleView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
@@ -439,3 +439,50 @@ class CoummnityPeopleView(BaseProtectedview):
         ]
 
         return Response({'observations': observations_list})
+
+
+class SpeciesIdentificationListView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
+        
+        species_details = All_Species.objects.values('image', 'common_name', 'scientific_name', 'no_identification_agreement', 'no_identification_disagreement', 'user_id')
+        
+        paginator = CustomPagination()
+        paginated_data = paginator.paginate_queryset(species_details, request)
+        
+        serializer = SpeciesIdentifications(paginated_data, many=True)
+        
+        return Response(serializer.data)
+
+    def post(self, request):
+        user = self.get_user_from_token()
+        
+        user_id = request.data.get('user')
+        image =  request.data.get('image')
+        scientific_name = request.data.get('scientific_name')
+        option = request.data.get('option')
+        
+         # Check if all necessary fields are provided
+        if not all([user_id, image, scientific_name, option]):
+            return Response({"message": "Missing data"}, status=400)
+
+        species = All_Species.objects.filter(user_id=user_id, image=image, scientific_name=scientific_name).first()
+            
+        if species:
+            user.identifications += 1
+            if option == 'yes':
+                species.no_identification_agreement += 1
+            elif option == 'no':
+                species.no_identification_disagreement -= 1
+
+            species.save()
+            user.save()
+            
+            response = {
+                'message': "identifed sucssfully"
+            }
+        
+            return Response(response)
+        
+        return Response({"message": "Species not found"}, status=404)
+    
