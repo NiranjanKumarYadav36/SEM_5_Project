@@ -6,7 +6,7 @@ interface SpeciesData {
   count: number;
   common_name: string;
   image: URL;
-  observation_count: number;
+  observations_count: number;
   scientific_name: string;
 }
 
@@ -16,7 +16,7 @@ export const useSpeciesData = () => {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1); // Add page state for pagination
   const [hasMore, setHasMore] = useState(true); // Track if there's more data to load
-  const itemsPerPage = 12; // Number of items per page (you can adjust this)
+  const itemsPerPage = 16; // Number of items per page (you can adjust this)
 
   // Fetch paginated data
   const fetchData = async (pageNumber: number) => {
@@ -38,11 +38,9 @@ export const useSpeciesData = () => {
   }, [page]); // Fetch new data when 'page' changes
 
   // Function to load more data (next page)
-  const loadMore = () => {
-    if (hasMore && !loading) {
-      setPage((prevPage) => prevPage + 1);
-    }
+  const loadPage = (pageNumber: number) => {
+    setPage(pageNumber);
   };
-
-  return { data, loading, error, loadMore, hasMore };
+  console.log(data)
+  return { data, loading, error, loadPage, page , hasMore };
 };

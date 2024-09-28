@@ -5,78 +5,134 @@ import os
 from django.conf import settings
 import random
 from django.db import transaction
+import csv
+import random
+from datetime import datetime, timedelta
+from django.core.management.base import BaseCommand
+
+# Function to generate a random datetime within the last two months
+# def generate_random_datetime_last_two_months():
+#     today = datetime.today()
+#     two_months_ago = today - timedelta(days=60)
+    
+#     # Generate a random number of days between 0 and 60 (to get a date within the last two months)
+#     random_days = random.randint(0, 60)
+#     # Generate a random number of seconds within a day (86400 seconds = 24 hours)
+#     random_seconds = random.randint(0, 86400)
+    
+#     # Calculate the random datetime
+#     random_datetime = two_months_ago + timedelta(days=random_days, seconds=random_seconds)
+#     return random_datetime
 
 
 # class Command(BaseCommand):
-#     help = "Getting state name from All_Species model"
+#     help = "Generate random datetimes (including time) within the last two months and store them in a CSV file."
     
-#     def handle(self, *args,  **kwargs):
+#     def handle(self, *args, **kwargs):
+#         # Generate 15,221 random datetimes
+#         random_datetimes = [generate_random_datetime_last_two_months() for _ in range(15221)]
 
-#         data_dir = os.path.join(settings.BASE_DIR, 'data')
-#         csv_file_path = os.path.join(data_dir, 'wild_life_all_species.csv')
+#         # Define the CSV file path
+#         csv_file_path = "random_datetimes.csv"
 
-#         df = pd.read_csv(csv_file_path)
-        
-#         uniue_state_value = df['state'].unique()
+#         # Write the datetimes to the CSV file
+#         with open(csv_file_path, mode='w', newline='') as file:
+#             writer = csv.writer(file)
+#             writer.writerow(["Random Datetime"])  # Header
+#             for date in random_datetimes:
+#                 writer.writerow([date.strftime('%Y-%m-%d %H:%M:%S')])  # Format the datetime
 
-#         print(sorted(uniue_state_value))
-
-        
-#         unique_state_df = pd.DataFrame(uniue_state_value, columns=['state'])
-#         output_file_path = os.path.join(data_dir, 'state_list.csv')
-#         unique_state_df.to_csv(output_file_path, index=False, header=False)        
-
+#         self.stdout.write(f"Successfully generated 15,221 random datetimes and stored them in {csv_file_path}")
+   
 
 
 class Command(BaseCommand):
-    help = "Import data from CSV file and create Amphibians entries"
+    help = "Update the 'last_login' field of User table using data from a CSV file."
 
     def handle(self, *args, **kwargs):
-        # Total sum you want
-        target_sum = 178278
+        # Define the path to the CSV file
+        data_dir = os.path.join(settings.BASE_DIR, 'data')  # Adjust if your data directory is different
+        csv_file_path = os.path.join(data_dir, 'random_datetimes.csv')
+        
+        # Read the CSV file
+        df = pd.read_csv(csv_file_path)
 
-        @transaction.atomic  # Ensure the operation is atomic
-        def assign_random_identifications():
-            users = User.objects.all()
-            user_count = users.count()
+        # Check if the 'Random Datetime' column exists in the CSV
+        if 'Random Datetime' not in df.columns:
+            self.stdout.write(self.style.ERROR("CSV file does not contain a 'Random Datetime' column."))
+            return
 
-            if user_count == 0:
-                self.stdout.write(self.style.WARNING("No users found."))
-                return
+        # Ensure the column data is treated as datetime objects
+        df['Random Datetime'] = pd.to_datetime(df['Random Datetime'], format='%Y-%m-%d %H:%M:%S')
+
+        # Get the list of all users
+        users = User.objects.all()
+
+        # Check if the number of users matches the number of rows in the CSV file
+        if len(users) != len(df):
+            self.stdout.write(self.style.ERROR(f"The number of users ({len(users)}) does not match the number of rows in the CSV ({len(df)})."))
+            return
+
+        # Update each user's `last_login` field with the corresponding datetime value
+        for user, random_datetime in zip(users, df['Random Datetime']):
+            user.last_login = random_datetime
+            user.save()  # Save the changes to the database
+
+        self.stdout.write(self.style.SUCCESS(f"Successfully updated 'last_login' for {len(users)} users using the data from {csv_file_path}."))
+
+        
+
+
+
+# class Command(BaseCommand):
+#     help = "Import data from CSV file and create Amphibians entries"
+
+#     def handle(self, *args, **kwargs):
+#         # Total sum you want
+#         target_sum = 178278
+
+#         @transaction.atomic  # Ensure the operation is atomic
+#         def assign_random_identifications():
+#             users = User.objects.all()
+#             user_count = users.count()
+
+#             if user_count == 0:
+#                 self.stdout.write(self.style.WARNING("No users found."))
+#                 return
             
-            # Step 1: Generate random numbers for all but the last user
-            random_identifications = [random.randint(0, target_sum // user_count) for _ in range(user_count - 1)]
+#             # Step 1: Generate random numbers for all but the last user
+#             random_identifications = [random.randint(0, target_sum // user_count) for _ in range(user_count - 1)]
             
-            # Step 2: Calculate the current sum and determine the last identification
-            current_sum = sum(random_identifications)
-            last_identification = target_sum - current_sum
+#             # Step 2: Calculate the current sum and determine the last identification
+#             current_sum = sum(random_identifications)
+#             last_identification = target_sum - current_sum
             
-            # Step 3: Ensure the last identification is non-negative
-            if last_identification < 0:
-                # Adjust the random_identifications to ensure the last one is non-negative
-                adjustment = abs(last_identification)
-                for i in range(user_count - 1):
-                    if random_identifications[i] >= adjustment:
-                        random_identifications[i] -= adjustment
-                        break
-                else:
-                    # If all identifications are too small, just set them to zero
-                    random_identifications = [0] * (user_count - 1)
-                    last_identification = target_sum  # All goes to the last user
+#             # Step 3: Ensure the last identification is non-negative
+#             if last_identification < 0:
+#                 # Adjust the random_identifications to ensure the last one is non-negative
+#                 adjustment = abs(last_identification)
+#                 for i in range(user_count - 1):
+#                     if random_identifications[i] >= adjustment:
+#                         random_identifications[i] -= adjustment
+#                         break
+#                 else:
+#                     # If all identifications are too small, just set them to zero
+#                     random_identifications = [0] * (user_count - 1)
+#                     last_identification = target_sum  # All goes to the last user
 
-            # Add the last identification
-            random_identifications.append(last_identification)
+#             # Add the last identification
+#             random_identifications.append(last_identification)
 
-            # Step 4: Shuffle the identifications for randomness
-            random.shuffle(random_identifications)
+#             # Step 4: Shuffle the identifications for randomness
+#             random.shuffle(random_identifications)
 
-            # Step 5: Assign the values to the users
-            for idx, user in enumerate(users):
-                user.identifications = random_identifications[idx]
-                user.save()
+#             # Step 5: Assign the values to the users
+#             for idx, user in enumerate(users):
+#                 user.identifications = random_identifications[idx]
+#                 user.save()
 
-        # Call the function
-        assign_random_identifications()
+#         # Call the function
+#         assign_random_identifications()
 
 
 # class Command(BaseCommand):

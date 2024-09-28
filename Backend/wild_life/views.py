@@ -7,7 +7,7 @@ from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountS
                           HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer)
 import datetime, jwt
 from rest_framework import status
-from django.db.models import Count
+from django.db.models import Count, Subquery, OuterRef, F
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum
 from decimal import Decimal
@@ -103,6 +103,17 @@ class Logout(APIView):
         return response
 
 
+class DashboardView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
+        
+        response = {
+            "message": "Dashboard details",
+            "username": user.username,
+        }
+        
+        return Response(response)
+
 class HomePageView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
@@ -144,7 +155,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')[:40000:4]
+        total_species = Protozoa.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')
         
         
         # Serialize the data
@@ -203,35 +214,55 @@ class ObserversCountView(BaseProtectedview):
         return paginator.get_paginated_response(serializer.data)
 
 
-# class SpeciesCountView(BaseProtectedview):
-#     def get(self, request):
-#         user = self.get_user_from_token()
+class SpeciesCountView(BaseProtectedview):
+    def get(self, request):
+        # Get the user from the request token
+        user = self.get_user_from_token()
 
-#         models_name = [Amphibia, Plantae, Protozoa, Aves, Actinopterygii, Insecta, Arachnida, Mammalia, Mollusca, Reptilia]
+        # List of models to query
+        models_name = [
+            Amphibia, Plantae, Protozoa, Aves, Actinopterygii, 
+            Insecta, Arachnida, Mammalia, Mollusca, Reptilia
+        ]
         
-#         species_count = []
+        # Dictionary to store unique species by common name
+        unique_species = {}
 
-#         for model in models_name:
-#             # Group species by common_name and count the occurrences
-#             species = model.objects.values('common_name', 'scientific_name', 'image').annotate(observations_count=Count('common_name'))
+        # Iterate through each model to get species count grouped by common name
+        for model in models_name:
+            # Group species by common_name and count the occurrences in the current model
+            species = model.objects.values('common_name', 'scientific_name', 'image').annotate(observations_count=Count('common_name'))
 
-#             for s in species:
-#                 species_count.append({
-#                     'common_name': s['common_name'],
-#                     'scientific_name': s['scientific_name'],
-#                     'image': s['image'],  # Directly access image from values()
-#                     'observations_count': s['observations_count'],  # Attach count of occurrences
-#                 })
+            # Iterate through the grouped species
+            for s in species:
+                common_name = s['common_name']
+                
+                # If the species is already in the dictionary, update the count
+                if common_name in unique_species:
+                    unique_species[common_name]['observations_count'] += s['observations_count']
+                else:
+                    # Add new species entry with the first occurrence of image and other details
+                    unique_species[common_name] = {
+                        'common_name': common_name,
+                        'scientific_name': s['scientific_name'],
+                        'image': s['image'],  # Store the first image found for this species
+                        'observations_count': s['observations_count'],
+                    }
 
-#         # Use the serializer to serialize the response data
-#         serializer = SpeciesCountSerializers(species_count, many=True)
+        # Convert the dictionary to a list for serialization
+        species_count = list(unique_species.values())
 
-#         # Paginate the results
-#         paginator = CustomPagination()
-#         paginated_species = paginator.paginate_queryset(serializer.data, request)
+        # Create an instance of the custom paginator
+        paginator = CustomPagination()
         
-        
-#         return paginator.get_paginated_response(paginated_species)
+        # Paginate the results using the custom paginator
+        paginated_species = paginator.paginate_queryset(species_count, request)
+
+        # Use the serializer to serialize the paginated data
+        serializer = SpeciesCountSerializers(paginated_species, many=True)
+
+        # Return paginated response using the custom paginator's get_paginated_response method
+        return paginator.get_paginated_response(serializer.data)
 
 
 class IdentifiersView(BaseProtectedview):
@@ -253,13 +284,19 @@ class IdentifiersView(BaseProtectedview):
 class UserProfileView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
-                
+        
         observations = All_Species.objects.filter(user_id=user.username).count()
         
-        date_joined = user.date_joined.date()
-        last_active = user.last_login.date()
+        date_joined = None
+        last_active = None
 
-        identified_count = user.identifications
+        if hasattr(user, 'date_joined'):
+            date_joined = user.date_joined.date() if user.date_joined else None
+        
+        if hasattr(user, 'last_login'):
+            last_active = user.last_login.date() if user.last_login else None
+
+        identified_count = getattr(user, 'identifications', 0)  # Default to 0 if not present
         
         data = {
             'observations': observations,
@@ -276,6 +313,7 @@ class UserProfileView(BaseProtectedview):
         }
 
         return Response(response, status=status.HTTP_200_OK)
+
 
 
 class ProfileUpdateView(BaseProtectedview):
@@ -374,15 +412,35 @@ class SpeciesDetailsView(BaseProtectedview):
         return Response(response)
     
     
-    
 
+from django.db.models import Count, F
+from rest_framework.response import Response
 
+class CoummnityPeopleView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
 
+        # Fetch top 10 users with their observation count and user details
+        observations_count = (
+            All_Species.objects
+            .select_related('user')  # Assuming All_Species has a ForeignKey to User
+            .values('user_id')
+            .annotate(
+                observations_count=Count('id'),
+                identifications=F('user__identifications'),
+                last_login=F('user__last_login')
+            )
+            .order_by('-identifications', '-last_login', '-observations_count')[:10]  # Order by identifications, last_login, and observations_count
+        )
 
+        observations_list = [
+            {
+                'username': item['user_id'],
+                'identifications': item['identifications'],
+                'observations_count': item['observations_count'],
+                'last_active': item['last_login'].date() if item['last_login'] else None
+            }
+            for item in observations_count
+        ]
 
-
-
-
-
-
-
+        return Response({'observations': observations_list})

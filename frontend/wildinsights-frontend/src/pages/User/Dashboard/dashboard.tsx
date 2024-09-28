@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Box, Button, Typography, Avatar } from "@mui/material"; // Import Avatar component
 import HomeIcon from '@mui/icons-material/Home';
@@ -8,10 +8,29 @@ import EditIcon from '@mui/icons-material/Edit';
 import WorkIcon from '@mui/icons-material/Work';
 import Navbar from "../../../components/Navbar/Navbar";
 import Footer from "../../../components/Footer/footer";
+import axios from "../../../components/Apiclient/axiosclient";
 
 function UserDashboard() {
   // State to track the active item
   const [activeItem, setActiveItem] = useState("Home");
+  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await axios.get("/user_dashboard");
+            setUsername(response.data.username)
+        }catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false);
+          }
+      };
+      fetchData();
+  }, []); // Fetch once on mount
+
 
   // List of navigation items with labels, paths, and icons
   const navItems = [
@@ -52,7 +71,7 @@ function UserDashboard() {
             sx={{ width: 56, height: 56, mr: 2 }} // Styling for avatar size and spacing
           />
           <Typography variant="h6" sx={{ color: "#333" }}>
-            John Doe {/* Replace with actual username */}
+            {loading ? '...' : username }
           </Typography>
         </Box>
 

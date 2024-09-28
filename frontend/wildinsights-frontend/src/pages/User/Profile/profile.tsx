@@ -129,14 +129,14 @@ function UserProfile() {
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '1rem' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <CalendarToday sx={{ marginRight: '0.5rem', fontSize: 20 }} />
-                                    <Typography variant="body2">{loading ? '...' : joined_date}</Typography>
+                                    <Typography variant="body2">Joined: {loading ? '...' : joined_date}</Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <AccessTime sx={{ marginRight: '0.5rem', fontSize: 20 }} />
-                                    <Typography variant="body2">{loading ? '...' : last_active}</Typography>
+                                    <Typography variant="body2">LastActive: {loading ? '...' : last_active}</Typography>
                                 </Box>
                                 <Link to="/home" style={{ textDecoration: 'none', color: '#1976d2' }}>
-                                    <Typography variant="body2">View WildSightings</Typography>
+                                    <Typography variant="body2">WildSightings</Typography>
                                 </Link>
                             </Box>
 

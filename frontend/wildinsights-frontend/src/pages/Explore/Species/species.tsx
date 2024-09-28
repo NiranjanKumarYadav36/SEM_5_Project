@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import {
@@ -7,7 +8,6 @@ import {
   CardMedia,
   Typography,
   Grid,
-  Pagination,
   CircularProgress,
 } from "@mui/material";
 import Navbar from "../../../components/Navbar/Navbar";
@@ -18,27 +18,29 @@ import { useSpeciesData } from "../../../components/Loaders/ExploreLoader/Specie
 import LoadingScreen from "../../../components/LoadingScreen/Loading";
 
 export default function Species() {
-  const { data, loading, error, loadMore, hasMore } = useSpeciesData();
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12; // Number of items per page
+  const { data, loading, error, loadPage, page, hasMore } = useSpeciesData();
+  const itemsPerPage = 16; // Number of items per page
 
-  // Handle page change
-  const handlePageChange = (
-    _event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setCurrentPage(value);
-    loadMore(); // Trigger loading more data when navigating to the next page
+  const currentData = data.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
+
+  const handleNextPage = () => {
+    if (hasMore) {
+      loadPage(page + 1); // Load the next page if there's more data
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      loadPage(page - 1); // Load the previous page if we're past the first page
+    }
   };
 
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
     event.currentTarget.src = "/fallback-image.jpg"; // Replace with your fallback image path
   };
-
-  // Paginate data locally for the UI
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentData = data?.slice(indexOfFirstItem, indexOfLastItem);
 
   if (loading && data.length === 0) {
     return <LoadingScreen />; // Show loading screen only when no data is loaded yet
@@ -70,7 +72,6 @@ export default function Species() {
           flexGrow: 1,
           padding: "10px",
           margin: "20px",
-
           display: "flex",
           justifyContent: "center",
         }}
@@ -108,7 +109,7 @@ export default function Species() {
                       {item.common_name || "Unknown Species"}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Count: {item.count || "N/A"}
+                      Count: {item.observations_count || "N/A"}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -118,31 +119,23 @@ export default function Species() {
       </Box>
 
       {/* Pagination Controls */}
-      <Box display="flex" justifyContent="center" mt={4}>
-        <Pagination
-          count={Math.ceil(data.length / itemsPerPage)} // Total number of pages
-          page={currentPage}
-          onChange={handlePageChange}
-          color="primary"
-        />
+      <Box display="flex" justifyContent="space-between" mt={4}>
+        <Typography
+          variant="body2"
+          sx={{ cursor: "pointer", color: page > 1 ? "blue" : "grey" }}
+          onClick={handlePreviousPage}
+        >
+          Previous Page
+        </Typography>
+        <Typography>Page {page}</Typography>
+        <Typography
+          variant="body2"
+          sx={{ cursor: "pointer", color: hasMore ? "blue" : "grey" }}
+          onClick={handleNextPage}
+        >
+          Next Page
+        </Typography>
       </Box>
-
-      {/* Load more data when available */}
-      {hasMore && (
-        <Box display="flex" justifyContent="center" mt={2}>
-          {loading ? (
-            <CircularProgress />
-          ) : (
-            <Typography
-              variant="body2"
-              onClick={loadMore}
-              sx={{ cursor: "pointer", color: "blue" }}
-            >
-              Load more species...
-            </Typography>
-          )}
-        </Box>
-      )}
 
       <Footer />
     </Box>
