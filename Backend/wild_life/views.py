@@ -143,7 +143,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')[:40000:4]
+        total_species = Protozoa.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')
         
         
         # Serialize the data
@@ -204,33 +204,53 @@ class ObserversCountView(BaseProtectedview):
 
 class SpeciesCountView(BaseProtectedview):
     def get(self, request):
+        # Get the user from the request token
         user = self.get_user_from_token()
 
-        models_name = [Amphibia, Plantae, Protozoa, Aves, Actinopterygii, Insecta, Arachnida, Mammalia, Mollusca, Reptilia]
+        # List of models to query
+        models_name = [
+            Amphibia, Plantae, Protozoa, Aves, Actinopterygii, 
+            Insecta, Arachnida, Mammalia, Mollusca, Reptilia
+        ]
         
-        species_count = []
+        # Dictionary to store unique species by common name
+        unique_species = {}
 
+        # Iterate through each model to get species count grouped by common name
         for model in models_name:
-            # Group species by common_name and count the occurrences
+            # Group species by common_name and count the occurrences in the current model
             species = model.objects.values('common_name', 'scientific_name', 'image').annotate(observations_count=Count('common_name'))
 
+            # Iterate through the grouped species
             for s in species:
-                species_count.append({
-                    'common_name': s['common_name'],
-                    'scientific_name': s['scientific_name'],
-                    'image': s['image'],  # Directly access image from values()
-                    'observations_count': s['observations_count'],  # Attach count of occurrences
-                })
+                common_name = s['common_name']
+                
+                # If the species is already in the dictionary, update the count
+                if common_name in unique_species:
+                    unique_species[common_name]['observations_count'] += s['observations_count']
+                else:
+                    # Add new species entry with the first occurrence of image and other details
+                    unique_species[common_name] = {
+                        'common_name': common_name,
+                        'scientific_name': s['scientific_name'],
+                        'image': s['image'],  # Store the first image found for this species
+                        'observations_count': s['observations_count'],
+                    }
 
-        # Use the serializer to serialize the response data
-        serializer = SpeciesCountSerializers(species_count, many=True)
+        # Convert the dictionary to a list for serialization
+        species_count = list(unique_species.values())
 
-        # Paginate the results
+        # Create an instance of the custom paginator
         paginator = CustomPagination()
-        paginated_species = paginator.paginate_queryset(serializer.data, request)
         
-        
-        return paginator.get_paginated_response(paginated_species)
+        # Paginate the results using the custom paginator
+        paginated_species = paginator.paginate_queryset(species_count, request)
+
+        # Use the serializer to serialize the paginated data
+        serializer = SpeciesCountSerializers(paginated_species, many=True)
+
+        # Return paginated response using the custom paginator's get_paginated_response method
+        return paginator.get_paginated_response(serializer.data)
 
 
 class IdentifiersView(BaseProtectedview):
