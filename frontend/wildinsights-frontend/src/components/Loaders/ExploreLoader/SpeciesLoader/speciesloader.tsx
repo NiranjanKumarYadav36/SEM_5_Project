@@ -7,27 +7,42 @@ interface SpeciesData {
   common_name: string;
   image: URL;
   observation_count: number;
-  scientific_name : string
+  scientific_name: string;
 }
 
-export const speciesdata = () => {
+export const useSpeciesData = () => {
   const [data, setData] = useState<SpeciesData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1); // Add page state for pagination
+  const [hasMore, setHasMore] = useState(true); // Track if there's more data to load
+  const itemsPerPage = 25; // Number of items per page (you can adjust this)
+
+  // Fetch paginated data
+  const fetchData = async (pageNumber: number) => {
+    setLoading(true);
+    try {
+      const response = await axiosclient.get(`/species-count?page=${pageNumber}&page_size=${itemsPerPage}`);
+      const newSpecies = response.data.results || []; // Assuming 'results' contains the paginated data
+      setData((prevData) => [...prevData, ...newSpecies]); // Append new data to existing data
+      setHasMore(response.data.next !== null); // If 'next' is not null, there are more pages
+    } catch (err) {
+      setError("Failed to load data.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosclient.get("/species-count");
-        setData(response.data.data || []); // Set to an empty array if data is null or undefined
-      } catch (err) {
-        setError("Failed to load data.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+    fetchData(page);
+  }, [page]); // Fetch new data when 'page' changes
 
-  return { data, loading, error };
+  // Function to load more data (next page)
+  const loadMore = () => {
+    if (hasMore && !loading) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  return { data, loading, error, loadMore, hasMore };
 };

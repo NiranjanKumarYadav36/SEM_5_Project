@@ -19,7 +19,7 @@ export const useObservationData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosclient.get("/total-observers");
+        const response = await axiosclient.get("/explore");
         setData(response.data.data || []); // Set to an empty array if data is null or undefined
       } catch (err) {
         setError("Failed to load data.");

@@ -6,9 +6,9 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/footer";
 
 // Importing images for the How It Works section
-import recordObservationImage from '../../assets/images/record_observation.png';
-import shareWithNaturalistsImage from '../../assets/images/share_with_naturalists.png';
-import discussFindingsImage from '../../assets/images/discuss_findings.png';
+import recordObservationImage from '../../assets/Homepage/record_observation.png';
+import shareWithNaturalistsImage from '../../assets/Homepage/share_with_naturalists.png';
+import discussFindingsImage from '../../assets/Homepage/discuss_findings.png';
 
 // Define the type for the image gallery items
 interface ImageGalleryItem {

@@ -100,12 +100,7 @@ class AllSpeciesSerializers(serializers.ModelSerializer):
         return representation
     
     
-    
-    
-    
-    
-    
-    
+        
 class ObserversCountSerializers(serializers.Serializer):
     username = serializers.CharField()
     count = serializers.IntegerField()

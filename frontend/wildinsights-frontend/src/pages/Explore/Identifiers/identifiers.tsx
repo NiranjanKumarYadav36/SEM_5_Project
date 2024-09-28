@@ -1,5 +1,14 @@
-import React, { useEffect, useRef } from "react";
-import { Box, Typography, List, ListItem, ListItemText } from "@mui/material";
+import React from "react";
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemText,
+  ListSubheader,
+  Button,
+  CircularProgress,
+  Typography,
+} from "@mui/material";
 import Navbar from "../../../components/Navbar/Navbar";
 import NavigationButtons from "../../../components/Explore/NavigationButton/navigationbutton";
 import SearchBar from "../../../components/Explore/SearchBar/searchbar";
@@ -14,38 +23,26 @@ interface IdentifierData {
 
 export default function Identifiers() {
   // Use the custom hook to get paginated identifier data
-  const { data, loading, error, loadMore, hasMore } = useIdentifierData();
-  const identifierListRef = useRef<HTMLDivElement | null>(null);
+  const { data, loading, error, loadPage, hasMore, page } = useIdentifierData();
 
-  // Handle the search functionality (currently a placeholder)
   const handleSearch = (species: string, location: string) => {
     console.log("Search with species:", species, "and location:", location);
     // Handle your search logic here
   };
 
-  // Infinite scroll handler
-  const handleScroll = () => {
-    if (
-      identifierListRef.current &&
-      identifierListRef.current.scrollTop + identifierListRef.current.clientHeight >=
-        identifierListRef.current.scrollHeight - 10 // Added a buffer of 10px to trigger earlier
-    ) {
-      loadMore(); // Load more identifiers when scrolled to the bottom
+  // Handle loading the next page
+  const handleNextPage = () => {
+    if (hasMore) {
+      loadPage(page + 1); // Load the next page
     }
   };
 
-  // Attach and detach the scroll event listener
-  useEffect(() => {
-    const currentIdentifierListRef = identifierListRef.current;
-    if (currentIdentifierListRef) {
-      currentIdentifierListRef.addEventListener("scroll", handleScroll);
+  // Handle loading the previous page
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      loadPage(page - 1); // Load the previous page
     }
-    return () => {
-      if (currentIdentifierListRef) {
-        currentIdentifierListRef.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
+  };
 
   // Show loading screen if the data is still being loaded initially
   if (loading && data.length === 0) {
@@ -63,12 +60,9 @@ export default function Identifiers() {
       <SearchBar onSearch={handleSearch} />
       <NavigationButtons />
 
-      {/* Identifier List with Infinite Scrolling */}
-      <Box
-        ref={identifierListRef}
-        sx={{ maxHeight: "70vh", overflowY: "auto", padding: "10px" }}
-      >
-        <List>
+      {/* Identifier List with Pagination */}
+      <Box sx={{ maxHeight: "70vh", overflowY: "auto", padding: "10px", background: "lightgrey" }}>
+        <List subheader={<ListSubheader>Settings</ListSubheader>}>
           {data.map((identifier: IdentifierData, index: number) => (
             <ListItem key={index}>
               <ListItemText
@@ -78,12 +72,24 @@ export default function Identifiers() {
             </ListItem>
           ))}
         </List>
-        {/* Display loading indicator at the bottom when more data is loading */}
-        {loading && (
-          <Typography sx={{ textAlign: "center", padding: "10px" }}>
-            Loading more identifiers...
+
+        {/* Pagination Controls */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
+          <Button onClick={handlePreviousPage} disabled={page === 1 || loading}>
+            Previous
+          </Button>
+          {loading && <CircularProgress size={24} />}
+          <Button onClick={handleNextPage} disabled={!hasMore || loading}>
+            Next
+          </Button>
+        </Box>
+
+        {/* Pagination Status */}
+        <Box sx={{ textAlign: "center", marginTop: "10px" }}>
+          <Typography>
+            Page {page} of 120
           </Typography>
-        )}
+        </Box>
       </Box>
 
       <Footer />

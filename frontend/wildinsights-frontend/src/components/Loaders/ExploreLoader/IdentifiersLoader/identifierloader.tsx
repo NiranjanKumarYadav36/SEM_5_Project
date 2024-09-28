@@ -13,16 +13,19 @@ export const useIdentifierData = () => {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  
+  const itemsPerPage = 25;
 
-  // Fetch data with pagination support
+  // Fetch data for a specific page
   const fetchData = async (pageNumber: number) => {
     setLoading(true);
+    setError(null); // Reset error before making the API request
     try {
-      const response = await axiosclient.get(`/identifiers?page=${pageNumber}&page_size=10`);
-      const newData = response.data.results || []; // 'results' contains the paginated data
+      const response = await axiosclient.get(`/identifiers?page=${pageNumber}&page_size=${itemsPerPage}`);
+      const newData = response.data.results || []; // Assuming 'results' contains the paginated data
 
-      setData((prevData) => [...prevData, ...newData]); // Append new data to existing data
-      setHasMore(response.data.next !== null); // If 'next' is not null, there are more pages
+      setData(newData); // Replace existing data with new data
+      setHasMore(response.data.next !== null); // Check if there are more pages
     } catch (err) {
       setError("Failed to load data.");
     } finally {
@@ -31,15 +34,13 @@ export const useIdentifierData = () => {
   };
 
   useEffect(() => {
-    fetchData(page);
+    fetchData(page); // Fetch data whenever the page number changes
   }, [page]);
 
-  // Function to load more data (increment the page number)
-  const loadMore = () => {
-    if (hasMore && !loading) {
-      setPage(prevPage => prevPage + 1);
-    }
+  // Function to load a specific page
+  const loadPage = (pageNumber: number) => {
+    setPage(pageNumber);
   };
 
-  return { data, loading, error, loadMore, hasMore };
-};
+  return { data, loading, error, loadPage, hasMore, page, itemsPerPage };
+}
