@@ -8,41 +8,127 @@ from django.db import transaction
 import csv
 import random
 from datetime import datetime, timedelta
-from django.core.management.base import BaseCommand
 
-# Function to generate a random datetime within the last two months
-# def generate_random_datetime_last_two_months():
-#     today = datetime.today()
-#     two_months_ago = today - timedelta(days=60)
+# User = get_user_model()
+
+class Command(BaseCommand):
+    help = "Read descriptions from a file and assign them randomly to the User table."
+
+    def handle(self, *args, **kwargs):
+        
+        data_dir = os.path.join(settings.BASE_DIR, 'data')  # Adjust if your data directory is different
+        csv_file_path = os.path.join(data_dir, 'species_study_descriptions.txt')
+        
+        # Read descriptions from the file
+        with open(csv_file_path, "r") as file:
+            about = file.readlines()
+        
+        # Strip newlines from each description
+        about = [desc.strip() for desc in about]
+
+        # Get all users
+        users = User.objects.all()
+        
+        if not about:
+            self.stdout.write(self.style.ERROR("The descriptions file is empty."))
+            return
+        
+        if not users:
+            self.stdout.write(self.style.ERROR("No users found in the User table."))
+            return
+
+        # Assign random descriptions to each user
+        for user in users:
+            user.about = random.choice(about)  # Randomly select a description
+            user.save()
+        
+        self.stdout.write(self.style.SUCCESS(f"Assigned study descriptions to {users.count()} users."))
+
+class Command(BaseCommand):
+    help = "Generate random datetimes (including time) within the last two months and store them in a CSV file."
     
-#     # Generate a random number of days between 0 and 60 (to get a date within the last two months)
-#     random_days = random.randint(0, 60)
-#     # Generate a random number of seconds within a day (86400 seconds = 24 hours)
-#     random_seconds = random.randint(0, 86400)
+    def handle(self, *args, **kwargs):
+        import random
+
+    # Define lists of terms and related phrases
+    fields = [
+        "Ecologist", "Taxonomist", "Zoologist", "Botanist", "Evolutionary Biologist", "Conservation Biologist",
+        "Herpetologist", "Ornithologist", "Entomologist", "Ichthyologist", "Ethologist", "Marine Biologist",
+        "Paleontologist", "Mammalogist", "Systematist"
+    ]
+
+    actions = [
+        "studying", "analyzing", "documenting", "researching", "examining", "exploring", "investigating", 
+        "categorizing", "classifying", "reconstructing", "monitoring", "evaluating", "developing strategies for"
+    ]
+
+    subjects = [
+        "interspecies competition", "population dynamics", "behavioral patterns", "biodiversity", "evolutionary trends", 
+        "habitat loss", "genetic variations", "climate change effects", "dietary habits", "species adaptation", 
+        "predation and prey dynamics", "migratory routes", "social structures", "ecological impact of invasive species", 
+        "preservation of endangered species"
+    ]
+
+    specifics = [
+        "in tropical rainforests", "in arid deserts", "in marine environments", "in grassland ecosystems", 
+        "using fossil records", "based on genetic markers", "in isolated island ecosystems", "in polar regions", 
+        "in agricultural landscapes", "in urban environments", "with a focus on reproductive success", 
+        "using computational modeling", "via field observations", "with satellite tracking", "using historical data"
+    ]
+
+    # Generate random combinations
+    random_descriptions = set()
+    target_count = 15221  # Number of descriptions to generate
+
+    while len(random_descriptions) < target_count:
+        # Create a random description
+        description = f"{random.choice(fields)} {random.choice(actions)} {random.choice(subjects)} {random.choice(specifics)}."
+        random_descriptions.add(description)
+
+    # Save to a file
+    with open("species_study_descriptions.txt", "w") as file:
+        for desc in random_descriptions:
+            file.write(desc + "\n")
+
+    print(f"Generated {len(random_descriptions)} descriptions and saved to 'species_study_descriptions.txt'.")
+
+
+
+
+
+Function to generate a random datetime within the last two months
+def generate_random_datetime_last_two_months():
+    today = datetime.today()
+    two_months_ago = today - timedelta(days=60)
     
-#     # Calculate the random datetime
-#     random_datetime = two_months_ago + timedelta(days=random_days, seconds=random_seconds)
-#     return random_datetime
-
-
-# class Command(BaseCommand):
-#     help = "Generate random datetimes (including time) within the last two months and store them in a CSV file."
+    # Generate a random number of days between 0 and 60 (to get a date within the last two months)
+    random_days = random.randint(0, 60)
+    # Generate a random number of seconds within a day (86400 seconds = 24 hours)
+    random_seconds = random.randint(0, 86400)
     
-#     def handle(self, *args, **kwargs):
-#         # Generate 15,221 random datetimes
-#         random_datetimes = [generate_random_datetime_last_two_months() for _ in range(15221)]
+    # Calculate the random datetime
+    random_datetime = two_months_ago + timedelta(days=random_days, seconds=random_seconds)
+    return random_datetime
 
-#         # Define the CSV file path
-#         csv_file_path = "random_datetimes.csv"
 
-#         # Write the datetimes to the CSV file
-#         with open(csv_file_path, mode='w', newline='') as file:
-#             writer = csv.writer(file)
-#             writer.writerow(["Random Datetime"])  # Header
-#             for date in random_datetimes:
-#                 writer.writerow([date.strftime('%Y-%m-%d %H:%M:%S')])  # Format the datetime
+class Command(BaseCommand):
+    help = "Generate random datetimes (including time) within the last two months and store them in a CSV file."
+    
+    def handle(self, *args, **kwargs):
+        # Generate 15,221 random datetimes
+        random_datetimes = [generate_random_datetime_last_two_months() for _ in range(15221)]
 
-#         self.stdout.write(f"Successfully generated 15,221 random datetimes and stored them in {csv_file_path}")
+        # Define the CSV file path
+        csv_file_path = "random_datetimes.csv"
+
+        # Write the datetimes to the CSV file
+        with open(csv_file_path, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["Random Datetime"])  # Header
+            for date in random_datetimes:
+                writer.writerow([date.strftime('%Y-%m-%d %H:%M:%S')])  # Format the datetime
+
+        self.stdout.write(f"Successfully generated 15,221 random datetimes and stored them in {csv_file_path}")
    
 
 
@@ -84,176 +170,176 @@ class Command(BaseCommand):
 
 
 
-# class Command(BaseCommand):
-#     help = "Import data from CSV file and create Amphibians entries"
+class Command(BaseCommand):
+    help = "Import data from CSV file and create Amphibians entries"
 
-#     def handle(self, *args, **kwargs):
-#         # Total sum you want
-#         target_sum = 178278
+    def handle(self, *args, **kwargs):
+        # Total sum you want
+        target_sum = 178278
 
-#         @transaction.atomic  # Ensure the operation is atomic
-#         def assign_random_identifications():
-#             users = User.objects.all()
-#             user_count = users.count()
+        @transaction.atomic  # Ensure the operation is atomic
+        def assign_random_identifications():
+            users = User.objects.all()
+            user_count = users.count()
 
-#             if user_count == 0:
-#                 self.stdout.write(self.style.WARNING("No users found."))
-#                 return
+            if user_count == 0:
+                self.stdout.write(self.style.WARNING("No users found."))
+                return
             
-#             # Step 1: Generate random numbers for all but the last user
-#             random_identifications = [random.randint(0, target_sum // user_count) for _ in range(user_count - 1)]
+            # Step 1: Generate random numbers for all but the last user
+            random_identifications = [random.randint(0, target_sum // user_count) for _ in range(user_count - 1)]
             
-#             # Step 2: Calculate the current sum and determine the last identification
-#             current_sum = sum(random_identifications)
-#             last_identification = target_sum - current_sum
+            # Step 2: Calculate the current sum and determine the last identification
+            current_sum = sum(random_identifications)
+            last_identification = target_sum - current_sum
             
-#             # Step 3: Ensure the last identification is non-negative
-#             if last_identification < 0:
-#                 # Adjust the random_identifications to ensure the last one is non-negative
-#                 adjustment = abs(last_identification)
-#                 for i in range(user_count - 1):
-#                     if random_identifications[i] >= adjustment:
-#                         random_identifications[i] -= adjustment
-#                         break
-#                 else:
-#                     # If all identifications are too small, just set them to zero
-#                     random_identifications = [0] * (user_count - 1)
-#                     last_identification = target_sum  # All goes to the last user
+            # Step 3: Ensure the last identification is non-negative
+            if last_identification < 0:
+                # Adjust the random_identifications to ensure the last one is non-negative
+                adjustment = abs(last_identification)
+                for i in range(user_count - 1):
+                    if random_identifications[i] >= adjustment:
+                        random_identifications[i] -= adjustment
+                        break
+                else:
+                    # If all identifications are too small, just set them to zero
+                    random_identifications = [0] * (user_count - 1)
+                    last_identification = target_sum  # All goes to the last user
 
-#             # Add the last identification
-#             random_identifications.append(last_identification)
+            # Add the last identification
+            random_identifications.append(last_identification)
 
-#             # Step 4: Shuffle the identifications for randomness
-#             random.shuffle(random_identifications)
+            # Step 4: Shuffle the identifications for randomness
+            random.shuffle(random_identifications)
 
-#             # Step 5: Assign the values to the users
-#             for idx, user in enumerate(users):
-#                 user.identifications = random_identifications[idx]
-#                 user.save()
+            # Step 5: Assign the values to the users
+            for idx, user in enumerate(users):
+                user.identifications = random_identifications[idx]
+                user.save()
 
-#         # Call the function
-#         assign_random_identifications()
-
-
-# class Command(BaseCommand):
-#     help = "Import data from CSV file and create Amphibians entries"
-
-#     def handle(self, *args, **kwargs):
-
-#         data_dir = os.path.join(settings.BASE_DIR, 'data')
-#         csv_file_path = os.path.join(data_dir, 'unique_usernames_with_emails.csv')
-
-#         try:
-#             df = pd.read_csv(csv_file_path)
-#         except FileNotFoundError:
-#             self.stdout.write(self.style.ERROR('CSV file not found'))
-#             return
-
-#         for _, row in df.iterrows():
-#             try:
-#                 # Use get_or_create to either get the user or create one if they don't exist
-#                 user, created = User.objects.get_or_create(
-#                     username=row['username'],
-#                     defaults={
-#                         'email': row['email'],  # Assuming CSV has 'email' column
-#                         'password': row['password'],  # Store hashed password using Django's set_password
-#                     }
-#                 )
-
-#                 # If the user was created, hash the password
-#                 if created:
-#                     user.set_password(row['password'])  # Hash the password
-#                     user.save()   
-#                 self.stdout.write(self.style.SUCCESS(f"{row['username']}"))
-
-#             except Exception as e:
-#                 self.stdout.write(self.style.ERROR(f"Error processing row for user '{row['username']}': {str(e)}"))
+        # Call the function
+        assign_random_identifications()
 
 
+class Command(BaseCommand):
+    help = "Import data from CSV file and create Amphibians entries"
 
-# class Command(BaseCommand):
-#     help = "Import filtered data from CSV file"
+    def handle(self, *args, **kwargs):
 
-#     def handle(self, *args, **kwargs):
-#         data_dir = os.path.join(settings.BASE_DIR, 'data')
-#         csv_file_path = os.path.join(data_dir, 'filtered_spiders_observations.csv')
+        data_dir = os.path.join(settings.BASE_DIR, 'data')
+        csv_file_path = os.path.join(data_dir, 'unique_usernames_with_emails.csv')
 
-#         try:
-#             df = pd.read_csv(csv_file_path)
-#         except FileNotFoundError:
-#             self.stdout.write(self.style.ERROR('CSV file not found'))
-#             return
+        try:
+            df = pd.read_csv(csv_file_path)
+        except FileNotFoundError:
+            self.stdout.write(self.style.ERROR('CSV file not found'))
+            return
 
-#         for _, row in df.iterrows():
-#             # Skip the row if the user_name is missing (NaN) or empty
-#             if pd.isna(row['user_name']) or row['user_name'].strip() == "":
-#                 self.stdout.write(self.style.ERROR("User name is missing. Skipping row."))
-#                 continue
+        for _, row in df.iterrows():
+            try:
+                # Use get_or_create to either get the user or create one if they don't exist
+                user, created = User.objects.get_or_create(
+                    username=row['username'],
+                    defaults={
+                        'email': row['email'],  # Assuming CSV has 'email' column
+                        'password': row['password'],  # Store hashed password using Django's set_password
+                    }
+                )
 
-#             try:
-#                 # Fetch the User instance based on the username from CSV
-#                 user = User.objects.get(username=row['user_name'])
+                # If the user was created, hash the password
+                if created:
+                    user.set_password(row['password'])  # Hash the password
+                    user.save()   
+                self.stdout.write(self.style.SUCCESS(f"{row['username']}"))
 
-#                 # Check if any required fields are missing or NaN before creating the record
-#                 required_fields = [
-#                     'observed_on', 'time_observed_at', 'created_at', 'updated_at',
-#                     'image_url', 'description', 'num_identification_agreements',
-#                     'num_identification_disagreements', 'place_guess', 'place_county_name',
-#                     'place_state_name', 'place_country_name', 'species_guess',
-#                     'scientific_name', 'common_name', 'iconic_taxon_name',
-#                     'latitude', 'longitude'
-#                 ]
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"Error processing row for user '{row['username']}': {str(e)}"))
 
-#                 # If any of the required fields are NaN, skip the row
-#                 if any(pd.isna(row[field]) for field in required_fields):
-#                     self.stdout.write(self.style.ERROR(f"Required field is missing in row with user '{row['user_name']}'. Skipping row."))
-#                     continue
 
-#                 # Create the Protozoa object if all checks pass
-#                 All_Species.objects.create(
-#                     observed_date=row['observed_on'],
-#                     time_observed_at=row['time_observed_at'],
-#                     created_date=row['created_at'],
-#                     updated_date=row['updated_at'],
-#                     image=row['image_url'],
-#                     description=row['description'],
-#                     no_identification_agreement=row['num_identification_agreements'],
-#                     no_identification_disagreement=row['num_identification_disagreements'],
-#                     location=row['place_guess'],
-#                     city=row['place_county_name'],
-#                     state=row['place_state_name'],
-#                     country=row['place_country_name'],
-#                     species_name_guess=row['species_guess'],
-#                     scientific_name=row['scientific_name'],
-#                     common_name=row['common_name'],
-#                     category=row['iconic_taxon_name'],
-#                     latitude=row['latitude'],
-#                     longitude=row['longitude'],
-#                     user=user,
-#                 )
-#                 Arachnida.objects.create(
-#                     observed_date=row['observed_on'],
-#                     time_observed_at=row['time_observed_at'],
-#                     created_date=row['created_at'],
-#                     updated_date=row['updated_at'],
-#                     image=row['image_url'],
-#                     description=row['description'],
-#                     no_identification_agreement=row['num_identification_agreements'],
-#                     no_identification_disagreement=row['num_identification_disagreements'],
-#                     location=row['place_guess'],
-#                     city=row['place_county_name'],
-#                     state=row['place_state_name'],
-#                     country=row['place_country_name'],
-#                     species_name_guess=row['species_guess'],
-#                     scientific_name=row['scientific_name'],
-#                     common_name=row['common_name'],
-#                     category=row['iconic_taxon_name'],
-#                     latitude=row['latitude'],
-#                     longitude=row['longitude'],
-#                     user=user,
-#                 )
 
-#                 self.stdout.write(self.style.SUCCESS(f"Record successfully added for user '{row['user_name']}'"))
+class Command(BaseCommand):
+    help = "Import filtered data from CSV file"
 
-#             except User.DoesNotExist:
-#                 self.stdout.write(self.style.ERROR(f"User '{row['user_name']}' does not exist. Skipping row."))
+    def handle(self, *args, **kwargs):
+        data_dir = os.path.join(settings.BASE_DIR, 'data')
+        csv_file_path = os.path.join(data_dir, 'filtered_spiders_observations.csv')
+
+        try:
+            df = pd.read_csv(csv_file_path)
+        except FileNotFoundError:
+            self.stdout.write(self.style.ERROR('CSV file not found'))
+            return
+
+        for _, row in df.iterrows():
+            # Skip the row if the user_name is missing (NaN) or empty
+            if pd.isna(row['user_name']) or row['user_name'].strip() == "":
+                self.stdout.write(self.style.ERROR("User name is missing. Skipping row."))
+                continue
+
+            try:
+                # Fetch the User instance based on the username from CSV
+                user = User.objects.get(username=row['user_name'])
+
+                # Check if any required fields are missing or NaN before creating the record
+                required_fields = [
+                    'observed_on', 'time_observed_at', 'created_at', 'updated_at',
+                    'image_url', 'description', 'num_identification_agreements',
+                    'num_identification_disagreements', 'place_guess', 'place_county_name',
+                    'place_state_name', 'place_country_name', 'species_guess',
+                    'scientific_name', 'common_name', 'iconic_taxon_name',
+                    'latitude', 'longitude'
+                ]
+
+                # If any of the required fields are NaN, skip the row
+                if any(pd.isna(row[field]) for field in required_fields):
+                    self.stdout.write(self.style.ERROR(f"Required field is missing in row with user '{row['user_name']}'. Skipping row."))
+                    continue
+
+                # Create the Protozoa object if all checks pass
+                All_Species.objects.create(
+                    observed_date=row['observed_on'],
+                    time_observed_at=row['time_observed_at'],
+                    created_date=row['created_at'],
+                    updated_date=row['updated_at'],
+                    image=row['image_url'],
+                    description=row['description'],
+                    no_identification_agreement=row['num_identification_agreements'],
+                    no_identification_disagreement=row['num_identification_disagreements'],
+                    location=row['place_guess'],
+                    city=row['place_county_name'],
+                    state=row['place_state_name'],
+                    country=row['place_country_name'],
+                    species_name_guess=row['species_guess'],
+                    scientific_name=row['scientific_name'],
+                    common_name=row['common_name'],
+                    category=row['iconic_taxon_name'],
+                    latitude=row['latitude'],
+                    longitude=row['longitude'],
+                    user=user,
+                )
+                Arachnida.objects.create(
+                    observed_date=row['observed_on'],
+                    time_observed_at=row['time_observed_at'],
+                    created_date=row['created_at'],
+                    updated_date=row['updated_at'],
+                    image=row['image_url'],
+                    description=row['description'],
+                    no_identification_agreement=row['num_identification_agreements'],
+                    no_identification_disagreement=row['num_identification_disagreements'],
+                    location=row['place_guess'],
+                    city=row['place_county_name'],
+                    state=row['place_state_name'],
+                    country=row['place_country_name'],
+                    species_name_guess=row['species_guess'],
+                    scientific_name=row['scientific_name'],
+                    common_name=row['common_name'],
+                    category=row['iconic_taxon_name'],
+                    latitude=row['latitude'],
+                    longitude=row['longitude'],
+                    user=user,
+                )
+
+                self.stdout.write(self.style.SUCCESS(f"Record successfully added for user '{row['user_name']}'"))
+
+            except User.DoesNotExist:
+                self.stdout.write(self.style.ERROR(f"User '{row['user_name']}' does not exist. Skipping row."))

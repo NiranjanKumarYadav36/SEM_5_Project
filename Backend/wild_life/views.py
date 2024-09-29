@@ -157,7 +157,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = Protozoa.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')
+        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')
         
         
         # Serialize the data
@@ -473,7 +473,7 @@ class SpeciesIdentificationListView(BaseProtectedview):
             if option == 'yes':
                 species.no_identification_agreement += 1
             elif option == 'no':
-                species.no_identification_disagreement -= 1
+                species.no_identification_disagreement += 1
 
             species.save()
             user.save()
