@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
       }}
     >
       {/* Help Section */}
-      <Box sx={{ marginTop: 5 }}>
+      <Box sx={{ marginTop: 5, marginBottom:5 }}>
         <Link
           href="/help"
           underline="none"
