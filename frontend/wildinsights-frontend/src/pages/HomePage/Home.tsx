@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Grid, IconButton } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import axios from "../../components/Apiclient/axiosclient";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/footer";
 
@@ -10,6 +9,13 @@ import Footer from "../../components/Footer/footer";
 import recordObservationImage from '../../assets/Homepage/record_observation.png';
 import shareWithNaturalistsImage from '../../assets/Homepage/share_with_naturalists.png';
 import discussFindingsImage from '../../assets/Homepage/discuss_findings.png';
+import custombird from '../../assets/Homepage/bird.jpeg';
+import custombbutterfly from '../../assets/Homepage/butterfly.jpg';
+import custominsect from '../../assets/Homepage/insect.jpg';
+import customseagull from '../../assets/Homepage/seagull.jpg';
+import customflower from '../../assets/Homepage/flower.jpg';
+
+
 import natureFeature1 from "../../assets/Homepage/nature_feature1.png"; // Image 1
 import natureFeature2 from "../../assets/Homepage/nature_feature2.png"; // Image 2
 import natureFeature3 from "../../assets/Homepage/nature_feature3.png"; // Image 3
@@ -40,26 +46,28 @@ const natureFeatures = [
   { id: 6, image: natureFeature6, text: "Run a Bioblitz", description: "Hold an event where people try to find as many species as possible." },
 ];
 
+const imageGalleryData: ImageGalleryItem[] = [
+  { image:  custombird, common_name: 'Bird' },
+  { image:custombbutterfly , common_name: 'Butterfly' },
+  { image: custominsect, common_name: 'insect' },
+  { image: customseagull, common_name: 'seagull' },
+  { image: customflower, common_name: 'flower' },
+];
+
 function HomePage() {
   const [imageGallery, setImageGallery] = useState<ImageGalleryItem[]>([]);
   const [currentImage, setCurrentImage] = useState<ImageGalleryItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Fetch images from the API
+
+
+
+  // Set images from the static array
   useEffect(() => {
-    axios
-      .get("/home_page")
-      .then((response) => {
-        const images = response.data.data;
-        setImageGallery(images);
-        setCurrentImage(images[0]); // Set the first image immediately
-        setLoading(false); // Set loading to false once the first image is loaded
-      })
-      .catch((error) => {
-        console.error("Error fetching images:", error);
-        setLoading(false);
-      });
+    setImageGallery(imageGalleryData);
+    setCurrentImage(imageGalleryData[0]); // Set the first image initially
+    setLoading(false); // Set loading to false immediately
   }, []);
 
   // Automatically change images every 5 seconds
@@ -100,7 +108,7 @@ function HomePage() {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', overflow: "auto", height: "calc(100vh - 200px)" }}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', overflow: "auto", height: "calc(100vh - 200px)"  }}>
       <Navbar />
 
       {/* Dynamic Image Section */}
@@ -112,8 +120,8 @@ function HomePage() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          height: '400px',
-          width: '620px',
+          height: '500px',
+          width: '100%',
           backgroundColor: '#b2e0a1',
         }}
       >
@@ -151,6 +159,7 @@ function HomePage() {
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                 }}
               />
+    
               <Box
                 sx={{
                   position: 'absolute',
@@ -252,9 +261,9 @@ function HomePage() {
             </Grid>
           ))}
         </Grid>
-      </Box>
+      </Box  >
 
-      <Footer />
+      <Footer  />
     </Box>
   );
 }

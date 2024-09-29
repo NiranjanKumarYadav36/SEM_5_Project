@@ -473,7 +473,7 @@ class SpeciesIdentificationListView(BaseProtectedview):
             if option == 'yes':
                 species.no_identification_agreement += 1
             elif option == 'no':
-                species.no_identification_disagreement -= 1
+                species.no_identification_disagreement += 1
 
             species.save()
             user.save()

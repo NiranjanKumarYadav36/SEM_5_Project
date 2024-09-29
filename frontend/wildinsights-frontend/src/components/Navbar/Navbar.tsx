@@ -49,6 +49,7 @@ const Navbar = () => {
     { text: "Home", link: "/" },
     { text: "Explore", link: "/explore" },
     { text: "Community", link: "#" },
+    { text: "Identify", link: "/identify" },
     { text: "Contribute", link: "/contribute" },
   ];
 

@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomePage from "../pages/HomePage/Home";
-import React, { lazy, Suspense } from "react";
+import React, { Suspense } from "react";
 import Login from "../pages/LoginPage/Login";
 import Register from "../pages/RegisterPage/Register";
 import ProtectedRoute from "../components/ProtectiveRoutes/ProtectedRoute";
@@ -11,8 +11,10 @@ import Species from "../pages/Explore/Species/species";
 import LoadingScreen from "../components/LoadingScreen/Loading";
 import UserProfile  from "../pages/User/Profile/profile";
 import UserDashboard from "../pages/User/Dashboard/dashboard";
+import Explore from "../pages/Explore/Explore/Explore";
+import { People } from "../pages/Community/People/people";
+import { Identify } from "../pages/Identify/identify";
 
-const Explore = lazy(() => import("../pages/Explore/Explore/Explore"));
 
 const router = createBrowserRouter([
     {
@@ -60,7 +62,7 @@ const router = createBrowserRouter([
       children: [
         {
           path:"/community/people",
-          element: <div />
+          element: <People />
         },
         {
           path:"/community/projects",
@@ -70,6 +72,16 @@ const router = createBrowserRouter([
           path:"/community/forum",
           element: <div />
         },
+      ]
+    },
+    {
+      path: "/identify",
+      element:<ProtectedRoute />,
+      children:[
+        {
+          path: "",
+          element:<Identify />,
+        }
       ]
     },
     {
