@@ -55,13 +55,13 @@ export default function Identifiers() {
   }
 
   return (
-    <Box>
+    <Box sx={{overflowY: "auto",maxHeight: "100vh"}}>
       <Navbar />
       <SearchBar onSearch={handleSearch} />
       <NavigationButtons />
 
       {/* Identifier List with Pagination */}
-      <Box sx={{ maxHeight: "70vh", overflowY: "auto", padding: "10px", background: "lightgrey" }}>
+      <Box sx={{ padding: "10px", background: "lightgrey" }}>
         <List subheader={<ListSubheader>Settings</ListSubheader>}>
           {data.map((identifier: IdentifierData, index: number) => (
             <ListItem key={index}>

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -58,7 +60,7 @@ export const Identify = () => {
       console.log("Agreement updated:", response.data);
 
       setData((prevData) =>
-        prevData.map((item) =>
+        prevData.map((item: { user_id: string; scientific_name: string; no_identification_agreement: number; }) =>
           item.user_id === userId && item.scientific_name === scientificName
             ? { ...item, no_identification_agreement: item.no_identification_agreement + 1 }
             : item
@@ -99,7 +101,7 @@ export const Identify = () => {
   return (
     <Box sx={{ maxHeight: "100vh", overflowY: "auto" }}>
       <Navbar />
-      <Box sx={{ padding: "20px", margin: 10 }}>
+      <Box sx={{ padding: "20px", margin: 8 }}>
         <Grid container spacing={2} justifyContent="center">
           {paginatedData.map((item, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
