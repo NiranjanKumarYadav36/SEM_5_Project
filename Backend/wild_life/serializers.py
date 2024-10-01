@@ -157,3 +157,23 @@ class SpeciesDetailsSerializer(serializers.ModelSerializer):
             representation['updated_date'] = instance.updated_date.date().isoformat()  # Extract only date part 'YYYY-MM-DD'
 
         return representation
+    
+
+
+
+def get_species_serializer(model):
+    # Create a new dynamic class for the serializer using type()
+    return type(
+        'DynamicSpeciesSerializer',  # Name of the new serializer class
+        (serializers.ModelSerializer,),  # Base classes
+        {
+            # 'state': serializers.CharField(required=False, allow_null=True),
+            # 'username': serializers.CharField(required=False, allow_null=True),
+            'latitude': serializers.FloatField(required=False, allow_null=True),
+            'longitude': serializers.FloatField(required=False, allow_null=True),
+            'Meta': type('Meta', (), {'model': model, 'fields': '__all__'})  # Meta class
+        }
+    )
+
+
+ 

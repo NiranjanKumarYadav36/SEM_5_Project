@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (RegisterView, LoginView, ExplorePageView , Logout, ProtectedView, 
                     HomePageView, ObserversCountView, SpeciesCountView, IdentifiersView, 
                     UserProfileView, ProfileUpdateView, SpeciesDetailsView, DashboardView,
-                    CoummnityPeopleView, SpeciesIdentificationListView)
+                    CoummnityPeopleView, SpeciesIdentificationListView, FilteredView)
 
 urlpatterns = [
     path('verify-token', ProtectedView.as_view(), name='verify-token'),
@@ -28,6 +28,10 @@ urlpatterns = [
     path('community/people', CoummnityPeopleView.as_view(), name='community/people'),
     
     path('species_identifications/', SpeciesIdentificationListView.as_view(), name='species_identifications'),
+    
+    
+    
+    path('explore/filter', FilteredView.as_view(), name='filtered_view')
     
 ]
 

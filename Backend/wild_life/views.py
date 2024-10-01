@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .models import *
 from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers,
-                          HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer, SpeciesIdentifications, SpeciesDetailsSerializer)
+                          HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer, SpeciesIdentifications, 
+                          SpeciesDetailsSerializer, get_species_serializer)
 import datetime, jwt
 from rest_framework import status
 from django.db.models import Count, Subquery, OuterRef, F
@@ -465,3 +466,54 @@ class SpeciesDetailsView(BaseProtectedview):
         }
 
         return Response(response, status=status.HTTP_200_OK)
+
+
+
+
+class FilteredView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
+        
+        category = request.query_params.get('category')
+        state = request.query_params.get('location')
+        username = request.query_params.get('username')
+        
+        category_model_mapping = {
+            'Amphibia': Amphibia,
+            'Actinopterygii': Actinopterygii,
+            'Aves': Aves,
+            'Plantae': Plantae,
+            'Mollusca': Mollusca,
+            'Mammalia': Mammalia,
+            'Protozoa': Protozoa,
+            'Insecta': Insecta,
+            'Arachnida': Arachnida,
+            'Reptilia': Reptilia,
+        }
+        
+
+        filter_criteria = {}
+        if state:
+            filter_criteria['state'] = state
+        if username:
+            filter_criteria['user_id__username'] = username  
+        
+                    
+        # Determine the queryset to be used based on the category
+        if category and category in category_model_mapping:
+            model = category_model_mapping[category]
+            query_set = model.objects.filter(**filter_criteria)
+        else:
+            model = All_Species
+            query_set = model.objects.filter(**filter_criteria)
+            
+        # Serialize the queryset
+        # serializer = BaseSpeciesSerializer(query_set, many=True)
+        
+         # Use the dynamic serializer based on the model
+        serializer_class = get_species_serializer(model)
+        serializer = serializer_class(query_set, many=True)
+        
+        return Response(serializer.data)
+
+     
