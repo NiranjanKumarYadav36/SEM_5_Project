@@ -157,7 +157,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')
+        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')[1:500000:55]
         
         
         # Serialize the data
@@ -484,5 +484,5 @@ class SpeciesIdentificationListView(BaseProtectedview):
         
             return Response(response)
         
-        return Response({"message": "Species not found"}, status=404)
+        return Response({"message": "Species not found"}, status=404) 
     
