@@ -159,7 +159,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'id')[1:500000:75]
+        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id')[1:500000:75]
         
         
         # Serialize the data
@@ -474,7 +474,7 @@ class FilteredView(BaseProtectedview):
         user = self.get_user_from_token()
         
         category = request.query_params.get('category')
-        state = request.query_params.get('location')
+        state = request.query_params.get('state')
         username = request.query_params.get('username')
         start_date = request.query_params.get('start_date')
         end_date = request.query_params.get('end_date')
@@ -492,18 +492,15 @@ class FilteredView(BaseProtectedview):
             'Reptilia': Reptilia,
         }
         
-
         filter_criteria = {}
         if state:
             filter_criteria['state'] = state
         if username:
             filter_criteria['user_id__username'] = username 
         
-        
         date_format = "%Y-%m-%d" 
         if start_date:
             try:
-                # Parse the start date string to a date object
                 start_observed_date = datetime.datetime.strptime(start_date, date_format).date()
                 filter_criteria['observed_date__gte'] = start_observed_date
             except ValueError:
@@ -511,13 +508,11 @@ class FilteredView(BaseProtectedview):
 
         if end_date:
             try:
-                # Parse the end date string to a date object
                 end_observed_date = datetime.datetime.strptime(end_date, date_format).date()
                 filter_criteria['observed_date__lte'] = end_observed_date
             except ValueError:
                 return Response({"error": "Invalid end_date format. Use 'YYYY-MM-DD'."}, status=400)
         
-                    
         # Determine the queryset to be used based on the category
         if category and category in category_model_mapping:
             model = category_model_mapping[category]
@@ -525,12 +520,20 @@ class FilteredView(BaseProtectedview):
         else:
             model = All_Species
             query_set = model.objects.filter(**filter_criteria)[:4000]
-            
 
-         # Use the dynamic serializer based on the model
+        # Check if the queryset is empty and return a message if so
+        if not query_set.exists():
+            return Response({"message": "No data available for the provided filters."}, status=404)
+
+        # Select specific fields from the queryset
+        specific_fields = ['id', 'image', 'common_name', 'latitude', 'longitude', 'user_id']  
+        filtered_data = query_set.values(*specific_fields)
+        
+        # Use the dynamic serializer based on the model
         serializer_class = get_species_serializer(model)
-        serializer = serializer_class(query_set, many=True)
+        serializer = serializer_class(filtered_data, many=True)
         
         return Response(serializer.data)
+
 
      
