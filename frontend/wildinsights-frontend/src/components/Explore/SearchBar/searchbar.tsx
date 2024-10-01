@@ -112,27 +112,6 @@ const SearchBar: React.FC<SearchComponentProps> = ({ onSearch }) => {
     }
     setError("");
     setLoading(true);
-
-    try {
-      // Construct query params dynamically based on input
-      const params: { species?: string; location?: string } = {};
-      if (species) {
-        params.species = species;
-      }
-      if (location) {
-        params.location = location;
-      }
-
-      // Perform API request with axiosClient and send the species & location as query params
-      const response = await axiosclient.get("/explore/filter", { params });
-      console.log(response.data); // Handle the API response
-      onSearch(species, location); // You can trigger onSearch here
-    } catch (error) {
-      console.error("Error fetching data", error);
-      setError("Failed to fetch data.");
-    } finally {
-      setLoading(false);
-    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
