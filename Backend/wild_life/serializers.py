@@ -167,14 +167,13 @@ def get_species_serializer(model):
         'DynamicSpeciesSerializer',  # Name of the new serializer class
         (serializers.ModelSerializer,),  # Base classes
         {
-            # 'state': serializers.CharField(required=False, allow_null=True),
-            # 'username': serializers.CharField(required=False, allow_null=True),
+            'image': serializers.URLField(required=False, allow_null=True),
             'latitude': serializers.FloatField(required=False, allow_null=True),
             'longitude': serializers.FloatField(required=False, allow_null=True),
-            'created_date': serializers.DateTimeField(required=False, allow_null=True, format="%Y-%m-%d %H:%M:%S"),
-            'updated_date': serializers.DateTimeField(required=False, allow_null=True, format="%Y-%m-%d %H:%M:%S"),
-            'observed_date': serializers.DateField(required=False, allow_null=True, format="%Y-%m-%d"),
-            'Meta': type('Meta', (), {'model': model, 'fields': '__all__'})  # Meta class
+            # 'created_date': serializers.DateTimeField(required=False, allow_null=True, format="%Y-%m-%d %H:%M:%S"),
+            # 'updated_date': serializers.DateTimeField(required=False, allow_null=True, format="%Y-%m-%d %H:%M:%S"),
+            # 'observed_date': serializers.DateField(required=False, allow_null=True, format="%Y-%m-%d"),
+            'Meta': type('Meta', (), {'model': model, 'fields': ['id', 'image', 'common_name', 'latitude', 'longitude', 'user_id'] })  # Meta class
         }
     )
 
