@@ -14,6 +14,7 @@ from django.db.models import Sum
 from decimal import Decimal
 from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
+import pytz
 
 
 class BaseProtectedview(APIView):
@@ -158,7 +159,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = Protozoa.objects.values('image', 'latitude', 'longitude', 'common_name', 'id')
+        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'id')[1:500000:75]
         
         
         # Serialize the data
@@ -475,6 +476,8 @@ class FilteredView(BaseProtectedview):
         category = request.query_params.get('category')
         state = request.query_params.get('location')
         username = request.query_params.get('username')
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
         
         category_model_mapping = {
             'Amphibia': Amphibia,
@@ -494,20 +497,36 @@ class FilteredView(BaseProtectedview):
         if state:
             filter_criteria['state'] = state
         if username:
-            filter_criteria['user_id__username'] = username  
+            filter_criteria['user_id__username'] = username 
+        
+        
+        date_format = "%Y-%m-%d" 
+        if start_date:
+            try:
+                # Parse the start date string to a date object
+                start_observed_date = datetime.datetime.strptime(start_date, date_format).date()
+                filter_criteria['observed_date__gte'] = start_observed_date
+            except ValueError:
+                return Response({"error": "Invalid start_date format. Use 'YYYY-MM-DD'."}, status=400)
+
+        if end_date:
+            try:
+                # Parse the end date string to a date object
+                end_observed_date = datetime.datetime.strptime(end_date, date_format).date()
+                filter_criteria['observed_date__lte'] = end_observed_date
+            except ValueError:
+                return Response({"error": "Invalid end_date format. Use 'YYYY-MM-DD'."}, status=400)
         
                     
         # Determine the queryset to be used based on the category
         if category and category in category_model_mapping:
             model = category_model_mapping[category]
-            query_set = model.objects.filter(**filter_criteria)
+            query_set = model.objects.filter(**filter_criteria)[:2]
         else:
             model = All_Species
-            query_set = model.objects.filter(**filter_criteria)
+            query_set = model.objects.filter(**filter_criteria)[:4000]
             
-        # Serialize the queryset
-        # serializer = BaseSpeciesSerializer(query_set, many=True)
-        
+
          # Use the dynamic serializer based on the model
         serializer_class = get_species_serializer(model)
         serializer = serializer_class(query_set, many=True)
