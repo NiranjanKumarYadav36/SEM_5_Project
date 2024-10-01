@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Box,
-  List,
-  ListItem,
-  ListItemText,
-  ListSubheader,
-  Button,
   CircularProgress,
   Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
 } from "@mui/material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import Navbar from "../../../components/Navbar/Navbar";
 import NavigationButtons from "../../../components/Explore/NavigationButton/navigationbutton";
 import SearchBar from "../../../components/Explore/SearchBar/searchbar";
@@ -24,11 +28,36 @@ interface IdentifierData {
 export default function Identifiers() {
   // Use the custom hook to get paginated identifier data
   const { data, loading, error, loadPage, hasMore, page } = useIdentifierData();
+  const IdentifierListRef = useRef<HTMLDivElement | null>(null);
 
   const handleSearch = (species: string, location: string) => {
     console.log("Search with species:", species, "and location:", location);
     // Handle your search logic here
   };
+
+  // Infinite scroll handler
+  const handleScroll = () => {
+    if (
+      IdentifierListRef.current &&
+      IdentifierListRef.current.scrollTop + IdentifierListRef.current.clientHeight >=
+      IdentifierListRef.current.scrollHeight
+    ) {
+      loadPage(); // Load more observers when scrolled to the bottom
+    }
+  };
+
+  // Attach and detach the scroll event listener
+  useEffect(() => {
+    const currentIdentifierListRef = IdentifierListRef.current;
+    if (currentIdentifierListRef) {
+      currentIdentifierListRef.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (currentIdentifierListRef) {
+        currentIdentifierListRef.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
 
   // Handle loading the next page
   const handleNextPage = () => {
@@ -54,45 +83,71 @@ export default function Identifiers() {
     return <div>{error}</div>;
   }
 
+  // Calculate the starting rank for the current page
+  const startingRank = (page - 1) * data.length + 1;
+
   return (
     <Box sx={{overflowY: "auto",maxHeight: "100vh"}}>
       <Navbar />
       <SearchBar onSearch={handleSearch} />
       <NavigationButtons />
 
-      {/* Identifier List with Pagination */}
-      <Box sx={{ padding: "10px", background: "lightgrey" }}>
-        <List subheader={<ListSubheader>Settings</ListSubheader>}>
-          {data.map((identifier: IdentifierData, index: number) => (
-            <ListItem key={index}>
-              <ListItemText
-                primary={identifier.username || "Unknown User"}
-                secondary={`Identifications: ${identifier.identifications || 0}`}
-              />
-            </ListItem>
-          ))}
-        </List>
+      {/* Observer List with Infinite Scrolling */}
+      <Box
+        ref={IdentifierListRef}
+        sx={{ maxHeight: "70vh", overflowY: "auto", padding: "10px" }}
+      >
 
-        {/* Pagination Controls */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
-          <Button onClick={handlePreviousPage} disabled={page === 1 || loading}>
-            Previous
-          </Button>
-          {loading && <CircularProgress size={24} />}
-          <Button onClick={handleNextPage} disabled={!hasMore || loading}>
-            Next
-          </Button>
-        </Box>
+        {/* Identifier Table with Pagination */}
+        <Box sx={{ padding: "20px", maxWidth: "80%", margin: "auto" }}>
+          <TableContainer component={Paper} elevation={3}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: "bold" }}>Rank</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>User</TableCell>
+                  <TableCell sx={{ fontWeight: "bold", textAlign: "right" }}>
+                    Identifications
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((identifier: IdentifierData, index: number) => (
+                  <TableRow key={index}>
+                    <TableCell>#{startingRank + index}</TableCell>
+                    <TableCell>{identifier.username || "Unknown User"}</TableCell>
+                    <TableCell sx={{ textAlign: "right" }}>
+                      {identifier.identifications || 0}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-        {/* Pagination Status */}
-        <Box sx={{ textAlign: "center", marginTop: "10px" }}>
-          <Typography>
-            Page {page} of 120
-          </Typography>
+          {/* Pagination Controls */}
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px" }}>
+            <IconButton onClick={handlePreviousPage} disabled={page === 1 || loading} sx={{ color: !hasMore ? "grey.500" : "primary.main" }}>
+              <ArrowBack />
+            </IconButton>
+            <Typography sx={{ margin: "0 20px", fontWeight: "bold", color: "primary.main" }}>
+              Page {page}
+            </Typography>
+            {loading && <CircularProgress size={24} sx={{ margin: "0 20px" }} />}
+            <IconButton onClick={handleNextPage} disabled={!hasMore || loading} sx={{ color: !hasMore ? "grey.500" : "primary.main" }}>
+              <ArrowForward />
+            </IconButton>
+          </Box>
+
+          {/* Pagination Status */}
+          <Box sx={{ textAlign: "center", marginTop: "10px" }}>
+            <Typography variant="caption">
+              {`Showing ${(startingRank)} to ${(startingRank + data.length - 1)} identifications`}
+            </Typography>
+          </Box>
         </Box>
+        <Footer />
       </Box>
-
-      <Footer />
     </Box>
   );
 }
