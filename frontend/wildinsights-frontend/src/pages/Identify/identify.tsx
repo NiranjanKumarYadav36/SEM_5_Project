@@ -15,6 +15,7 @@ import { useIdentifyLoader } from "../../components/Loaders/IdentifyLoader/ident
 import Navbar from "../../components/Navbar/Navbar";
 import LoadingScreen from "../../components/LoadingScreen/Loading";
 import Footer from "../../components/Footer/footer";
+import SearchBarIdentify from "../../components/Identify/SearchBar/searchbar-identify";
 
 interface IdentifyData {
   image: URL;
@@ -38,7 +39,9 @@ export const Identify = () => {
   // Calculate total pages based on current data length
   const totalPages = Math.ceil(data.length / itemsPerPage);
   // Get paginated data based on current page
-  const paginatedData = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedData = data && data.length > 0 
+  ? data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) 
+  : [];
 
   if (loading && data.length === 0) {
     return <LoadingScreen />;
@@ -48,82 +51,103 @@ export const Identify = () => {
     return <div>{error}</div>;
   }
 
-  // Function to handle updates for agreements
-  const handleUpdateAgreement = async (userId: string, image: URL, scientificName: string) => {
+  const updateIdentificationCount = async (
+    userId: string,
+    image: URL,
+    scientificName: string,
+    option: "yes" | "no"
+  ) => {
+    const isAgreement = option === "yes";
+  
+    // Optimistically update the UI
+    setData((prevData) =>
+      prevData.map((item: { user_id: string; scientific_name: string; no_identification_agreement: number; no_identification_disagreement: number; }) =>
+        item.user_id === userId && item.scientific_name === scientificName
+          ? {
+              ...item,
+              no_identification_agreement: isAgreement
+                ? item.no_identification_agreement + 1
+                : item.no_identification_agreement,
+              no_identification_disagreement: !isAgreement
+                ? item.no_identification_disagreement + 1
+                : item.no_identification_disagreement,
+            }
+          : item
+      )
+    );
+  
     try {
+      // Send the update request to the server
       const response = await axiosclient.post("/species_identifications/", {
         user: userId,
         image: image.toString(),
         scientific_name: scientificName,
-        option: "yes",
+        option,
       });
-      console.log("Agreement updated:", response.data);
-
+      console.log(`${isAgreement ? "Agreement" : "Disagreement"} updated:`, response.data);
+    } catch (error) {
+      console.error("Error updating identification:", error.response ? error.response.data : error.message);
+  
+      // Revert the optimistic update if the request fails
       setData((prevData) =>
-        prevData.map((item: { user_id: string; scientific_name: string; no_identification_agreement: number; }) =>
+        prevData.map((item: { user_id: string; scientific_name: string; no_identification_agreement: number; no_identification_disagreement: number; }) =>
           item.user_id === userId && item.scientific_name === scientificName
-            ? { ...item, no_identification_agreement: item.no_identification_agreement + 1 }
+            ? {
+                ...item,
+                no_identification_agreement: isAgreement
+                  ? item.no_identification_agreement - 1
+                  : item.no_identification_agreement,
+                no_identification_disagreement: !isAgreement
+                  ? item.no_identification_disagreement - 1
+                  : item.no_identification_disagreement,
+              }
             : item
         )
       );
-      // Optionally update the UI state here
-
-      
-    } catch (error) {
-      if (error.response) {
-        console.error("Error response data:", error.response.data);
-      } else {
-        console.error("Request error:", error.message);
-      }
     }
+  };
+
+  // Function to handle updates for agreements
+  const handleUpdateAgreement = async (userId: string, image: URL, scientificName: string) => {
+    updateIdentificationCount(userId, image, scientificName, "yes");
   };
 
   // Function to handle updates for disagreements
   const handleUpdateDisagreement = async (userId: string, image: URL, scientificName: string) => {
-    try {
-      const response = await axiosclient.post("/species_identifications/", {
-        user: userId,
-        image: image.toString(),
-        scientific_name: scientificName,
-        option: "no",
-      });
-      console.log("Disagreement updated:", response.data);
-      // Optionally update the UI state here
-    } catch (error) {
-      if (error.response) {
-        console.error("Error response data:", error.response.data);
-      } else {
-        console.error("Request error:", error.message);
-      }
-    }
+    updateIdentificationCount(userId, image, scientificName, "no");
   };
 
   return (
     <Box sx={{ maxHeight: "100vh", overflowY: "auto" }}>
       <Navbar />
+      <SearchBarIdentify onSearch={function (species: string, location: string): void {
+        throw new Error("Function not implemented.");
+      } } />
       <Box sx={{ padding: "20px", margin: 8 }}>
-        <Grid container spacing={2} justifyContent="center">
+        <Grid container spacing={2} justifyContent="center" alignItems="stretch">
           {paginatedData.map((item, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card sx={{ width: "100%", margin: "10px 0" }}>
+            <Grid item xs={12} sm={6} md={3} key={index} sx={{ display: "flex" }}>
+              <Card sx={{ width: "100%", margin: "10px 0", height:"100%",display: "flex", flexDirection: "column" }}>
                 <CardMedia
                   component="img"
-                  height="200"
+                  height="180"
                   image={item.image.toString()}
                   alt={item.common_name}
                 />
-                <CardContent>
+                <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="h5">{item.common_name}</Typography>
-                  <Typography variant="subtitle1">{item.scientific_name}</Typography>
-                  <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Typography variant="subtitle1" >Scientifc name: {item.scientific_name}</Typography>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", padding: "16px" }}>
                     <Button
                       variant="contained"
+                      size="small"
                       onClick={() => handleUpdateAgreement(item.user_id, item.image, item.scientific_name)}
                     >
                       {item.no_identification_agreement} Agree
                     </Button>
                     <Button
                       variant="contained"
+                      size="small"
                       onClick={() => handleUpdateDisagreement(item.user_id, item.image, item.scientific_name)}
                     >
                       {item.no_identification_disagreement} Disagree
@@ -136,7 +160,7 @@ export const Identify = () => {
         </Grid>
 
         {/* Pagination controls */}
-        <Box sx={{ textAlign: "center", marginTop: "20px" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: '10px' }}>
           <Button
             variant="contained"
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -158,7 +182,3 @@ export const Identify = () => {
     </Box>
   );
 };
-function setData(arg0: (prevData: any) => any) {
-  throw new Error("Function not implemented.");
-}
-
