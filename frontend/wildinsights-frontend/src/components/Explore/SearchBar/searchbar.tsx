@@ -78,7 +78,7 @@ const SearchBar: React.FC<SearchComponentProps> = ({ onSearch }) => {
     { name: "Uttar Pradesh" },
     { name: "Uttaranchal" }, 
     { name: "Uttarakhand" },
-    { name: "West Bengal" }
+    { name: "West Bengal" },
   ];
 
   
