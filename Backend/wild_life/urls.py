@@ -17,16 +17,17 @@ urlpatterns = [
     path('species-count', SpeciesCountView.as_view(), name='species-count'),
     path('identifiers', IdentifiersView.as_view(), name='identifiers'),
     
+    path('species_details', SpeciesDetailsView.as_view(), name='species_details'),
+    
+    
     path('user_profile', UserProfileView.as_view(), name='user_prfile'),
     path('user_profile/update', ProfileUpdateView.as_view(), name='profile_update'),
     
     path('user_dashboard', DashboardView.as_view(), name="user_dashboard"),
-    
-    path('species_details/', SpeciesDetailsView.as_view(), name='species_details'),
-    
+        
     path('community/people', CoummnityPeopleView.as_view(), name='community/people'),
     
-    path('species_identifications/', SpeciesIdentificationListView.as_view(), name='species_identifications')
+    path('species_identifications/', SpeciesIdentificationListView.as_view(), name='species_identifications'),
     
 ]
 

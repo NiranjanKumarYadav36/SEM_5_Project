@@ -3,6 +3,8 @@ from django.core.validators import validate_email
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from .models import *
+from datetime import datetime
+from dateutil import parser 
 
 
 
@@ -84,7 +86,7 @@ class AllSpeciesSerializers(serializers.ModelSerializer):
     
     class Meta:
         model = All_Species
-        fields = ['image', 'latitude', 'longitude', 'common_name', 'user_id', 'category']
+        fields = ['image', 'latitude', 'longitude', 'common_name', 'id']
         
     
     
@@ -124,4 +126,34 @@ class SpeciesIdentifications(serializers.ModelSerializer):
         model = All_Species
         fields = ['image', 'common_name', 'scientific_name', 'no_identification_agreement', 'no_identification_disagreement', 'user_id']
         
-        
+
+class SpeciesDetailsSerializer(serializers.ModelSerializer):
+    image = serializers.URLField()    
+    latitude = serializers.DecimalField(max_digits=14, decimal_places=10, allow_null=True, required=False)
+    longitude = serializers.DecimalField(max_digits=14, decimal_places=10, allow_null=True, required=False)
+
+    class Meta:
+        model = All_Species
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        # Convert latitude and longitude to float
+        representation['latitude'] = float(representation['latitude']) if representation['latitude'] is not None else None
+        representation['longitude'] = float(representation['longitude']) if representation['longitude'] is not None else None
+
+        # Handle Date and Time fields
+        if instance.observed_date:
+            representation['observed_date'] = instance.observed_date.isoformat()  # 'YYYY-MM-DD'
+
+        if instance.time_observed_at:
+            representation['time_observed_at'] = instance.time_observed_at.isoformat()  # 'HH:MM:SS'
+
+        if instance.created_date:
+            representation['created_date'] = instance.created_date.date().isoformat()  # Extract only date part 'YYYY-MM-DD'
+
+        if instance.updated_date:
+            representation['updated_date'] = instance.updated_date.date().isoformat()  # Extract only date part 'YYYY-MM-DD'
+
+        return representation

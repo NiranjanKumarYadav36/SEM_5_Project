@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .models import *
 from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers,
-                          HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer, SpeciesIdentifications)
+                          HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer, SpeciesIdentifications, SpeciesDetailsSerializer)
 import datetime, jwt
 from rest_framework import status
 from django.db.models import Count, Subquery, OuterRef, F
@@ -157,7 +157,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'user_id', 'category')[1:500000:55]
+        total_species = Protozoa.objects.values('image', 'latitude', 'longitude', 'common_name', 'id')
         
         
         # Serialize the data
@@ -344,73 +344,28 @@ class SpeciesDetailsView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
 
-        latitude = request.GET.get('latitude')
-        longitude = request.GET.get('longitude')
-        common_name = request.GET.get('common_name')
-        category = request.GET.get('category')
+        species_id = request.GET.get('id')
 
-        if not all([latitude, longitude, common_name, category]):
-            return Response({'message': 'Missing query parameters'}, status=400)
-
-        species_details = []
-
-        category_model_mapping = {
-            'Amphibia': Amphibia,
-            'Actinopterygii': Actinopterygii,
-            'Aves': Aves,
-            'Plantae': Plantae,
-            'Mollusca': Mollusca,
-            'Mammalia': Mammalia,
-            'Protozoa': Protozoa,
-            'Insecta': Insecta,
-            'Arachnida': Arachnida,
-            'Reptilia': Reptilia,
-        }
+        if not species_id:
+            return Response({'message': 'Missing query parameters'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-        try:
-            latitude = Decimal(latitude)
-            longitude = Decimal(longitude)
-        except (TypeError, ValueError):
-            return Response({'message': 'Invalid latitude or longitude'}, status=400)
-
-
-        model = category_model_mapping.get(category)
-        if not model:
-            return Response({'message': 'Invalid category'}, status=400)
-
-
-        species = model.objects.filter(common_name=common_name, latitude=latitude, longitude=longitude).first()
-
-        if species:
-            species_details.append({
-                'common_name': species.common_name,
-                'scientific_name': species.scientific_name,
-                'species_name_guess': species.species_name_guess,
-                'image': species.image.url,
-                'latitude': species.latitude,
-                'longitude': species.longitude,
-                'observed_date': species.observed_date,
-                'time_of_observation': species.time_observed_at,
-                'no_identification_agreement': species.no_identification_agreement,
-                'no_identification_disagreement': species.no_identification_disagreement,
-                'city': species.city,
-                'location': species.location,
-                'state': species.state,
-                'country': species.country,
-                'uploaded_by': species.user.username if species.user else 'Unknown'  
-            })
-        else:
-            return Response({'message': 'Species not found'}, status=404)
-
+        species = All_Species.objects.filter(id=species_id).first()
+        
+        
+        if not species:
+            return Response({'message': 'Species not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = SpeiceDetailsSerializer(species, many=False)
+    
         response = {
             'message': 'Species details fetched successfully',
-            'data': species_details,
+            'data': serializer.data,
             'user': user.username,
         }
 
         return Response(response)
-    
+
  
 class CoummnityPeopleView(BaseProtectedview):
     def get(self, request):
@@ -485,4 +440,40 @@ class SpeciesIdentificationListView(BaseProtectedview):
             return Response(response)
         
         return Response({"message": "Species not found"}, status=404) 
-    
+
+
+class SpeciesDetailsView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
+
+        species_id = request.GET.get('id')
+
+        if not species_id:
+            return Response({'message': 'Missing query parameters'}, status=status.HTTP_400_BAD_REQUEST)
+
+        species = All_Species.objects.filter(id=species_id).first()
+
+        if not species:
+            return Response({'message': 'Species not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = SpeciesDetailsSerializer(species)
+
+        response = {
+            'message': 'Species details fetched successfully',
+            'data': serializer.data,
+            'user': user.username,
+        }
+
+        return Response(response, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
+
+
+
+
+
