@@ -356,7 +356,7 @@ class SpeciesDetailsView(BaseProtectedview):
         if not species:
             return Response({'message': 'Species not found'}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = SpeiceDetailsSerializer(species, many=False)
+        serializer = SpeicesDetailsSerializer(species, many=False)
     
         response = {
             'message': 'Species details fetched successfully',
