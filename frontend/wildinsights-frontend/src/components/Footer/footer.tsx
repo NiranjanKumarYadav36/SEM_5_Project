@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, IconButton, Link, Typography } from "@mui/material";
+import { Box, IconButton, Link, Typography, Grid } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -8,7 +8,6 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 
 const Footer: React.FC = () => {
-
   const socialLinks = {
     twitter: "https://twitter.com/yourhandle",
     facebook: "https://facebook.com/yourhandle",
@@ -26,39 +25,45 @@ const Footer: React.FC = () => {
         alignItems: "center",
         backgroundColor: "#eaf3d8",
         borderTop: "1px solid #e0e0e0",
+        padding: "20px 0",
+        height: "100%"
       }}
     >
-      {/* Help Section */}
-      <Box sx={{ marginTop: 5, marginBottom:5 }}>
-        <Link
-          href="/help"
-          underline="none"
-          sx={{ display: "flex", alignItems: "center" }}
-        >
-          <HelpOutlineIcon sx={{ mr: 1 }} />
-          <Typography variant="body1">Help</Typography>
-        </Link>
-        <Link href="/forums" underline="none">
-          <Typography variant="body1" color="primary">
-            Forums
-          </Typography>
-        </Link>
-        <Link href="/terms-of-use" underline="none">
-          <Typography variant="body1" color="primary">
-            Terms of Use
-          </Typography>
-        </Link>
-        <Link href="/privacy" underline="none">
-          <Typography variant="body1" color="primary">
-            Privacy
-          </Typography>
-        </Link>
-        <Link href="/community-guidelines" underline="none">
-          <Typography variant="body1" color="primary">
-            Community Guidelines
-          </Typography>
-        </Link>
-      </Box>
+      {/* Help and Community Guidelines in Two Columns */}
+      <Grid container spacing={2} sx={{ width: "50%" }}>
+        <Grid item xs={6}>
+          <Link
+            href="/help"
+            underline="none"
+            sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}
+          >
+            <HelpOutlineIcon sx={{ mr: 1 }} />
+            <Typography variant="body1">Help</Typography>
+          </Link>
+          <Link href="/forums" underline="none">
+            <Typography variant="body1" color="primary">
+              Forums
+            </Typography>
+          </Link>
+        </Grid>
+        <Grid item xs={6}>
+          <Link href="/terms-of-use" underline="none">
+            <Typography variant="body1" color="primary">
+              Terms of Use
+            </Typography>
+          </Link>
+          <Link href="/privacy" underline="none">
+            <Typography variant="body1" color="primary">
+              Privacy
+            </Typography>
+          </Link>
+          <Link href="/community-guidelines" underline="none">
+            <Typography variant="body1" color="primary">
+              Community Guidelines
+            </Typography>
+          </Link>
+        </Grid>
+      </Grid>
 
       {/* Social Icons Section */}
       <Box>

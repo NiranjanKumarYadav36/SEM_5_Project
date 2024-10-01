@@ -24,7 +24,7 @@ export const People = () => {
   }
 
   const renderTable = (tableData: PeopleData[], title: string, dataKey: keyof PeopleData) => (
-    <TableContainer component={Paper} sx={{ minWidth: 200, margin: "0 10px" }}>
+    <TableContainer component={Paper} sx={{ minWidth: 210, margin: "0 10px" }}>
       <Typography variant="h6" align="center">{title}</Typography>
       <Table>
         <TableHead>
@@ -36,8 +36,8 @@ export const People = () => {
         <TableBody>
           {tableData.map((row, index) => (
             <TableRow key={index}>
-              <TableCell>{row.username}</TableCell>
-              <TableCell>{row[dataKey]}</TableCell>
+              <TableCell >{row.username}</TableCell>
+              <TableCell align="center">{row[dataKey]}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -75,8 +75,8 @@ export const People = () => {
 
         {/* Tables */}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {renderTable(mostObservations, "Most Observations", "observations_count")}
-          {renderTable(mostIdentifiers, "Most Identifications", "identifications")}
+          {renderTable(mostObservations, "Observations", "observations_count")}
+          {renderTable(mostIdentifiers, "Identifications", "identifications")}
           {renderTable(mostRecentLogin, "Last Active", "last_active")} {/* Sorted by last_active */}
         </Box>
       </Box>

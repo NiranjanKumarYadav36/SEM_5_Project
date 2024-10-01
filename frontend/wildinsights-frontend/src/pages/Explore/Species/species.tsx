@@ -16,6 +16,7 @@ import SearchBar from "../../../components/Explore/SearchBar/searchbar";
 import Footer from "../../../components/Footer/footer";
 import { useSpeciesData } from "../../../components/Loaders/ExploreLoader/SpeciesLoader/speciesloader";
 import LoadingScreen from "../../../components/LoadingScreen/Loading";
+import altImage from "../../../assets/Species/image-not-found.png";
 
 export default function Species() {
   const { data, loading, error, loadPage, page, hasMore } = useSpeciesData();
@@ -39,10 +40,10 @@ export default function Species() {
   };
 
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
-    event.currentTarget.src = "/fallback-image.jpg"; // Replace with your fallback image path
+    event.currentTarget.src = altImage; // Replace with your fallback image path
   };
 
-  if (loading && data.length === 0) {
+  if (loading ) {
     return <LoadingScreen />; // Show loading screen only when no data is loaded yet
   }
 
@@ -99,7 +100,7 @@ export default function Species() {
                   <CardMedia
                     component="img"
                     height="250"
-                    image={item.image || "vite.svg"} // Handle missing image
+                    image={item.image} 
                     alt={item.common_name}
                     onError={handleImageError}
                   />
@@ -121,7 +122,7 @@ export default function Species() {
       {/* Pagination Controls */}
       <Box display="flex" justifyContent="space-between" mt={4}>
         <Typography
-          variant="body2"
+          variant="body1"
           sx={{ cursor: "pointer", color: page > 1 ? "blue" : "grey" }}
           onClick={handlePreviousPage}
         >
@@ -129,7 +130,7 @@ export default function Species() {
         </Typography>
         <Typography>Page {page}</Typography>
         <Typography
-          variant="body2"
+          variant="body1"
           sx={{ cursor: "pointer", color: hasMore ? "blue" : "grey" }}
           onClick={handleNextPage}
         >

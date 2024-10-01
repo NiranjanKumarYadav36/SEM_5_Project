@@ -8,7 +8,7 @@ interface ObservationData {
   image: URL;
   latitude: number;
   longitude: number;
-  username: string;
+  user_id: string;
 }
 
 export const useObservationData = () => {
