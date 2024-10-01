@@ -468,8 +468,6 @@ class SpeciesDetailsView(BaseProtectedview):
         return Response(response, status=status.HTTP_200_OK)
 
 
-
-
 class FilteredView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()

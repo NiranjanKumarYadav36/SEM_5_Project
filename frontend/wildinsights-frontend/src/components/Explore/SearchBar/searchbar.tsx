@@ -9,6 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import axiosclient from "../../Apiclient/axiosclient";
 import Filter from "../../../components/Filter/filter";
 
 type Option = {
@@ -38,7 +39,7 @@ const SearchBar: React.FC<SearchComponentProps> = ({ onSearch }) => {
     { name: "Protozoa" },
     { name: "Insecta" },
     { name: "Arachnida" },
-    { name: "Reptilia" }
+    { name: "Reptilia" },
   ];
 
   const predefinedLocations = [
@@ -63,6 +64,7 @@ const SearchBar: React.FC<SearchComponentProps> = ({ onSearch }) => {
     { name: "Lakshadweep" },
     { name: "Madhya Pradesh" },
     { name: "Manipur" },
+    { name: "Maharashtra"},
     { name: "Meghalaya" },
     { name: "Mizoram" },
     { name: "Nagaland" },
@@ -76,15 +78,14 @@ const SearchBar: React.FC<SearchComponentProps> = ({ onSearch }) => {
     { name: "Telangana" },
     { name: "Tripura" },
     { name: "Uttar Pradesh" },
-    { name: "Uttaranchal" }, 
+    { name: "Uttaranchal" },
     { name: "Uttarakhand" },
-    { name: "West Bengal" }
+    { name: "West Bengal" },
   ];
 
-  
   // Filter species options based on user input
   useEffect(() => {
-    if (species.length < 1) return; 
+    if (species.length < 1) return;
 
     const filteredSpecies = predefinedSpecies.filter((option) =>
       option.name.toLowerCase().includes(species.toLowerCase())
@@ -103,20 +104,40 @@ const SearchBar: React.FC<SearchComponentProps> = ({ onSearch }) => {
   }, [location]);
 
   // Handle search form submission
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!species && !location) {
-      setError("Please select or type a species and a location.");
+      setError("Please select or type a species and/or a location.");
       return;
     }
     setError("");
-    onSearch(species, location);
+    setLoading(true);
+
+    try {
+      // Construct query params dynamically based on input
+      const params: { species?: string; location?: string } = {};
+      if (species) {
+        params.species = species;
+      }
+      if (location) {
+        params.location = location;
+      }
+
+      // Perform API request with axiosClient and send the species & location as query params
+      const response = await axiosclient.get("/explore/filter", { params });
+      console.log(response.data); // Handle the API response
+      onSearch(species, location); // You can trigger onSearch here
+    } catch (error) {
+      console.error("Error fetching data", error);
+      setError("Failed to fetch data.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleApplyFilters = (filters: any) => {
     console.log("Applied Filters:", filters);
-    
     // Perform your API call to fetch filtered data here
   };
 
