@@ -523,7 +523,7 @@ class FilteredView(BaseProtectedview):
         # Determine the queryset to be used based on the category
         if category and category in category_model_mapping:
             model = category_model_mapping[category]
-            query_set = model.objects.filter(**filter_criteria)[:2]
+            query_set = model.objects.filter(**filter_criteria)[:4000]
         else:
             model = All_Species
             query_set = model.objects.filter(**filter_criteria)[:4000]
