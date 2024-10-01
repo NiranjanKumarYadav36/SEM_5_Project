@@ -47,8 +47,8 @@ const natureFeatures = [
 ];
 
 const imageGalleryData: ImageGalleryItem[] = [
-  { image:  custombird, common_name: 'Bird' },
-  { image:custombbutterfly , common_name: 'Butterfly' },
+  { image: custombird, common_name: 'Bird' },
+  { image: custombbutterfly, common_name: 'Butterfly' },
   { image: custominsect, common_name: 'insect' },
   { image: customseagull, common_name: 'seagull' },
   { image: customflower, common_name: 'flower' },
@@ -108,8 +108,41 @@ function HomePage() {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', overflow: "auto", height: "calc(100vh - 200px)"  }}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', overflow: "auto", height: "calc(100vh - 200px)" }}>
       <Navbar />
+
+      {/* How It Works Section */}
+      <Box sx={{ py: 4, backgroundColor: '#f9f9f9' }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          How It Works
+        </Typography>
+        <Grid container justifyContent="center" spacing={2} sx={{ position: 'relative' }}>
+          {howItWorksItems.map((item, index) => (
+            <Grid item key={item.id} xs={12} sm={6} md={4} textAlign="center" sx={{ position: 'relative' }}>
+              <Box display="flex" flexDirection="column" alignItems="center">
+                <img
+                  src={item.image}
+                  alt={item.text}
+                  style={{
+                    width: '100%',
+                    maxWidth: '200px',
+                    height: 'auto',
+                    objectFit: 'contain',
+                  }}
+                />
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1976d2', mt: 2 }}>
+                  {index + 1}
+                </Typography>
+
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1976d2', mt: 2 }}>
+                  {item.text}
+                </Typography>
+
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
 
       {/* Dynamic Image Section */}
       <Box
@@ -159,7 +192,7 @@ function HomePage() {
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                 }}
               />
-    
+
               <Box
                 sx={{
                   position: 'absolute',
@@ -204,33 +237,7 @@ function HomePage() {
         </IconButton>
       </Box>
 
-      {/* How It Works Section */}
-      <Box sx={{ py: 4, backgroundColor: '#f9f9f9' }}>
-        <Typography variant="h4" align="center" gutterBottom>
-          How It Works
-        </Typography>
-        <Grid container justifyContent="center" spacing={2} sx={{ position: 'relative' }}>
-          {howItWorksItems.map((item, index) => (
-            <Grid item key={item.id} xs={12} sm={6} md={4} textAlign="center" sx={{ position: 'relative' }}>
-              <Box display="flex" flexDirection="column" alignItems="center">
-                <img
-                  src={item.image}
-                  alt={item.text}
-                  style={{
-                    width: '100%',
-                    maxWidth: '200px',
-                    height: 'auto',
-                    objectFit: 'contain',
-                  }}
-                />
-                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1976d2', mt: 2 }}>
-                  {item.text}
-                </Typography>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
+
 
       {/* Nature Features Section */}
       <Box sx={{ py: 4, backgroundColor: '#74ac0020' }}>
@@ -263,7 +270,7 @@ function HomePage() {
         </Grid>
       </Box  >
 
-      <Footer  />
+      <Footer />
     </Box>
   );
 }
