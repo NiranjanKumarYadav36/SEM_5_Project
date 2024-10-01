@@ -51,12 +51,12 @@ export default function Explore() {
 
     try {
       // Construct query params dynamically based on input
-      const params: { category?: string; location?: string } = {};
+      const params: { category?: string; state?: string } = {};
       if (species) {
         params.category = species;
       }
       if (location) {
-        params.location = location;
+        params.state = location;
       }
       const response = await axiosclient.get("/explore/filter", { params });
       setFilteredData(response.data);
