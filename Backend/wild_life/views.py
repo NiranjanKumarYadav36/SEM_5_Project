@@ -448,7 +448,7 @@ class SpeciesDetailsView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
 
-        species_id = request.GET.get('id')
+        species_id = request.query_params.get('id')
 
         if not species_id:
             return Response({'message': 'Missing query parameters'}, status=status.HTTP_400_BAD_REQUEST)

@@ -389,3 +389,9 @@ class Arachnida(models.Model):
 
     def __str__(self):
         return f"{self.species_name_guess} observed by {self.user}"
+
+
+class Identified(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    species_identified_id = models.ForeignKey('All_Species', on_delete=models.CASCADE, null=True, blank=True) # lazy reference
+    
