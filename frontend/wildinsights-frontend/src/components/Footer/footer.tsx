@@ -26,6 +26,7 @@ const Footer: React.FC = () => {
         backgroundColor: "#eaf3d8",
         borderTop: "1px solid #e0e0e0",
         padding: "20px 0",
+        height: "100%"
       }}
     >
       {/* Help and Community Guidelines in Two Columns */}

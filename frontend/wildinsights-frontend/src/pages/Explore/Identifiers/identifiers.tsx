@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, {useRef } from "react";
 import {
   Box,
   CircularProgress,
@@ -35,29 +35,6 @@ export default function Identifiers() {
     // Handle your search logic here
   };
 
-  // Infinite scroll handler
-  const handleScroll = () => {
-    if (
-      IdentifierListRef.current &&
-      IdentifierListRef.current.scrollTop + IdentifierListRef.current.clientHeight >=
-      IdentifierListRef.current.scrollHeight
-    ) {
-      loadPage(); // Load more observers when scrolled to the bottom
-    }
-  };
-
-  // Attach and detach the scroll event listener
-  useEffect(() => {
-    const currentIdentifierListRef = IdentifierListRef.current;
-    if (currentIdentifierListRef) {
-      currentIdentifierListRef.addEventListener("scroll", handleScroll);
-    }
-    return () => {
-      if (currentIdentifierListRef) {
-        currentIdentifierListRef.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
 
   // Handle loading the next page
   const handleNextPage = () => {
