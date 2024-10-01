@@ -465,15 +465,3 @@ class SpeciesDetailsView(BaseProtectedview):
         }
 
         return Response(response, status=status.HTTP_200_OK)
-
-
-
-
-
-
-
-
-
-
-
-
