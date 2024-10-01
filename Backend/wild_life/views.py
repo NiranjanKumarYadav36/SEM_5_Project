@@ -523,10 +523,10 @@ class FilteredView(BaseProtectedview):
         # Determine the queryset to be used based on the category
         if category and category in category_model_mapping:
             model = category_model_mapping[category]
-            query_set = model.objects.filter(**filter_criteria)
+            query_set = model.objects.filter(**filter_criteria)[:2]
         else:
             model = All_Species
-            query_set = model.objects.filter(**filter_criteria)
+            query_set = model.objects.filter(**filter_criteria)[:4000]
             
 
          # Use the dynamic serializer based on the model
