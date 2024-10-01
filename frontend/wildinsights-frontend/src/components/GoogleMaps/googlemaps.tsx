@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
-import LoadingScreen from "../LoadingScreen/Loading";
 import {
   AdvancedMarker,
   APIProvider,
@@ -9,24 +8,23 @@ import {
   useMap,
 } from "@vis.gl/react-google-maps";
 import { MarkerClusterer, type Marker } from "@googlemaps/markerclusterer"; // Ensure correct Marker import
-import { useObservationData } from "../Explore/DataFetcher/observationdata";
 import { Card, CardMedia, CardContent, Typography, Link } from "@mui/material";
 
-const Maps: React.FC = () => {
-  const { data, loading, error } = useObservationData();
-  console.log(data);
+interface ObservationData {
+  category: string;
+  common_name: string;
+  image: URL;
+  latitude: number;
+  longitude: number;
+  user_id: string;
+}
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+const Maps: React.FC< {data : ObservationData[]}> = ({ data }) => {
 
-  if (error) {
-    return <div>{error}</div>; // Display error if loading fails
-  }
 
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-      <div style={{ height: "600px", width: "100%" }}>
+      <div style={{ height: "700px", width: "100%" }}>
         <Map
           defaultZoom={5}
           defaultCenter={{ lat: 20.5937, lng: 78.9629 }}
