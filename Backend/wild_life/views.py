@@ -343,33 +343,6 @@ class ProfileUpdateView(BaseProtectedview):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class SpeciesDetailsView(BaseProtectedview):
-    def get(self, request):
-        user = self.get_user_from_token()
-
-        species_id = request.GET.get('id')
-
-        if not species_id:
-            return Response({'message': 'Missing query parameters'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-        species = All_Species.objects.filter(id=species_id).first()
-        
-        
-        if not species:
-            return Response({'message': 'Species not found'}, status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = SpeicesDetailsSerializer(species, many=False)
-    
-        response = {
-            'message': 'Species details fetched successfully',
-            'data': serializer.data,
-            'user': user.username,
-        }
-
-        return Response(response)
-
- 
 class CoummnityPeopleView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
@@ -567,3 +540,30 @@ class FilteredView(BaseProtectedview):
         
         return Response(serializer.data)
 
+
+
+# class SpeciesDetailsView(BaseProtectedview):
+#     def get(self, request):
+#         user = self.get_user_from_token()
+
+#         species_id = request.GET.get('id')
+
+#         if not species_id:
+#             return Response({'message': 'Missing query parameters'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+#         species = All_Species.objects.filter(id=species_id).first()
+        
+        
+#         if not species:
+#             return Response({'message': 'Species not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+#         serializer = SpeciesDetailsSerializer(species, many=False)
+    
+#         response = {
+#             'message': 'Species details fetched successfully',
+#             'data': serializer.data,
+#             'user': user.username,
+#         }
+
+#         return Response(response)
