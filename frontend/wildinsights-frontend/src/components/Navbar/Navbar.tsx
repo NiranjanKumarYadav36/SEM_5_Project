@@ -50,7 +50,7 @@ const Navbar = () => {
     { text: "Explore", link: "/explore" },
     { text: "Community", link: "#" },
     { text: "Identify", link: "/identify" },
-    { text: "Your Observations", link: "/sds" },//Update pls
+    { text: "Your Observations", link: "/explore/your_observations" },//Update pls
   ];
 
   const communityItems = [

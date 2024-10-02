@@ -116,8 +116,7 @@ const Markers = ({ points }: Props) => {
           onCloseClick={handleInfoWindowClose} // Close InfoWindow on click
         >
           <Card sx={{ height: "100%" }}>
-            <Link href="/">
-              {" "}
+            <Link href="/observations/&{activeMarker.id}">
               {/* MUI Card component for layout */}
               <CardMedia
                 component="img"
@@ -128,9 +127,11 @@ const Markers = ({ points }: Props) => {
               />
             </Link>
             <CardContent>
+              <Link href="/observations/&{activeMarker.id}" underline="none">
               <Typography gutterBottom variant="h6" component="div">
                 {activeMarker.common_name}
               </Typography>
+              </Link>
               <Typography variant="body2" color="text.secondary">
                 Username: {activeMarker.user_id}
               </Typography>

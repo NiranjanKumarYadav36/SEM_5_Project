@@ -534,6 +534,4 @@ class FilteredView(BaseProtectedview):
         serializer = serializer_class(filtered_data, many=True)
         
         return Response(serializer.data)
-
-
      
