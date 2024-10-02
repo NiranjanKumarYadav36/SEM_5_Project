@@ -115,12 +115,12 @@ const SearchBar: React.FC<SearchComponentProps> = ({ onSearch }) => {
 
     try {
       // Construct query params dynamically based on input
-      const params: { category?: string; location?: string } = {};
+      const params: { category?: string; state?: string } = {};
       if (species) {
         params.category = species;
       }
       if (location) {
-        params.location = location;
+        params.state = location;
       }
 
       // Perform API request with axiosClient and send the species & location as query params
