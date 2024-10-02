@@ -429,12 +429,8 @@ class ReviewedListView(BaseProtectedview):
         agreed_species = user.agreed_species.all() 
         
         serializer = ReviewdSerializer(agreed_species, many=True)
-
-        response = {
-            'data': serializer.data
-        }
         
-        return Response(response)
+        return Response(serializer.data)
             
 
 class SpeciesDetailsView(BaseProtectedview):
@@ -630,3 +626,4 @@ class AddObservationView(BaseProtectedview):
         }
         
         return Response(response, status=201)  
+
