@@ -10,6 +10,7 @@ class User(AbstractUser):
     password = models.CharField(max_length=255, )
     identifications = models.BigIntegerField(default=0)
     about = models.TextField(max_length=1000, null=True, blank=True)
+    agreed_species = models.ManyToManyField('All_Species', related_name='agrred_users')
 
     REQUIRED_FIELDS = []
 
@@ -389,3 +390,7 @@ class Arachnida(models.Model):
 
     def __str__(self):
         return f"{self.species_name_guess} observed by {self.user}"
+
+
+
+    

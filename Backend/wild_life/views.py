@@ -15,6 +15,7 @@ from decimal import Decimal
 from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
 import pytz
+from django.shortcuts import get_object_or_404
 
 
 class BaseProtectedview(APIView):
@@ -402,7 +403,9 @@ class SpeciesIdentificationListView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
         
-        species_details = All_Species.objects.values('image', 'common_name', 'scientific_name', 'no_identification_agreement', 'no_identification_disagreement', 'user_id')
+        agreed_species_ids = user.agreed_species.values_list('id', flat=True)
+        
+        species_details = All_Species.objects.exclude(id__in=agreed_species_ids).values('id', 'image', 'common_name', 'scientific_name', 'no_identification_agreement', 'no_identification_disagreement')
         
         paginator = CustomPagination()
         paginated_data = paginator.paginate_queryset(species_details, request)
@@ -414,19 +417,21 @@ class SpeciesIdentificationListView(BaseProtectedview):
     def post(self, request):
         user = self.get_user_from_token()
         
-        user_id = request.data.get('user')
-        image =  request.data.get('image')
-        scientific_name = request.data.get('scientific_name')
-        option = request.data.get('option')
+        # user_id = request.data.get('user')
+        # image =  request.data.get('image')
+        # scientific_name = request.data.get('scientific_name')
+        specie_id = request.query_params.get('id')
+        option = request.query_params.get('option')
         
          # Check if all necessary fields are provided
-        if not all([user_id, image, scientific_name, option]):
+        if not all([specie_id, option]):
             return Response({"message": "Missing data"}, status=400)
 
-        species = All_Species.objects.filter(user_id=user_id, image=image, scientific_name=scientific_name).first()
+        species = All_Species.objects.filter(id=specie_id).first()
             
         if species:
             user.identifications += 1
+            user.agreed_species.add(specie_id)
             if option == 'yes':
                 species.no_identification_agreement += 1
             elif option == 'no':
@@ -444,11 +449,38 @@ class SpeciesIdentificationListView(BaseProtectedview):
         return Response({"message": "Species not found"}, status=404) 
 
 
+class ReviewedListView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
+        
+        agreed_species = user.agreed_species.all() 
+        
+        species_details = []
+        for species in agreed_species:
+            # Fetch details for each agreed species
+            species_object = get_object_or_404(All_Species, pk=species.id)
+            species_data = {
+                'id': species_object.id,
+                'image': species_object.image.url,  
+                'common_name': species_object.common_name,
+                'scientific_name': species_object.scientific_name,
+                'no_identification_agreement': species_object.no_identification_agreement,
+                'no_identification_disagreement': species_object.no_identification_disagreement
+            }
+            species_details.append(species_data)
+
+        response = {
+            'data': species_details
+        }
+        
+        return Response(response)
+            
+
 class SpeciesDetailsView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
 
-        species_id = request.GET.get('id')
+        species_id = request.query_params.get('id')
 
         if not species_id:
             return Response({'message': 'Missing query parameters'}, status=status.HTTP_400_BAD_REQUEST)
@@ -534,4 +566,4 @@ class FilteredView(BaseProtectedview):
         serializer = serializer_class(filtered_data, many=True)
         
         return Response(serializer.data)
-     
+
