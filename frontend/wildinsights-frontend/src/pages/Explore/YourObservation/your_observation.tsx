@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import Navbar from "../../../components/Navbar/Navbar";
 import Maps from "../../../components/GoogleMaps/googlemaps";
-import NavigationButtons from "../../../components/Explore/NavigationButton/navigationbutton";
 import SearchBar from "../../../components/Explore/SearchBar/searchbar";
 import Footer from "../../../components/Footer/footer";
 import axiosclient from "../../../components/Apiclient/axiosclient";
@@ -18,12 +17,11 @@ interface ObservationData {
   latitude: number;
   longitude: number;
   user_id: string;
-  id : number;
 }
 
 
 
-export default function Explore() {
+export default function MyObservation() {
   const [defaultData, setDefaultData] = useState([]);  // For default observations
   const [filteredData, setFilteredData] = useState([]);  // For search-specific data
   const [loading, setLoading] = useState(true);
@@ -32,7 +30,7 @@ export default function Explore() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosclient.get("/explore");
+        const response = await axiosclient.get("/explore/your_observation");
         setDefaultData(response.data.data || []); // Set to an empty array if data is null or undefined
       } catch (error) {
         console.error("Failed to load data.",error);
@@ -79,7 +77,6 @@ export default function Explore() {
       <Box>
         <Navbar />
         <SearchBar onSearch={handleSearch} />
-        <NavigationButtons />
       </Box>
       <Box sx={{ position:"relative"}}>
         <Maps data={dataToRender}/>

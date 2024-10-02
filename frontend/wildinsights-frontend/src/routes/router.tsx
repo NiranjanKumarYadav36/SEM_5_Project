@@ -14,6 +14,8 @@ import UserDashboard from "../pages/User/Dashboard/dashboard";
 import Explore from "../pages/Explore/Explore/Explore";
 import { People } from "../pages/Community/People/people";
 import { Identify } from "../pages/Identify/identify";
+import MyObservation from "../pages/Explore/YourObservation/your_observation";
+import { ObservationView } from "../pages/ObservationsView/observationview";
 
 
 const router = createBrowserRouter([
@@ -53,6 +55,10 @@ const router = createBrowserRouter([
           path:"/explore/observers",
           element: <Observers />,
         },
+        {
+          path:"/explore/your_observations",
+          element: <MyObservation />,
+        }
       ]
     },
     {
@@ -81,6 +87,16 @@ const router = createBrowserRouter([
         {
           path: "",
           element:<Identify />,
+        }
+      ]
+    },
+    {
+      path: "/observations",
+      element:<ProtectedRoute />,
+      children:[
+        {
+          path: "/observations/:id",
+          element: <ObservationView />,
         }
       ]
     },
