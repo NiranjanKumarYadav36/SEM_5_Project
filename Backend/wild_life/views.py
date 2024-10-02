@@ -5,7 +5,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from .models import *
 from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers,
                           HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer, SpeciesIdentifications, 
-                          SpeciesDetailsSerializer, get_species_serializer)
+                          SpeciesDetailsSerializer, get_species_serializer, UserObservationsSerializer)
 import datetime, jwt
 from rest_framework import status
 from django.db.models import Count, Subquery, OuterRef, F
@@ -342,7 +342,7 @@ class ProfileUpdateView(BaseProtectedview):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
- 
+
 class CoummnityPeopleView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
@@ -540,3 +540,19 @@ class FilteredView(BaseProtectedview):
         
         return Response(serializer.data)
 
+
+class UserObseravtionView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
+            
+        total_species = All_Species.objects.filter(user_id=user.username).values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id')[1:500000:75]
+        
+        serializer = UserObservationsSerializer(total_species, many=True) 
+        
+        response = {
+            'mesaage': 'Explore page content',
+            'data': serializer.data,
+            'user': user.username,
+        }
+
+        return Response(response)

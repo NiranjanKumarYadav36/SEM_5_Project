@@ -86,7 +86,7 @@ class AllSpeciesSerializers(serializers.ModelSerializer):
     
     class Meta:
         model = All_Species
-        fields = ['image', 'latitude', 'longitude', 'common_name', 'id']
+        fields = ['image', 'latitude', 'longitude', 'common_name', 'id', 'user_id']
         
     
     
@@ -118,7 +118,6 @@ class IdentifiersSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'identifications']
         
-
 
 class SpeciesIdentifications(serializers.ModelSerializer):
     image = serializers.URLField()
@@ -159,8 +158,6 @@ class SpeciesDetailsSerializer(serializers.ModelSerializer):
         return representation
     
 
-
-
 def get_species_serializer(model):
     # Create a new dynamic class for the serializer using type()
     return type(
@@ -178,3 +175,25 @@ def get_species_serializer(model):
     )
 
 
+
+class UserObservationsSerializer(serializers.ModelSerializer):
+    image = serializers.URLField()    
+    latitude = serializers.DecimalField(max_digits=14, decimal_places=10,  allow_null=True, required=False)
+    longitude = serializers.DecimalField(max_digits=14, decimal_places=10,  allow_null=True, required=False)
+    
+    class Meta:
+        model = All_Species
+        fields = ['image', 'latitude', 'longitude', 'common_name', 'id', 'user_id']
+        
+    
+    
+    def to_representation(self, instance):
+        # Use the default serialization
+        representation = super().to_representation(instance)
+
+        # Convert latitude and longitude to float
+        representation['latitude'] = float(representation['latitude']) if representation['latitude'] is not None else None
+        representation['longitude'] = float(representation['longitude']) if representation['longitude'] is not None else None
+
+        return representation
+    
