@@ -15,6 +15,7 @@ from decimal import Decimal
 from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
 import pytz
+from django.shortcuts import get_object_or_404
 
 
 class BaseProtectedview(APIView):
@@ -448,6 +449,33 @@ class SpeciesIdentificationListView(BaseProtectedview):
         return Response({"message": "Species not found"}, status=404) 
 
 
+class ReviewedListView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
+        
+        agreed_species = user.agreed_species.all() 
+        
+        species_details = []
+        for species in agreed_species:
+            # Fetch details for each agreed species
+            species_object = get_object_or_404(All_Species, pk=species.id)
+            species_data = {
+                'id': species_object.id,
+                'image': species_object.image.url,  
+                'common_name': species_object.common_name,
+                'scientific_name': species_object.scientific_name,
+                'no_identification_agreement': species_object.no_identification_agreement,
+                'no_identification_disagreement': species_object.no_identification_disagreement
+            }
+            species_details.append(species_data)
+
+        response = {
+            'data': species_details
+        }
+        
+        return Response(response)
+            
+
 class SpeciesDetailsView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
@@ -539,5 +567,3 @@ class FilteredView(BaseProtectedview):
         
         return Response(serializer.data)
 
-
-     
