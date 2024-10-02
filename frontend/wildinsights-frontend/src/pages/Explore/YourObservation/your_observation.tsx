@@ -30,8 +30,9 @@ export default function MyObservation() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosclient.get("/explore/your_observation");
+        const response = await axiosclient.get("/your_observation");
         setDefaultData(response.data.data || []); // Set to an empty array if data is null or undefined
+        console.log(response.data)
       } catch (error) {
         console.error("Failed to load data.",error);
       } finally {
