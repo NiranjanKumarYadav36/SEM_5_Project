@@ -22,8 +22,8 @@ class All_Species(models.Model):
     observed_date = models.DateField(_('Observed Date'), null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(auto_created=True)
-    updated_date = models.DateTimeField(auto_created=True)
+    created_date = models.DateTimeField(auto_now_add=True) # Automatically set to now when the object is created
+    updated_date = models.DateTimeField(auto_now=True) # Automatically set to now every time the object is updated
     
     image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
@@ -56,10 +56,10 @@ class Amphibia(models.Model):
     observed_date = models.DateField(_('Observed Date'), null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(auto_created=False)
-    updated_date = models.DateTimeField(auto_created=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     
-    image = models.ImageField(_('Image URL'), null=True)
+    image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     
@@ -90,10 +90,10 @@ class Aves(models.Model):
     observed_date = models.DateField(_('Observed Date'), null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(auto_created=False)
-    updated_date = models.DateTimeField(auto_created=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     
-    image = models.ImageField(_('Image URL'), null=True,)
+    image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     
@@ -124,10 +124,10 @@ class Actinopterygii(models.Model):
     observed_date = models.DateField(_('Observed Date'),  null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(auto_created=False)
-    updated_date = models.DateTimeField(auto_created=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     
-    image = models.ImageField(_('Image URL'), null=True)
+    image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     
@@ -158,10 +158,10 @@ class Insecta(models.Model):
     observed_date = models.DateField(_('Observed Date'), null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(auto_created=False)
-    updated_date = models.DateTimeField(auto_created=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     
-    image = models.ImageField(_('Image URL'), null=True)
+    image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     
@@ -192,10 +192,10 @@ class Mammalia(models.Model):
     observed_date = models.DateField(_('Observed Date'),   null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(auto_created=False)
-    updated_date = models.DateTimeField(auto_created=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     
-    image = models.ImageField(_('Image URL'), null=True)
+    image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     
@@ -226,10 +226,10 @@ class Mollusca(models.Model):
     observed_date = models.DateField(_('Observed Date'),  null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(auto_created=False)
-    updated_date = models.DateTimeField(auto_created=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     
-    image = models.ImageField(_('Image URL'), null=True)
+    image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     
@@ -260,10 +260,10 @@ class Plantae(models.Model):
     observed_date = models.DateField(_('Observed Date'),  null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(auto_created=False)
-    updated_date = models.DateTimeField(auto_created=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     
-    image = models.ImageField(_('Image URL'), null=True)
+    image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     
@@ -294,10 +294,10 @@ class Protozoa(models.Model):
     observed_date = models.DateField(_('Observed Date'),   null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(_('Created At'), )
-    updated_date = models.DateTimeField(_('Updated At'), )
+    created_date = models.DateTimeField(_('Created At'), auto_now_add=True)
+    updated_date = models.DateTimeField(_('Updated At'), auto_now=True)
     
-    image = models.ImageField(_('Image URL'), null=True)
+    image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     
@@ -328,10 +328,10 @@ class Reptilia(models.Model):
     observed_date = models.DateField(_('Observed Date'),  null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(auto_created=False)
-    updated_date = models.DateTimeField(auto_created=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     
-    image = models.ImageField(_('Image URL'), null=True)
+    image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     
@@ -362,10 +362,10 @@ class Arachnida(models.Model):
     observed_date = models.DateField(_('Observed Date'), null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(auto_created=False)
-    updated_date = models.DateTimeField(auto_created=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     
-    image = models.ImageField(_('Image URL'), null=True)
+    image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     

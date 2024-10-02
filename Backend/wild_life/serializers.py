@@ -123,7 +123,7 @@ class SpeciesIdentifications(serializers.ModelSerializer):
     image = serializers.URLField()
     class Meta:
         model = All_Species
-        fields = ['image', 'common_name', 'scientific_name', 'no_identification_agreement', 'no_identification_disagreement', 'user_id']
+        fields = ['id', 'image', 'common_name', 'scientific_name', 'no_identification_agreement', 'no_identification_disagreement', 'user_id']
         
 
 class SpeciesDetailsSerializer(serializers.ModelSerializer):
@@ -197,3 +197,17 @@ class UserObservationsSerializer(serializers.ModelSerializer):
         return representation
 
 
+class ReviewdSerializer(serializers.ModelSerializer):
+    image = serializers.URLField()
+    class Meta:
+        model = All_Species
+        fields = [
+            'id',
+            'image',
+            'common_name',
+            'scientific_name',
+            'no_identification_agreement',
+            'no_identification_disagreement',
+        ]
+        
+    

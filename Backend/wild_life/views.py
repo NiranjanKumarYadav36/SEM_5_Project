@@ -5,7 +5,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from .models import *
 from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers,
                           HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer, SpeciesIdentifications, 
-                          SpeciesDetailsSerializer, get_species_serializer, UserObservationsSerializer)
+                          SpeciesDetailsSerializer, get_species_serializer, UserObservationsSerializer, ReviewdSerializer)
 import datetime, jwt
 from rest_framework import status
 from django.db.models import Count, Subquery, OuterRef, F
@@ -428,22 +428,10 @@ class ReviewedListView(BaseProtectedview):
         
         agreed_species = user.agreed_species.all() 
         
-        species_details = []
-        for species in agreed_species:
-            # Fetch details for each agreed species
-            species_object = get_object_or_404(All_Species, pk=species.id)
-            species_data = {
-                'id': species_object.id,
-                'image': species_object.image.url,  
-                'common_name': species_object.common_name,
-                'scientific_name': species_object.scientific_name,
-                'no_identification_agreement': species_object.no_identification_agreement,
-                'no_identification_disagreement': species_object.no_identification_disagreement
-            }
-            species_details.append(species_data)
+        serializer = ReviewdSerializer(agreed_species, many=True)
 
         response = {
-            'data': species_details
+            'data': serializer.data
         }
         
         return Response(response)
@@ -545,7 +533,11 @@ class UserObseravtionView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
             
-        total_species = All_Species.objects.filter(user_id=user.username).values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id')[1:500000:75]
+        total_species = All_Species.objects.filter(user_id=user.username).values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id')
+        
+        for species in total_species:
+            if species['image']:  # Check if the image field is not empty
+                species['image'] = request.build_absolute_uri(species['image'])
         
         serializer = UserObservationsSerializer(total_species, many=True) 
         
@@ -564,7 +556,6 @@ class AddObservationView(BaseProtectedview):
         
         observed_date = request.data.get('observed_date')
         time_observed_at = request.data.get('time_observed_at')
-        image = request.data.get('image') 
         description = request.data.get('description')
         location = request.data.get('location')
         city = request.data.get('city')
@@ -577,6 +568,23 @@ class AddObservationView(BaseProtectedview):
         latitude = request.data.get('latitude')
         longitude = request.data.get('longitude')
 
+        image = request.FILES.get('image')
+        
+        category_model_mapping = {
+            'Amphibia': Amphibia,
+            'Actinopterygii': Actinopterygii,
+            'Aves': Aves,
+            'Plantae': Plantae,
+            'Mollusca': Mollusca,
+            'Mammalia': Mammalia,
+            'Protozoa': Protozoa,
+            'Insecta': Insecta,
+            'Arachnida': Arachnida,
+            'Reptilia': Reptilia,
+        }
+        
+        
+        
         observation = All_Species.objects.create(
             user_id=user.username,  
             observed_date=observed_date,
@@ -595,9 +603,29 @@ class AddObservationView(BaseProtectedview):
             longitude=longitude,
         )
         
+        if category and category in category_model_mapping:
+            model = category_model_mapping[category]
+            query_set = model.objects.create(
+                user_id=user.username,  
+                observed_date=observed_date,
+                time_observed_at=time_observed_at,
+                image=image,
+                description=description,
+                location=location,
+                city=city,
+                state=state,
+                country=country,
+                species_name_guess=species_name_guess,
+                scientific_name=scientific_name,
+                common_name=common_name,
+                category=category,
+                latitude=latitude,
+                longitude=longitude,
+            )
+        
         response = {
             'message': 'Observation added successfully',
-            'observation_id': observation.id,  
+            'observation_id': (observation.id, query_set.id),  
             'user': user.username,
         }
         
