@@ -17,11 +17,10 @@ interface ObservationData {
   latitude: number;
   longitude: number;
   user_id: string;
+  id: number;
 }
 
-const Maps: React.FC< {data : ObservationData[]}> = ({ data }) => {
-
-
+const Maps: React.FC<{ data: ObservationData[] }> = ({ data }) => {
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
       <div style={{ height: "700px", width: "100%" }}>
@@ -54,8 +53,8 @@ type Point = {
   key: string;
   image: URL;
   user_id: string;
-  category: string;
   common_name: string;
+  id : number
 };
 
 type Props = { points: Point[] };
@@ -93,6 +92,7 @@ const Markers = ({ points }: Props) => {
     });
   };
   const handleMarkerClick = (point: Point) => {
+    console.log("Clicked marker point:", point);
     setActiveMarker(point);
   };
 
@@ -116,7 +116,7 @@ const Markers = ({ points }: Props) => {
           onCloseClick={handleInfoWindowClose} // Close InfoWindow on click
         >
           <Card sx={{ height: "100%" }}>
-            <Link href="/observations/&{activeMarker.id}">
+            <Link href={`/observations/${activeMarker.id}`}>
               {/* MUI Card component for layout */}
               <CardMedia
                 component="img"
@@ -127,10 +127,10 @@ const Markers = ({ points }: Props) => {
               />
             </Link>
             <CardContent>
-              <Link href="/observations/&{activeMarker.id}" underline="none">
-              <Typography gutterBottom variant="h6" component="div">
-                {activeMarker.common_name}
-              </Typography>
+              <Link href={`/observations/${activeMarker.id}`} underline="none">
+                <Typography gutterBottom variant="h6" component="div">
+                  {activeMarker.common_name}
+                </Typography>
               </Link>
               <Typography variant="body2" color="text.secondary">
                 Username: {activeMarker.user_id}

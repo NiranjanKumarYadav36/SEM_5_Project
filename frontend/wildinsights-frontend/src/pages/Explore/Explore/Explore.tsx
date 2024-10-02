@@ -12,7 +12,6 @@ import LoadingScreen from "../../../components/LoadingScreen/Loading";
 
 
 interface ObservationData {
-  category: string;
   common_name: string;
   image: URL;
   latitude: number;
@@ -34,6 +33,7 @@ export default function Explore() {
       try {
         const response = await axiosclient.get("/explore");
         setDefaultData(response.data.data || []); // Set to an empty array if data is null or undefined
+        console.log(response);
       } catch (error) {
         console.error("Failed to load data.",error);
       } finally {

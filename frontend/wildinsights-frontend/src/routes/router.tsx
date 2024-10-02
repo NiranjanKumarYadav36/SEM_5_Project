@@ -15,7 +15,7 @@ import Explore from "../pages/Explore/Explore/Explore";
 import { People } from "../pages/Community/People/people";
 import { Identify } from "../pages/Identify/identify";
 import MyObservation from "../pages/Explore/YourObservation/your_observation";
-import { ObservationView } from "../pages/ObservationsView/observationview";
+import ObservationView from "../pages/ObservationsView/observationview";
 
 
 const router = createBrowserRouter([
