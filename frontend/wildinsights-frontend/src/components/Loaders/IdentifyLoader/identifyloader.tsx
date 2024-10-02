@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from "react";
 import axiosclient from "../../Apiclient/axiosclient";
 
 interface IdentifyData {
   id: number;
-  image: URL;
+  image: string; // Changed from URL to string
   common_name: string;
   scientific_name: string;
   username: string;
@@ -19,21 +18,22 @@ export const useIdentifyLoader = (
   const [data, setData] = useState<IdentifyData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(initialPage); // Allow initial page to be set externally
+  const [page, setPage] = useState(initialPage);
   const [hasMore, setHasMore] = useState(true);
+
+  const itemsPerPage = 12;
 
   const fetchData = async (pageNumber: number, isReviewed: boolean) => {
     setLoading(true);
+    setError(null); // Reset error before making the API request
     try {
       const endpoint = isReviewed ? "reviewed" : "species_identifications/";
-      const response = await axiosclient.get(`${endpoint}?page=${pageNumber}&page_size=12`);
-      const newData = response.data || [];
+      const response = await axiosclient.get(`${endpoint}?page=${pageNumber}&page_size=${itemsPerPage}`);
+      const newData = response.data.results || [];
       console.log(newData);
       
       // Replace old data with the new data (no appending)
       setData(newData); 
-
-      // Check if there's a next page based on the API response
       setHasMore(response.data.next !== null);
     } catch (err) {
       console.error("Error fetching data:", err);
@@ -47,12 +47,10 @@ export const useIdentifyLoader = (
     fetchData(page, isReviewed); // Fetch data when the page or isReviewed changes
   }, [page, isReviewed]);
 
-  // Function to load more data by incrementing the page number
-  const loadMore = () => {
-    if (hasMore && !loading) {
-      setPage((prevPage) => prevPage + 1);
-    }
+  // Function to load a specific page
+  const loadPage = (pageNumber: number) => {
+    setPage(pageNumber);
   };
 
-  return { data, loading, error, loadMore, hasMore, page, setPage };
+  return { data, loading, error, loadPage, hasMore, page, setPage, itemsPerPage };
 };

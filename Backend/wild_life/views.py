@@ -160,7 +160,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = Protozoa.objects.values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id')[1:500000:75]
+        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id')[1:500000:75]
         
         
         # Serialize the data
@@ -385,7 +385,7 @@ class SpeciesIdentificationListView(BaseProtectedview):
         
         serializer = SpeciesIdentifications(paginated_data, many=True)
         
-        return Response(serializer.data)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
         user = self.get_user_from_token()
@@ -428,9 +428,13 @@ class ReviewedListView(BaseProtectedview):
         
         agreed_species = user.agreed_species.all() 
         
-        serializer = ReviewdSerializer(agreed_species, many=True)
+        paginator = CustomPagination()
+        paginated_data = paginator.paginate_queryset(agreed_species, request)
         
-        return Response(serializer.data)
+        
+        serializer = ReviewdSerializer(paginated_data, many=True)
+        
+        return paginator.get_paginated_response(serializer.data)
             
 
 class SpeciesDetailsView(BaseProtectedview):

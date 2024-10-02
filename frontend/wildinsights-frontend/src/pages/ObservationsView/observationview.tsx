@@ -3,7 +3,18 @@ import { useParams } from "react-router-dom";
 import axiosclient from "../../components/Apiclient/axiosclient";
 import LoadingScreen from "../../components/LoadingScreen/Loading";
 import Navbar from "../../components/Navbar/Navbar";
-import { Box, Card, CardMedia, Dialog, Typography } from "@mui/material";
+import Footer from "../../components/Footer/footer";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Dialog,
+  Typography,
+  Grid,
+  Paper,
+  Divider,
+} from "@mui/material";
 
 interface SpeciesDetails {
   common_name: string;
@@ -23,10 +34,11 @@ interface SpeciesDetails {
   time_observed_at: string;
   updated_date: string;
   user: string;
+  country: string;
 }
 
 const ObservationView = () => {
-  const { id } = useParams<{ id: string }>(); // Assuming you're using `id` from the URL params
+  const { id } = useParams<{ id: string }>();
   const [speciesData, setSpeciesData] = useState<SpeciesDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -37,27 +49,22 @@ const ObservationView = () => {
       const speciesId = Number(id);
       const params = { id: speciesId };
       try {
-        const response = await axiosclient.get("/species_details", {
-          params, // Sending species_id as a query param
-        });
-        console.log(response);
+        const response = await axiosclient.get("/species_details", { params });
 
-        // Check the response data and handle appropriately
         if (response.status === 200) {
           setSpeciesData(response.data.data);
-          console.log(speciesData); // Assuming the species data is in `data.data`
         } else {
           setError("Failed to fetch species details.");
         }
       } catch (err) {
         setError("Error fetching species details: " + err.message);
       } finally {
-        setLoading(false); // Stop loading after request completes
+        setLoading(false);
       }
     };
 
     fetchSpeciesDetails();
-  }, []);
+  }, [id]);
 
   if (loading) {
     return <LoadingScreen />;
@@ -66,69 +73,135 @@ const ObservationView = () => {
   if (error) {
     return <div>{error}</div>;
   }
+
   const handleClickOpen = () => {
-    setOpen(true); // Open the modal
+    setOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false); // Close the modal
+    setOpen(false);
   };
 
   return (
     <Box>
       <Navbar />
-      <Box display={"flex"} justifyContent={"space-around"}>
+      <Box
+        sx={{
+          padding: 4,
+          backgroundColor: "#ffffff",
+          borderRadius: "8px",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+          maxHeight: "80vh", // Limit the height
+          overflowY: "auto", // Enable vertical scrolling
+        }}
+      >
         {speciesData ? (
-          <Box>
-            <Typography variant="h3" margin={5}>
-              {speciesData.common_name}({speciesData.scientific_name})
-            </Typography>
-            <Box margin={5}>
+          <Grid container spacing={4} justifyContent="center">
+            <Grid item xs={12} sm={6} md={4}>
               <Card>
                 <CardMedia
                   component="img"
-                  height="auto"
                   image={speciesData.image}
                   alt={speciesData.common_name}
                   sx={{
-                    maxWidth: "100%", // Ensure it doesn't overflow
-                    maxHeight: "400px", // Set a max height for the image
-                    objectFit: "contain", // Maintain aspect ratio
+                    maxHeight: "300px",
+                    objectFit: "cover",
                     cursor: "pointer",
-                    border: "5px solid #f0f0f0",
-                    borderRadius: "8px",
-                    padding: "8px",
-                    backgroundColor: "#fff",
+                    borderRadius: "4px",
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
                   }}
                   onClick={handleClickOpen}
                 />
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Scientific Name: {speciesData.scientific_name}
+                  </Typography>
+                  <Typography variant="h6" color="textSecondary">
+                    Category: {speciesData.category}
+                  </Typography>
+                  <Typography variant="subtitle2" color="textSecondary">
+                    Observed in: {speciesData.city}, {speciesData.state}, {speciesData.country}
+                  </Typography>
+                </CardContent>
               </Card>
-            </Box>
-            <Box >
-              <Typography variant="h4" margin={2}>Notes</Typography>
-              <Box sx={{backgroundColor: "#fff"}}>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={8}>
+              <Paper sx={{ padding: 4, backgroundColor: "#f9f9f9", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }}>
+                <Typography variant="h5" marginBottom={2}>
+                  Description
+                </Typography>
+                <Divider sx={{ marginBottom: 2 }} />
                 <Typography>{speciesData.description}</Typography>
-              </Box>
-            </Box>
-          </Box>
+
+                <Typography variant="h5" marginTop={4} marginBottom={2}>
+                  Observation Details
+                </Typography>
+                <Divider sx={{ marginBottom: 2 }} />
+
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body1">
+                      <strong>Observed Date:</strong> {speciesData.observed_date}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body1">
+                      <strong>Observed Time:</strong> {speciesData.time_observed_at}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body1">
+                      <strong>Created Date:</strong> {speciesData.created_date}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body1">
+                      <strong>Updated Date:</strong> {speciesData.updated_date}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body1">
+                      <strong>Latitude:</strong> {speciesData.latitude}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body1">
+                      <strong>Longitude:</strong> {speciesData.longitude}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body1">
+                      <strong>No. of Agreements:</strong> {speciesData.no_identification_agreement}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body1">
+                      <strong>No. of Disagreements:</strong> {speciesData.no_identification_disagreement}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+          </Grid>
         ) : (
-          <div>No species details available.</div>
+          <Typography>No species details available.</Typography>
         )}
-      </Box>
-      {/* Dialog for image display */}
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
-        <Box sx={{ position: "relative" }}>
+
+        {/* Dialog for image display */}
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
           <CardMedia
             component="img"
-            image={speciesData?.image} // Display image in dialog
+            image={speciesData?.image}
             alt={speciesData?.common_name}
             sx={{
-              height: "80vh", // Set height for the dialog image
-              objectFit: "contain", // Maintain aspect ratio
+              height: "50vh",
+              objectFit: "cover",
             }}
           />
-        </Box>
-      </Dialog>
+        </Dialog>
+      </Box>
+      <Footer />
     </Box>
   );
 };
