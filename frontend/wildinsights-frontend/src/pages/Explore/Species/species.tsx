@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Card,
@@ -9,7 +7,9 @@ import {
   Typography,
   Grid,
   CircularProgress,
+  IconButton,
 } from "@mui/material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material"; // Import arrow icons from MUI
 import Navbar from "../../../components/Navbar/Navbar";
 import NavigationButtons from "../../../components/Explore/NavigationButton/navigationbutton";
 import SearchBar from "../../../components/Explore/SearchBar/searchbar";
@@ -43,7 +43,7 @@ export default function Species() {
     event.currentTarget.src = altImage; // Replace with your fallback image path
   };
 
-  if (loading ) {
+  if (loading && currentData.length === 0) {
     return <LoadingScreen />; // Show loading screen only when no data is loaded yet
   }
 
@@ -62,9 +62,7 @@ export default function Species() {
       }}
     >
       <Navbar />
-      <SearchBar
-        onSearch={(species, location) => console.log(species, location)}
-      />
+      <SearchBar onSearch={(species, location) => console.log(species, location)} />
       <NavigationButtons />
 
       {/* Main content area with scroll */}
@@ -100,7 +98,7 @@ export default function Species() {
                   <CardMedia
                     component="img"
                     height="250"
-                    image={item.image} 
+                    image={item.image}
                     alt={item.common_name}
                     onError={handleImageError}
                   />
@@ -120,24 +118,50 @@ export default function Species() {
       </Box>
 
       {/* Pagination Controls */}
-      <Box display="flex" justifyContent="space-between" mt={4}>
-        <Typography
-          variant="body1"
-          sx={{ cursor: "pointer", color: page > 1 ? "blue" : "grey" }}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "20px",
+        }}
+      >
+        <IconButton
           onClick={handlePreviousPage}
+          disabled={page === 1 || loading}
+          sx={{ color: page === 1 ? "grey.500" : "primary.main" }}
         >
-          Previous Page
-        </Typography>
-        <Typography>Page {page}</Typography>
+          <ArrowBack />
+        </IconButton>
         <Typography
-          variant="body1"
-          sx={{ cursor: "pointer", color: hasMore ? "blue" : "grey" }}
-          onClick={handleNextPage}
+          sx={{
+            margin: "0 20px",
+            fontWeight: "bold",
+            color: "primary.main",
+          }}
         >
-          Next Page
+          Page {page}
         </Typography>
+        {loading && (
+          <CircularProgress size={24} sx={{ margin: "0 20px" }} />
+        )}
+        <IconButton
+          onClick={handleNextPage}
+          disabled={!hasMore || loading}
+          sx={{ color: !hasMore ? "grey.500" : "primary.main" }}
+        >
+          <ArrowForward />
+        </IconButton>
       </Box>
 
+      {/* Pagination Status */}
+      <Box sx={{ textAlign: "center", marginTop: "10px" }}>
+        <Typography variant="caption">
+          {`Showing ${itemsPerPage * (page - 1) + 1} to ${
+            itemsPerPage * (page - 1) + currentData.length
+          } identifications`}
+        </Typography>
+      </Box>
       <Footer />
     </Box>
   );
