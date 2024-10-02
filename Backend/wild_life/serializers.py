@@ -86,7 +86,7 @@ class AllSpeciesSerializers(serializers.ModelSerializer):
     
     class Meta:
         model = All_Species
-        fields = ['image', 'latitude', 'longitude', 'common_name', 'id']
+        fields = ['image', 'latitude', 'longitude', 'common_name', 'id', 'user_id']
         
     
     
