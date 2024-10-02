@@ -9,26 +9,29 @@ import {
   CardMedia,
   Grid,
   Typography,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
-import axiosclient from "../../components/Apiclient/axiosclient";
 import { useIdentifyLoader } from "../../components/Loaders/IdentifyLoader/identifyloader";
 import Navbar from "../../components/Navbar/Navbar";
 import LoadingScreen from "../../components/LoadingScreen/Loading";
 import Footer from "../../components/Footer/footer";
 import SearchBarIdentify from "../../components/Identify/SearchBar/searchbar-identify";
+import axiosclient from "../../components/Apiclient/axiosclient";
 
 interface IdentifyData {
+  id : number;
   image: URL;
   common_name: string;
   scientific_name: string;
   username: string;
   no_identification_agreement: number;
   no_identification_disagreement: number;
-  user_id: string;
 }
 
 export const Identify = () => {
-  const { data, loading, error } = useIdentifyLoader(); // Ensure IdentifyLoader provides all data
+  const [isReviewed, setIsReviewed] = useState(false); // State for the reviewed checkbox
+  const { data, loading, error, loadMore } = useIdentifyLoader(1, isReviewed); // Pass isReviewed here
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
@@ -36,12 +39,10 @@ export const Identify = () => {
     setCurrentPage(1); // Reset to page 1 whenever data changes
   }, [data]);
 
-  // Calculate total pages based on current data length
   const totalPages = Math.ceil(data.length / itemsPerPage);
-  // Get paginated data based on current page
   const paginatedData = data && data.length > 0 
-  ? data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) 
-  : [];
+    ? data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) 
+    : [];
 
   if (loading && data.length === 0) {
     return <LoadingScreen />;
@@ -51,83 +52,64 @@ export const Identify = () => {
     return <div>{error}</div>;
   }
 
-  const updateIdentificationCount = async (
-    userId: string,
-    image: URL,
-    scientificName: string,
-    option: "yes" | "no"
-  ) => {
-    const isAgreement = option === "yes";
-  
-    // Optimistically update the UI
-    setData((prevData) =>
-      prevData.map((item: { user_id: string; scientific_name: string; no_identification_agreement: number; no_identification_disagreement: number; }) =>
-        item.user_id === userId && item.scientific_name === scientificName
-          ? {
-              ...item,
-              no_identification_agreement: isAgreement
-                ? item.no_identification_agreement + 1
-                : item.no_identification_agreement,
-              no_identification_disagreement: !isAgreement
-                ? item.no_identification_disagreement + 1
-                : item.no_identification_disagreement,
-            }
-          : item
-      )
-    );
-  
+  const handleUpdateAgreement = async ( Id: number ) => {
+    console.log(Id)
     try {
-      // Send the update request to the server
+      // Optimistically update the UI
       const response = await axiosclient.post("/species_identifications/", {
-        user: userId,
-        image: image.toString(),
-        scientific_name: scientificName,
-        option,
+        id:Id,
+        option: "yes",
       });
-      console.log(`${isAgreement ? "Agreement" : "Disagreement"} updated:`, response.data);
+      console.log("Agreement updated:", response.data);
     } catch (error) {
-      console.error("Error updating identification:", error.response ? error.response.data : error.message);
-  
-      // Revert the optimistic update if the request fails
-      setData((prevData) =>
-        prevData.map((item: { user_id: string; scientific_name: string; no_identification_agreement: number; no_identification_disagreement: number; }) =>
-          item.user_id === userId && item.scientific_name === scientificName
-            ? {
-                ...item,
-                no_identification_agreement: isAgreement
-                  ? item.no_identification_agreement - 1
-                  : item.no_identification_agreement,
-                no_identification_disagreement: !isAgreement
-                  ? item.no_identification_disagreement - 1
-                  : item.no_identification_disagreement,
-              }
-            : item
-        )
-      );
+      console.error("Error updating agreement:", error.response ? error.response.data : error.message);
+      // If API call fails, you may need to handle the rollback here as needed
     }
   };
 
-  // Function to handle updates for agreements
-  const handleUpdateAgreement = async (userId: string, image: URL, scientificName: string) => {
-    updateIdentificationCount(userId, image, scientificName, "yes");
+  // Function to handle updates for disagreements
+  const handleUpdateDisagreement = async ( Id: number) => {
+    try {
+      // Optimistically update the UI
+      const response = await axiosclient.post("/species_identifications/", {
+        id: Id,
+        option: "no",
+      });
+      console.log("Disagreement updated:", response.data);
+    } catch (error) {
+      console.error("Error updating disagreement:", error.response ? error.response.data : error.message);
+      // If API call fails, you may need to handle the rollback here as needed
+    }
   };
 
-  // Function to handle updates for disagreements
-  const handleUpdateDisagreement = async (userId: string, image: URL, scientificName: string) => {
-    updateIdentificationCount(userId, image, scientificName, "no");
-  };
 
   return (
     <Box sx={{ maxHeight: "100vh", overflowY: "auto" }}>
       <Navbar />
       <SearchBarIdentify onSearch={function (species: string, location: string): void {
         throw new Error("Function not implemented.");
-      } } />
+      }} />
+      
       <Box sx={{ padding: "20px", margin: 8 }}>
+        {/* Reviewed Checkbox */}
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isReviewed}
+              onChange={(e) => {
+                setIsReviewed(e.target.checked);
+                setCurrentPage(1); // Reset page to 1 when the checkbox is toggled
+              }}
+              color="primary"
+            />
+          }
+          label="Show Reviewed"
+        />
+
         <Grid container spacing={2} justifyContent="center" alignItems="stretch">
           {paginatedData.map((item, index) => (
             <Grid item xs={12} sm={6} md={3} key={index} sx={{ display: "flex" }}>
-              <Card sx={{ width: "100%", margin: "10px 0", height:"100%",display: "flex", flexDirection: "column" }}>
+              <Card sx={{ width: "100%", margin: "10px 0", height: "100%", display: "flex", flexDirection: "column" }}>
                 <CardMedia
                   component="img"
                   height="180"
@@ -136,19 +118,19 @@ export const Identify = () => {
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="h5">{item.common_name}</Typography>
-                  <Typography variant="subtitle1" >Scientifc name: {item.scientific_name}</Typography>
+                  <Typography variant="subtitle1">Scientific name: {item.scientific_name}</Typography>
                   <Box sx={{ display: "flex", justifyContent: "space-between", padding: "16px" }}>
                     <Button
                       variant="contained"
                       size="small"
-                      onClick={() => handleUpdateAgreement(item.user_id, item.image, item.scientific_name)}
+                      onClick={() => handleUpdateAgreement( item.id)}
                     >
                       {item.no_identification_agreement} Agree
                     </Button>
                     <Button
                       variant="contained"
                       size="small"
-                      onClick={() => handleUpdateDisagreement(item.user_id, item.image, item.scientific_name)}
+                      onClick={() => handleUpdateDisagreement( item.id)}
                     >
                       {item.no_identification_disagreement} Disagree
                     </Button>

@@ -23,7 +23,7 @@ interface ObservationData {
 const Maps: React.FC<{ data: ObservationData[] }> = ({ data }) => {
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-      <div style={{ height: "700px", width: "100%" }}>
+      <div style={{ height: "650px", width: "100%" }}>
         <Map
           defaultZoom={5}
           defaultCenter={{ lat: 20.5937, lng: 78.9629 }}

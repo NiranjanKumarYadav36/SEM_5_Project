@@ -393,9 +393,9 @@ class SpeciesIdentificationListView(BaseProtectedview):
         # user_id = request.data.get('user')
         # image =  request.data.get('image')
         # scientific_name = request.data.get('scientific_name')
-        specie_id = request.query_params.get('id')
-        option = request.query_params.get('option')
-        
+        specie_id = request.data.get('id')
+        option = request.data.get('option')
+        print(specie_id)
          # Check if all necessary fields are provided
         if not all([specie_id, option]):
             return Response({"message": "Missing data"}, status=400)

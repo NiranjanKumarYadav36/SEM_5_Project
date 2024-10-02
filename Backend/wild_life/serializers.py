@@ -123,7 +123,7 @@ class SpeciesIdentifications(serializers.ModelSerializer):
     image = serializers.URLField()
     class Meta:
         model = All_Species
-        fields = ['id', 'image', 'common_name', 'scientific_name', 'no_identification_agreement', 'no_identification_disagreement', 'user_id']
+        fields = ['image', 'common_name', 'scientific_name', 'no_identification_agreement', 'no_identification_disagreement','id']
         
 
 class SpeciesDetailsSerializer(serializers.ModelSerializer):
