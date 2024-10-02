@@ -175,7 +175,6 @@ def get_species_serializer(model):
     )
 
 
-
 class UserObservationsSerializer(serializers.ModelSerializer):
     image = serializers.URLField()    
     latitude = serializers.DecimalField(max_digits=14, decimal_places=10,  allow_null=True, required=False)
@@ -196,4 +195,19 @@ class UserObservationsSerializer(serializers.ModelSerializer):
         representation['longitude'] = float(representation['longitude']) if representation['longitude'] is not None else None
 
         return representation
+
+
+class ReviewdSerializer(serializers.ModelSerializer):
+    image = serializers.URLField()
+    class Meta:
+        model = All_Species
+        fields = [
+            'id',
+            'image',
+            'common_name',
+            'scientific_name',
+            'no_identification_agreement',
+            'no_identification_disagreement',
+        ]
+        
     
