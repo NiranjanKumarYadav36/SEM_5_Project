@@ -556,3 +556,49 @@ class UserObseravtionView(BaseProtectedview):
         }
 
         return Response(response)
+
+
+class AddObservationView(BaseProtectedview):
+    def post(self, request):
+        user = self.get_user_from_token()
+        
+        observed_date = request.data.get('observed_date')
+        time_observed_at = request.data.get('time_observed_at')
+        image = request.data.get('image') 
+        description = request.data.get('description')
+        location = request.data.get('location')
+        city = request.data.get('city')
+        state = request.data.get('state')
+        country = request.data.get('country')
+        species_name_guess = request.data.get('species_name_guess')
+        scientific_name = request.data.get('scientific_name')
+        common_name = request.data.get('common_name')
+        category = request.data.get('category')
+        latitude = request.data.get('latitude')
+        longitude = request.data.get('longitude')
+
+        observation = All_Species.objects.create(
+            user_id=user.username,  
+            observed_date=observed_date,
+            time_observed_at=time_observed_at,
+            image=image,
+            description=description,
+            location=location,
+            city=city,
+            state=state,
+            country=country,
+            species_name_guess=species_name_guess,
+            scientific_name=scientific_name,
+            common_name=common_name,
+            category=category,
+            latitude=latitude,
+            longitude=longitude,
+        )
+        
+        response = {
+            'message': 'Observation added successfully',
+            'observation_id': observation.id,  
+            'user': user.username,
+        }
+        
+        return Response(response, status=201)  

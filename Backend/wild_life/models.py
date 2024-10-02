@@ -22,10 +22,10 @@ class All_Species(models.Model):
     observed_date = models.DateField(_('Observed Date'), null=False)
     time_observed_at = models.TimeField(_('Time Observed At'), null=False)
     
-    created_date = models.DateTimeField(auto_created=False)
-    updated_date = models.DateTimeField(auto_created=False)
+    created_date = models.DateTimeField(auto_created=True)
+    updated_date = models.DateTimeField(auto_created=True)
     
-    image = models.ImageField(_('Image URL'), null=True)
+    image = models.ImageField(_('Image URL'), null=True, upload_to='species')
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     
@@ -93,7 +93,7 @@ class Aves(models.Model):
     created_date = models.DateTimeField(auto_created=False)
     updated_date = models.DateTimeField(auto_created=False)
     
-    image = models.ImageField(_('Image URL'), null=True)
+    image = models.ImageField(_('Image URL'), null=True,)
     
     description = models.TextField(_('Description'), max_length=10000, null=True)
     
