@@ -648,7 +648,7 @@ class EditObservationsView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
             
-        total_species = All_Species.objects.filter(user_id=user.username).values('image', 'common_name', 'id', 'category', 'scientific_name', 'location', 'state', 'country', 'no_identification_disagreement', 'no_identification_agreement', 'description')
+        total_species = All_Species.objects.filter(user_id=user.username).values('image', 'common_name', 'id', 'category', 'scientific_name', 'location', 'state', 'no_identification_disagreement', 'no_identification_agreement', 'description')
         
         for species in total_species:
             if species['image']:

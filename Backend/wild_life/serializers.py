@@ -218,4 +218,4 @@ class EditObservationsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = All_Species
-        fields = ['image', 'common_name', 'id', 'category', 'scientific_name', 'location', 'state', 'country', 'no_identification_disagreement', 'no_identification_agreement', 'description']
+        fields = ['image', 'common_name', 'id', 'category', 'scientific_name', 'location', 'state', 'no_identification_disagreement', 'no_identification_agreement', 'description']

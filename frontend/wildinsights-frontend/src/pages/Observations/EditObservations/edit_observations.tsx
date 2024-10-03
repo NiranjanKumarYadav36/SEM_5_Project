@@ -36,7 +36,6 @@ interface ObservationsData {
     description: string;
     location: string;
     state: string;
-    country: string;
 }
 
 // Define predefined categories
@@ -141,14 +140,6 @@ function EditObservationForm({ observation, onSave, onCancel }: { observation: O
                 />
                 <TextField
                     fullWidth
-                    label="Country"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    margin="normal"
-                />
-                <TextField
-                    fullWidth
                     label="Description"
                     name="description"
                     value={formData.description}
@@ -216,7 +207,7 @@ export default function EditObservations() {
         setSelectedObservation(null);
         setSnackbarMessage("Observation updated successfully!");
         setSnackbarOpen(true);
-        navigate("/edit_observation"); // Redirect to ediobservations
+        navigate("/observation/edit"); // Redirect to ediobservations
     };
 
     const handleCancel = () => {

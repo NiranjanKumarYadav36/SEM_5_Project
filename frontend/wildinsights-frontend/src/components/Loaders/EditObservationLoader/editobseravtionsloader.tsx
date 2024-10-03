@@ -12,7 +12,6 @@ interface ObservationsData {
     description: string;
     location:string;
     state: string;
-    country: string;
 }
 
 export const useObservationData = () => {
