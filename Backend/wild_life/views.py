@@ -162,7 +162,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id')[1:500000:75]
+        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id', 'category')[1:500000:75]
         
         
         # Serialize the data
@@ -444,11 +444,12 @@ class SpeciesDetailsView(BaseProtectedview):
         user = self.get_user_from_token()
 
         species_id = request.query_params.get('id')
+        category = request.query_params.get('category')
 
-        if not species_id:
+        if not species_id and category:
             return Response({'message': 'Missing query parameters'}, status=status.HTTP_400_BAD_REQUEST)
 
-        species = All_Species.objects.filter(id=species_id).first()
+        species = All_Species.objects.filter(id=species_id, category=category).first()
 
         if not species:
             return Response({'message': 'Species not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -535,7 +536,7 @@ class UserObseravtionView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
             
-        total_species = All_Species.objects.filter(user_id=user.username).values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id')
+        total_species = All_Species.objects.filter(user_id=user.username).values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id', 'category')
         
         for species in total_species:
             if species['image']:  # Check if the image field is not empty
