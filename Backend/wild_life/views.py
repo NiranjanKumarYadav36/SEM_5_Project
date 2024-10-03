@@ -162,7 +162,7 @@ class ExplorePageView(BaseProtectedview):
         user = self.get_user_from_token()
         
          # Fetch all species from the database
-        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id', 'category')[1:500000:100]
+        total_species = All_Species.objects.values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id', 'category')[1:500000:75]
         
         
         # Serialize the data
@@ -468,13 +468,15 @@ class SpeciesDetailsView(BaseProtectedview):
 class FilteredView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
-        
+
+        # Extract query parameters
         category = request.query_params.get('category')
         state = request.query_params.get('state')
         username = request.query_params.get('username')
         start_date = request.query_params.get('start_date')
         end_date = request.query_params.get('end_date')
-        
+
+        # Define mapping for category to model
         category_model_mapping = {
             'Amphibia': Amphibia,
             'Actinopterygii': Actinopterygii,
@@ -487,14 +489,15 @@ class FilteredView(BaseProtectedview):
             'Arachnida': Arachnida,
             'Reptilia': Reptilia,
         }
-        
+
+        # Build initial filter criteria based on request parameters
         filter_criteria = {}
         if state:
             filter_criteria['state'] = state
         if username:
-            filter_criteria['user_id__username'] = username 
-        
-        date_format = "%Y-%m-%d" 
+            filter_criteria['user_id__username'] = username
+
+        date_format = "%Y-%m-%d"
         if start_date:
             try:
                 start_observed_date = datetime.datetime.strptime(start_date, date_format).date()
@@ -508,27 +511,36 @@ class FilteredView(BaseProtectedview):
                 filter_criteria['observed_date__lte'] = end_observed_date
             except ValueError:
                 return Response({"error": "Invalid end_date format. Use 'YYYY-MM-DD'."}, status=400)
-        
-        # Determine the queryset to be used based on the category
+
+        # Step 1: Determine the initial queryset based on the category
         if category and category in category_model_mapping:
             model = category_model_mapping[category]
-            query_set = model.objects.filter(**filter_criteria)[:4000]
+            initial_queryset = model.objects.filter(**filter_criteria)[:4000]
         else:
-            model = All_Species
-            query_set = model.objects.filter(**filter_criteria)[:4000]
+            initial_queryset = All_Species.objects.filter(**filter_criteria)[:4000]
 
-        # Check if the queryset is empty and return a message if so
-        if not query_set.exists():
+        # Check if the initial queryset is empty before converting it to a list
+        if not initial_queryset.exists():
             return Response({"message": "No data available for the provided filters."}, status=404)
 
-        # Select specific fields from the queryset
-        specific_fields = ['id', 'image', 'common_name', 'latitude', 'longitude', 'user_id']  
-        filtered_data = query_set.values(*specific_fields)
-        
-        # Use the dynamic serializer based on the model
-        serializer_class = get_species_serializer(model)
-        serializer = serializer_class(filtered_data, many=True)
-        
+        # Step 2: Use `values()` to get the required fields for filtering All_Species
+        initial_queryset_values = initial_queryset.values('user_id', 'image')
+
+        # Extract `user_id` and `image` values separately
+        user_ids = initial_queryset_values.values_list('user_id', flat=True)
+        image_values = initial_queryset_values.values_list('image', flat=True)
+
+        # Step 3: Use the `user_id` values from initial queryset to filter `All_Species`
+        # Filter `All_Species` using the `user_id` values
+        all_species_data = All_Species.objects.filter(user_id__in=user_ids).filter(image__in=image_values)
+
+        # Step 4: Serialize and return the final data
+        specific_fields = ['image', 'common_name', 'user_id', 'latitude', 'longitude', 'id']  # Define fields you want to retrieve
+        serialized_data = all_species_data.values(*specific_fields)
+
+        serializer_class = get_species_serializer(All_Species)
+        serializer = serializer_class(serialized_data, many=True)
+
         return Response(serializer.data)
 
 
