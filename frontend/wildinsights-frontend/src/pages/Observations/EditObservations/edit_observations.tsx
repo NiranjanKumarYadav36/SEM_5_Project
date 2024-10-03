@@ -20,7 +20,7 @@ import {
 import { ArrowBack, ArrowForward, Edit, Save } from "@mui/icons-material";
 import Navbar from "../../../components/Navbar/Navbar";
 import Footer from "../../../components/Footer/footer";
-import { useObservationData } from "../../../components/Loaders/UserObservationLoader/editobseravtionsloader";
+import { useObservationData } from "../../../components/Loaders/EditObservationLoader/editobseravtionsloader";
 import LoadingScreen from "../../../components/LoadingScreen/Loading";
 import axiosclient from "../../../components/Apiclient/axiosclient"; // Import your axios client
 import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
@@ -177,7 +177,7 @@ function EditObservationForm({ observation, onSave, onCancel }: { observation: O
     );
 }
 
-export default function UserObservations() {
+export default function EditObservations() {
     const { data, loading, error, loadPage, hasMore, page } = useObservationData();
     const [observations, setObservations] = useState<ObservationsData[]>(data); // Initialize state with data
     const [selectedObservation, setSelectedObservation] = useState<ObservationsData | null>(null);

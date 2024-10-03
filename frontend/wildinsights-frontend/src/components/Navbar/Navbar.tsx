@@ -70,9 +70,9 @@ const Navbar = () => {
   ];
 
   const observationItems = [
-    { text: "Your Observations", link: "/explore/your_observations" }, // Update as needed
-    { text: "Add Observation", link: "/add_observation" },
-    { text: "Edit Observation", link: "/edit_observation" },
+    { text: "Your Observations", link: "/observation/me" }, // Update as needed
+    { text: "Add Observation", link: "/observation/add" },
+    { text: "Edit Observation", link: "/observation/edit" },
   ];
 
   return (
