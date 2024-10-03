@@ -184,7 +184,7 @@ class UserObservationsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = All_Species
-        fields = ['image', 'latitude', 'longitude', 'common_name', 'id', 'user_id', 'category']
+        fields = ['image', 'latitude', 'longitude', 'common_name', 'id', 'user_id',]
         
     
     
@@ -213,3 +213,9 @@ class ReviewdSerializer(serializers.ModelSerializer):
         ]
         
     
+class EditObservationsSerializer(serializers.ModelSerializer):
+    image = serializers.URLField()    
+    
+    class Meta:
+        model = All_Species
+        fields = ['image', 'common_name', 'id', 'category', 'scientific_name', 'location', 'state', 'country', 'no_identification_disagreement', 'no_identification_agreement', 'description']

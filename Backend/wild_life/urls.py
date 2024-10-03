@@ -3,7 +3,8 @@ from .views import (RegisterView, LoginView, ExplorePageView , Logout, Protected
                     HomePageView, ObserversCountView, SpeciesCountView, IdentifiersView, 
                     UserProfileView, ProfileUpdateView, SpeciesDetailsView, DashboardView,
                     CoummnityPeopleView, SpeciesIdentificationListView, FilteredView,
-                    ReviewedListView, UserObseravtionView, AddObservationView)
+                    ReviewedListView, UserObseravtionView, AddObservationView,
+                    EditObservationsView)
 
 urlpatterns = [
     path('verify-token', ProtectedView.as_view(), name='verify-token'),
@@ -39,7 +40,8 @@ urlpatterns = [
 
     path('your_observation', UserObseravtionView.as_view(), name='your_observation'),
     path('add_observation', AddObservationView.as_view(), name='add_observation'),
-        
+    
+    path('edit_observation', EditObservationsView.as_view(), name='edit_observation')
 ]
 
 

@@ -18,7 +18,7 @@ import MyObservation from "../pages/Explore/YourObservation/your_observation";
 import ObservationView from "../pages/ObservationsView/observationview";
 import LocationMap from "../components/GoogleMaps/GetLocationMap/locationmap";
 import MyMapComponent from "../components/GoogleMaps/GetLocationMap/text";
-
+import UserObservations from "../pages/User/Observations/edit_observations";
 
 const router = createBrowserRouter([
     {
@@ -139,6 +139,10 @@ const router = createBrowserRouter([
     {
       path:"/register",//Register
       element:<Register />
+    },
+    {
+      path: "/edit_observation",
+      element: <UserObservations />
     },
     {
       path:"*",//Any urls that dont exist

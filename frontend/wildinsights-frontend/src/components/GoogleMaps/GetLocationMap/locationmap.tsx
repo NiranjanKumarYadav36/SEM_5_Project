@@ -78,7 +78,7 @@ const LocationMap: React.FC = () => {
         <div style={{ height: "650px", width: "100%" }}>
           {error && <p>{error}</p>}
           <Map
-            ref =
+            // ref = {}
             defaultZoom={userLocation ? 12 : 5}
             defaultCenter={userLocation || { lat: 20.5937, lng: 78.9629 }} // Default to India if no location is found
             mapId={import.meta.env.VITE_GOOGLE_MAPS_ID}

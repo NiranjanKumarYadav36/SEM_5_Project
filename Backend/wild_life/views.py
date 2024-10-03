@@ -5,7 +5,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from .models import *
 from .serializers import (UserSerializer, AllSpeciesSerializers, ObserversCountSerializers, SpeciesCountSerializers,
                           HomePageSerializer, IdentifiersSerializer, UserProfileUpdateSerializer, SpeciesIdentifications, 
-                          SpeciesDetailsSerializer, get_species_serializer, UserObservationsSerializer, ReviewdSerializer)
+                          SpeciesDetailsSerializer, get_species_serializer, UserObservationsSerializer, ReviewdSerializer, EditObservationsSerializer)
 import datetime, jwt
 from rest_framework import status
 from django.db.models import Count, Subquery, OuterRef, F
@@ -444,12 +444,12 @@ class SpeciesDetailsView(BaseProtectedview):
         user = self.get_user_from_token()
 
         species_id = request.query_params.get('id')
-        category = request.query_params.get('category')
+        # category = request.query_params.get('category')
 
-        if not species_id and category:
+        if not species_id:
             return Response({'message': 'Missing query parameters'}, status=status.HTTP_400_BAD_REQUEST)
 
-        species = All_Species.objects.filter(id=species_id, category=category).first()
+        species = All_Species.objects.filter(id=species_id).first()
 
         if not species:
             return Response({'message': 'Species not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -536,7 +536,7 @@ class UserObseravtionView(BaseProtectedview):
     def get(self, request):
         user = self.get_user_from_token()
             
-        total_species = All_Species.objects.filter(user_id=user.username).values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id', 'category')
+        total_species = All_Species.objects.filter(user_id=user.username).values('image', 'latitude', 'longitude', 'common_name', 'id', 'user_id',)
         
         for species in total_species:
             if species['image']:  # Check if the image field is not empty
@@ -634,3 +634,52 @@ class AddObservationView(BaseProtectedview):
         
         return Response(response, status=201)  
 
+
+class EditObservationsView(BaseProtectedview):
+    def get(self, request):
+        user = self.get_user_from_token()
+            
+        total_species = All_Species.objects.filter(user_id=user.username).values('image', 'common_name', 'id', 'category', 'scientific_name', 'location', 'state', 'country', 'no_identification_disagreement', 'no_identification_agreement', 'description')
+        
+        for species in total_species:
+            if species['image']:
+                species['image'] = request.build_absolute_uri(species['image'])
+        
+        paginator = CustomPagination()
+        paginated_data = paginator.paginate_queryset(total_species, request)
+        
+        serializer = EditObservationsSerializer(paginated_data, many=True) 
+    
+
+        return paginator.get_paginated_response(serializer.data)
+
+    def post(self, request):
+        user = self.get_user_from_token()
+        
+        # Extract the observation data from the request
+        observation_data = request.data
+        observation_id = observation_data.get('id')
+        
+        if not observation_id:
+            return Response({"detail": "Observation ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Fetch the existing observation based on the ID
+            observation = All_Species.objects.get(id=observation_id, user_id=user.username)
+            
+            # Update fields from the received data
+            observation.common_name = observation_data.get('common_name', observation.common_name)
+            observation.scientific_name = observation_data.get('scientific_name', observation.scientific_name)
+            observation.category = observation_data.get('category', observation.category)
+            observation.image = observation_data.get('image', observation.image)
+            observation.location = observation_data.get('location', observation.location)
+            observation.state = observation_data.get('state', observation.state)
+            observation.country = observation_data.get('country', observation.country)
+            observation.description = observation_data.get('description', observation.description)
+
+            # Save the updated observation
+            observation.save()
+
+            return Response({"detail": "Observation updated successfully"}, status=status.HTTP_200_OK)
+        except All_Species.DoesNotExist:
+            return Response({"detail": "Observation not found"}, status=status.HTTP_404_NOT_FOUND)
