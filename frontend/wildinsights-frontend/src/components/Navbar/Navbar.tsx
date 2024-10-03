@@ -12,11 +12,12 @@ import {
   Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import useHandleLogout from "../Logout/logout";
 import logo from "../../assets/NavBar/logo.png"; // Adjust path as needed
 
 const Navbar = () => {
+  const navigate = useNavigate(); // Create navigate function
   const handleLogout = useHandleLogout();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -55,22 +56,24 @@ const Navbar = () => {
     setAnchorElObservation(null);
   };
 
+  const handlehomechange = () => {
+    navigate("/"); // Navigate to home when the logo is clicked
+  };
+
   const menuItems = [
-    { text: "Home", link: "/" },
     { text: "Explore", link: "/explore" },
     { text: "Community", link: "#" },
     { text: "Identify", link: "/identify" },
-    { text: "Observations", link: "#" }, // New observations menu item
+    { text: "Observations", link: "#" },
   ];
 
   const communityItems = [
     { text: "People", link: "/community/people" },
-    { text: "Projects", link: "/community/projects" },
-    { text: "Forums", link: "/community/forum" },
+    { text: "Projects", link: "/"}
   ];
 
   const observationItems = [
-    { text: "Your Observations", link: "/observation/me" }, // Update as needed
+    { text: "Your Observations", link: "/observation/me" },
     { text: "Add Observation", link: "/observation/add" },
     { text: "Edit Observation", link: "/observation/edit" },
   ];
@@ -84,7 +87,10 @@ const Navbar = () => {
         padding: "10px 0",
       }}
     >
-      <Container maxWidth={false} sx={{ padding: 0, marginLeft: 0, marginRight: 0 }}>
+      <Container
+        maxWidth={false}
+        sx={{ padding: 0, marginLeft: 0, marginRight: 0 }}
+      >
         <Toolbar disableGutters>
           {/* Logo and Title Section */}
           <Box
@@ -96,23 +102,25 @@ const Navbar = () => {
           >
             {/* Logo Image */}
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <img
-                src={logo} // Image source from imported logo
-                alt="Logo"
-                style={{
-                  height: "40px",
-                  marginRight: "10px",
-                  backgroundColor: "transparent", // Ensure image background is transparent
-                }}
-              />
-              {/* Title Text (Non-clickable, Black) */}
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{ fontWeight: "bold", color: "#000", display: "flex" }}
-              >
-                WildInsights
-              </Typography>
+              <Button onClick={handlehomechange}>
+                <img
+                  src={logo} // Image source from imported logo
+                  alt="Logo"
+                  style={{
+                    height: "40px",
+                    marginRight: "10px",
+                    backgroundColor: "transparent", // Ensure image background is transparent
+                  }}
+                />
+                {/* Title Text (Non-clickable, Black) */}
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ fontWeight: "bold", color: "#000", display: "flex" }}
+                >
+                  WildInsights
+                </Typography>
+              </Button>
             </Box>
           </Box>
 
@@ -272,10 +280,18 @@ const Navbar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleMenuCloseUser}
             >
-              <MenuItem component={Link} to="/user/dashboard" onClick={handleMenuCloseUser}>
+              <MenuItem
+                component={Link}
+                to="/user/dashboard"
+                onClick={handleMenuCloseUser}
+              >
                 Dashboard
               </MenuItem>
-              <MenuItem component={Link} to="/user/profile" onClick={handleMenuCloseUser}>
+              <MenuItem
+                component={Link}
+                to="/user/profile"
+                onClick={handleMenuCloseUser}
+              >
                 Profile
               </MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
