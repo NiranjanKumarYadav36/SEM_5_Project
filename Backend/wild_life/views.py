@@ -140,6 +140,9 @@ class HomePageView(APIView):
                     speices_image.append({
                         'common_name': speices.common_name if speices.common_name != 'Not provided' else "",
                         'image': speices.image,
+                        'user_id': speices.user_id,
+                        'state': speices.state,
+                        'country': speices.country,
                     })
             except ObjectDoesNotExist:
                 continue

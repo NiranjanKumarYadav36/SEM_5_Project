@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -47,6 +46,15 @@ const Login = () => {
     };
     fetchImages();
   }, []);
+
+  // Automatically change the image every 5 seconds
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000); // Change every 5 seconds
+
+    return () => clearInterval(intervalId); // Cleanup the interval on component unmount
+  }, [images.length]);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -101,9 +109,9 @@ const Login = () => {
             alignItems: "center",
             justifyContent: "center",
             height: "100vh",
-            bgcolor: "#f5f5f5",
+            bgcolor: "#74ac0057",
             position: "absolute",
-            left: "-198px",
+            left: "-194px",
             "&:hover .arrowButton": {
               visibility: "visible", // Show arrows only on hover
             },
@@ -134,10 +142,12 @@ const Login = () => {
               src={images[currentImageIndex].image} // Update the image URL based on your response
               alt={`Image ${currentImageIndex + 1}`}
               sx={{
-                height: "80%",
-                width: "80%",
-                objectFit: "contain",
+                height: "693px", // Fixed height for the container
+                width: "550px", // Fixed width for the container
+                objectFit: "cover", // Ensures the image scales proportionally while covering the box area
                 position: "relative",
+                borderRadius: "2px", // Optional: Adds rounded corners to the image
+                border: "2px solid #e0e0e0", // Optional: Adds a border around the image container
               }}
             />
           )}
@@ -165,16 +175,93 @@ const Login = () => {
             <Box
               sx={{
                 position: "absolute",
-                bottom: "10px",
-                width: "100%",
+                bottom: "0px",
+                width: "550px",
                 bgcolor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
                 color: "#fff",
                 textAlign: "center",
-                p: 1,
+                p: 2,
+                borderRadius: 0, // Adds rounded corners to the description box
               }}
             >
-              <Typography variant="subtitle1">{images[currentImageIndex].common_name}</Typography>
+              <Typography variant="h6" sx={{ mb: 1 }}>
+                Image Details
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between", // Align space between items evenly
+                  flexDirection: "row", // Align items in a row
+                  flexWrap: "nowrap", // Prevent wrapping to the next line
+                }}
+              >
+                {/* Display each detail in a separate box with fixed width */}
+                <Box
+                  sx={{
+                    textAlign: "left",
+                    width: "125px", // Set a fixed width for each detail container
+                    marginBottom: "8px",
+                    display: "inline-block", // Prevents wrapping within each detail
+                  }}
+                >
+                  <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                    Common Name:
+                  </Typography>
+                  <Typography variant="body2">
+                    {images[currentImageIndex].common_name || "N/A"}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    textAlign: "left",
+                    width: "125px",
+                    marginBottom: "8px",
+                    display: "inline-block",
+                  }}
+                >
+                  <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                    Observer:
+                  </Typography>
+                  <Typography variant="body2">
+                    {images[currentImageIndex].user_id || "Unknown"}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    textAlign: "left",
+                    width: "125px",
+                    marginBottom: "8px",
+                    display: "inline-block",
+                  }}
+                >
+                  <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                    State:
+                  </Typography>
+                  <Typography variant="body2">
+                    {images[currentImageIndex].state || "N/A"}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    textAlign: "left",
+                    width: "125px",
+                    marginBottom: "8px",
+                    display: "inline-block",
+                  }}
+                >
+                  <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                    Country:
+                  </Typography>
+                  <Typography variant="body2">
+                    {images[currentImageIndex].country || "N/A"}
+                  </Typography>
+                </Box>
+              </Box>
             </Box>
+
           )}
         </Grid>
 

@@ -74,9 +74,11 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
         return instance
     
 
-class HomePageSerializer(serializers.Serializer):
-    common_name = serializers.CharField()
-    image = serializers.CharField()
+class HomePageSerializer(serializers.ModelSerializer):
+    image = serializers.URLField()
+    class Meta:
+        model = All_Species
+        fields = ['image', 'common_name', 'user_id', 'state', 'country']
 
 
 class AllSpeciesSerializers(serializers.ModelSerializer):
