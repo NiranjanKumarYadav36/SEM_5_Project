@@ -14,10 +14,9 @@ import UserDashboard from "../pages/User/Dashboard/dashboard";
 import Explore from "../pages/Explore/Explore/Explore";
 import { People } from "../pages/Community/People/people";
 import { Identify } from "../pages/Identify/identify";
-import MyObservation from "../pages/Explore/YourObservation/your_observation";
+import MyObservation from "../pages/Observations/YourObservation/your_observation";
 import ObservationView from "../pages/ObservationsView/observationview";
-import LocationMap from "../components/GoogleMaps/GetLocationMap/locationmap";
-import MyMapComponent from "../components/GoogleMaps/GetLocationMap/text";
+import AddObservation from "../pages/Observations/AddObservation/addobservation";
 
 
 const router = createBrowserRouter([
@@ -108,13 +107,8 @@ const router = createBrowserRouter([
       children:[
         {
           path: "",
-          element: <LocationMap />,
+          element: <AddObservation />,
         },
-        {
-          path: "/add_observation/1",
-          element:<MyMapComponent />,
-        }
-
       ]
     },
     {

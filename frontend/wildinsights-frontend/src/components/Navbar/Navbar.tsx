@@ -21,6 +21,7 @@ const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [anchorElCommunity, setAnchorElCommunity] = useState<null | HTMLElement>(null);
+  const [anchorElObservation, setAnchorElObservation] = useState<null | HTMLElement>(null); // New for observations
 
   const handleMenuOpenNav = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -46,18 +47,32 @@ const Navbar = () => {
     setAnchorElCommunity(null);
   };
 
+  const handleMenuOpenObservation = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElObservation(event.currentTarget);
+  };
+
+  const handleMenuCloseObservation = () => {
+    setAnchorElObservation(null);
+  };
+
   const menuItems = [
     { text: "Home", link: "/" },
     { text: "Explore", link: "/explore" },
     { text: "Community", link: "#" },
     { text: "Identify", link: "/identify" },
-    { text: "Your Observations", link: "/explore/your_observations" },//Update pls
-    { text: "Add Observation", link: "/add_observation"}  ];
+    { text: "Observations", link: "#" }, // New observations menu item
+  ];
 
   const communityItems = [
     { text: "People", link: "/community/people" },
     { text: "Projects", link: "/community/projects" },
     { text: "Forums", link: "/community/forum" },
+  ];
+
+  const observationItems = [
+    { text: "Your Observations", link: "/explore/your_observations" }, // Update as needed
+    { text: "Add Observation", link: "/add_observation" },
+    { text: "Edit Observation", link: "/edit_observation" },
   ];
 
   return (
@@ -107,8 +122,8 @@ const Navbar = () => {
               item.text === "Community" ? (
                 <Box
                   key={item.text}
-                  onMouseEnter={handleMenuOpenCommunity} // Open on hover
-                  onMouseLeave={handleMenuCloseCommunity} // Close when mouse leaves
+                  onMouseEnter={handleMenuOpenCommunity}
+                  onMouseLeave={handleMenuCloseCommunity}
                 >
                   <Button
                     sx={{
@@ -117,31 +132,69 @@ const Navbar = () => {
                       fontSize: "1rem",
                       transition: "background-color 0.3s",
                       "&:hover": {
-                        backgroundColor: "#2b6f6b", // Darker shade on hover
+                        backgroundColor: "#2b6f6b",
                       },
                     }}
-                    onClick={handleMenuOpenCommunity} // Open on click
+                    onClick={handleMenuOpenCommunity}
                   >
                     {item.text}
                   </Button>
-
-                  {/* Community dropdown */}
                   <Menu
                     anchorEl={anchorElCommunity}
-                    anchorOrigin={{ vertical: "bottom", horizontal: "left" }} // Opens below button
+                    anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
                     transformOrigin={{ vertical: "top", horizontal: "left" }}
                     keepMounted
                     open={Boolean(anchorElCommunity)}
                     onClose={handleMenuCloseCommunity}
                   >
-                    {communityItems.map((item) => (
+                    {communityItems.map((subItem) => (
                       <MenuItem
-                        key={item.text}
+                        key={subItem.text}
                         component={Link}
-                        to={item.link}
+                        to={subItem.link}
                         onClick={handleMenuCloseCommunity}
                       >
-                        {item.text}
+                        {subItem.text}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
+              ) : item.text === "Observations" ? (
+                <Box
+                  key={item.text}
+                  onMouseEnter={handleMenuOpenObservation} // Open on hover for observations
+                  onMouseLeave={handleMenuCloseObservation} // Close when mouse leaves
+                >
+                  <Button
+                    sx={{
+                      color: "#fff",
+                      textTransform: "none",
+                      fontSize: "1rem",
+                      transition: "background-color 0.3s",
+                      "&:hover": {
+                        backgroundColor: "#2b6f6b",
+                      },
+                    }}
+                    onClick={handleMenuOpenObservation}
+                  >
+                    {item.text}
+                  </Button>
+                  <Menu
+                    anchorEl={anchorElObservation}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                    transformOrigin={{ vertical: "top", horizontal: "left" }}
+                    keepMounted
+                    open={Boolean(anchorElObservation)}
+                    onClose={handleMenuCloseObservation}
+                  >
+                    {observationItems.map((subItem) => (
+                      <MenuItem
+                        key={subItem.text}
+                        component={Link}
+                        to={subItem.link}
+                        onClick={handleMenuCloseObservation}
+                      >
+                        {subItem.text}
                       </MenuItem>
                     ))}
                   </Menu>
@@ -157,7 +210,7 @@ const Navbar = () => {
                     fontSize: "1rem",
                     transition: "background-color 0.3s",
                     "&:hover": {
-                      backgroundColor: "#2b6f6b", // Darker shade on hover
+                      backgroundColor: "#2b6f6b",
                     },
                   }}
                 >
@@ -209,7 +262,6 @@ const Navbar = () => {
               marginRight: 3,
             }}
           >
-            
             <IconButton onClick={handleMenuOpenUser} sx={{ p: 0 }}>
               <Avatar alt="Profile Picture" src="/static/images/avatar/1.jpg" />
             </IconButton>
