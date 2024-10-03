@@ -561,7 +561,6 @@ class AddObservationView(BaseProtectedview):
         time_observed_at = request.data.get('time_observed_at')
         description = request.data.get('description')
         location = request.data.get('location')
-        city = request.data.get('city')
         state = request.data.get('state')
         country = request.data.get('country')
         species_name_guess = request.data.get('species_name_guess')
@@ -595,7 +594,6 @@ class AddObservationView(BaseProtectedview):
             image=image,
             description=description,
             location=location,
-            city=city,
             state=state,
             country=country,
             species_name_guess=species_name_guess,
@@ -615,7 +613,6 @@ class AddObservationView(BaseProtectedview):
                 image=image,
                 description=description,
                 location=location,
-                city=city,
                 state=state,
                 country=country,
                 species_name_guess=species_name_guess,
