@@ -17,7 +17,7 @@ import { Identify } from "../pages/Identify/identify";
 import MyObservation from "../pages/Observations/YourObservation/your_observation";
 import ObservationView from "../pages/ObservationsView/observationview";
 import AddObservation from "../pages/Observations/AddObservation/addobservation";
-
+import UserObservations from "../pages/User/Observations/edit_observations";
 
 const router = createBrowserRouter([
     {
@@ -133,6 +133,10 @@ const router = createBrowserRouter([
     {
       path:"/register",//Register
       element:<Register />
+    },
+    {
+      path: "/edit_observation",
+      element: <UserObservations />
     },
     {
       path:"*",//Any urls that dont exist
