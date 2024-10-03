@@ -119,9 +119,9 @@ class DashboardView(BaseProtectedview):
         return Response(response)
 
 
-class HomePageView(BaseProtectedview):
+class HomePageView(APIView):
     def get(self, request):
-        user = self.get_user_from_token()
+        # user = self.get_user_from_token()
         
         num_list = []
         for i in range(5):
@@ -149,7 +149,6 @@ class HomePageView(BaseProtectedview):
         response = {
                 'message': 'Random five images',
                 'data': serializer.data,
-                'user': user.username
             }
         
         return Response(response)

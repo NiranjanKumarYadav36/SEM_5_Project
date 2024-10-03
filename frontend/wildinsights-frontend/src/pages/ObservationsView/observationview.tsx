@@ -83,7 +83,7 @@ const ObservationView = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{ maxHeight: "100vh", overflowY: "auto" }}>
       <Navbar />
       <Box
         sx={{
