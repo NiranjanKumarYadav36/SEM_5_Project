@@ -51,7 +51,7 @@ const Navbar = () => {
     { text: "Community", link: "#" },
     { text: "Identify", link: "/identify" },
     { text: "Your Observations", link: "/explore/your_observations" },//Update pls
-  ];
+    { text: "Add Observation", link: "/add_observation"}  ];
 
   const communityItems = [
     { text: "People", link: "/community/people" },
@@ -190,6 +190,7 @@ const Navbar = () => {
               marginRight: 3,
             }}
           >
+            
             <IconButton onClick={handleMenuOpenUser} sx={{ p: 0 }}>
               <Avatar alt="Profile Picture" src="/static/images/avatar/1.jpg" />
             </IconButton>

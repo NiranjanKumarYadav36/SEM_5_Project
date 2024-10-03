@@ -16,6 +16,8 @@ import { People } from "../pages/Community/People/people";
 import { Identify } from "../pages/Identify/identify";
 import MyObservation from "../pages/Explore/YourObservation/your_observation";
 import ObservationView from "../pages/ObservationsView/observationview";
+import LocationMap from "../components/GoogleMaps/GetLocationMap/locationmap";
+import MyMapComponent from "../components/GoogleMaps/GetLocationMap/text";
 
 
 const router = createBrowserRouter([
@@ -98,6 +100,21 @@ const router = createBrowserRouter([
           path: "/observations/:id",
           element: <ObservationView />,
         }
+      ]
+    },
+    {
+      path: "/add_observation",
+      element:<ProtectedRoute />,
+      children:[
+        {
+          path: "",
+          element: <LocationMap />,
+        },
+        {
+          path: "/add_observation/1",
+          element:<MyMapComponent />,
+        }
+
       ]
     },
     {

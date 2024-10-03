@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import Navbar from "../../../components/Navbar/Navbar";
-import Maps from "../../../components/GoogleMaps/googlemaps";
+import Maps from "../../../components/GoogleMaps/defaultMap/googlemaps";
 import NavigationButtons from "../../../components/Explore/NavigationButton/navigationbutton";
 import SearchBar from "../../../components/Explore/SearchBar/searchbar";
 import Footer from "../../../components/Footer/footer";
