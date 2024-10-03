@@ -77,34 +77,42 @@ export const Identify = () => {
 
   const startingRank = (page - 1) * data.length + 1;
 
+  const refreshList = () => {
+    // Function to refresh the list after updating the data
+    loadPage(page); // Reload the current page
+  };
+
 
   const handleUpdateAgreement = async (Id: number) => {
-    console.log(Id)
-    try {
-      // Optimistically update the UI
-      const response = await axiosclient.post("/species_identifications/", {
-        id: Id,
-        option: "yes",
-      });
-      console.log("Agreement updated:", response.data);
-    } catch (error) {
-      console.error("Error updating agreement:", error.response ? error.response.data : error.message);
-      // If API call fails, you may need to handle the rollback here as needed
+    const confirm = window.confirm("Are you sure you want to mark this as 'Agree'?"); // Confirmation dialog
+    if (confirm) {
+      try {
+        // Make the API call
+        const response = await axiosclient.post("/species_identifications/", {
+          id: Id,
+          option: "yes",
+        });
+        console.log("Agreement updated:", response.data);
+        refreshList(); // Refresh the list after updating
+      } catch (error) {
+        console.error("Error updating agreement:", error.response ? error.response.data : error.message);
+      }
     }
   };
 
-  // Function to handle updates for disagreements
   const handleUpdateDisagreement = async (Id: number) => {
-    try {
-      // Optimistically update the UI
-      const response = await axiosclient.post("/species_identifications/", {
-        id: Id,
-        option: "no",
-      });
-      console.log("Disagreement updated:", response.data);
-    } catch (error) {
-      console.error("Error updating disagreement:", error.response ? error.response.data : error.message);
-      // If API call fails, you may need to handle the rollback here as needed
+    const confirm = window.confirm("Are you sure you want to mark this as 'Disagree'?"); // Confirmation dialog
+    if (confirm) {
+      try {
+        const response = await axiosclient.post("/species_identifications/", {
+          id: Id,
+          option: "no",
+        });
+        console.log("Disagreement updated:", response.data);
+        refreshList(); // Refresh the list after updating
+      } catch (error) {
+        console.error("Error updating disagreement:", error.response ? error.response.data : error.message);
+      }
     }
   };
 
@@ -118,19 +126,23 @@ export const Identify = () => {
 
       <Box sx={{ padding: "20px", margin: 8 }}>
         {/* Reviewed Checkbox */}
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={isReviewed}
-              onChange={(e) => {
-                setIsReviewed(e.target.checked);
-                setCurrentPage(1); // Reset page to 1 when the checkbox is toggled
-              }}
-              color="primary"
-            />
-          }
-          label="Show Reviewed"
-        />
+        <Box display="flex" justifyContent="flex-end" alignItems="center">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={isReviewed}
+                onChange={(e) => {
+                  setIsReviewed(e.target.checked);
+                  setCurrentPage(1);
+                }}
+                color="primary"
+              />
+            }
+            label="Show Reviewed"
+            style={{ marginRight: '15px' }} // This moves it to the right
+          />
+        </Box>
+
 
         <Grid container spacing={2} justifyContent="center" alignItems="stretch">
           {paginatedData.map((item, index) => (
@@ -154,6 +166,7 @@ export const Identify = () => {
                       size="small"
                       onClick={() => handleUpdateAgreement(item.id)}
                       sx={{ flexGrow: 1, marginRight: 1 }}
+                      disabled={isReviewed}
                     >
                       {item.no_identification_agreement} Agree
                     </Button>
@@ -162,6 +175,7 @@ export const Identify = () => {
                       size="small"
                       onClick={() => handleUpdateDisagreement(item.id)}
                       sx={{ flexGrow: 1, marginLeft: 1 }}
+                      disabled={isReviewed}
                     >
                       {item.no_identification_disagreement} Disagree
                     </Button>

@@ -74,9 +74,11 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
         return instance
     
 
-class HomePageSerializer(serializers.Serializer):
-    common_name = serializers.CharField()
-    image = serializers.CharField()
+class HomePageSerializer(serializers.ModelSerializer):
+    image = serializers.URLField()
+    class Meta:
+        model = All_Species
+        fields = ['image', 'common_name', 'user_id', 'state', 'country']
 
 
 class AllSpeciesSerializers(serializers.ModelSerializer):
@@ -86,7 +88,7 @@ class AllSpeciesSerializers(serializers.ModelSerializer):
     
     class Meta:
         model = All_Species
-        fields = ['image', 'latitude', 'longitude', 'common_name', 'id', 'user_id']
+        fields = ['image', 'latitude', 'longitude', 'common_name', 'id', 'user_id', 'category']
         
     
     
@@ -182,7 +184,7 @@ class UserObservationsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = All_Species
-        fields = ['image', 'latitude', 'longitude', 'common_name', 'id', 'user_id']
+        fields = ['image', 'latitude', 'longitude', 'common_name', 'id', 'user_id', 'category']
         
     
     

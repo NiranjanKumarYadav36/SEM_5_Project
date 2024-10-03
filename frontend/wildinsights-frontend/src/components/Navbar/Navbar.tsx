@@ -14,6 +14,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import useHandleLogout from "../Logout/logout";
+import logo from "../../assets/NavBar/logo.png"; // Adjust path as needed
 
 const Navbar = () => {
   const handleLogout = useHandleLogout();
@@ -55,7 +56,7 @@ const Navbar = () => {
 
   const communityItems = [
     { text: "People", link: "/community/people" },
-    { text: "projects", link: "/community/projects" },
+    { text: "Projects", link: "/community/projects" },
     { text: "Forums", link: "/community/forum" },
   ];
 
@@ -68,22 +69,40 @@ const Navbar = () => {
         padding: "10px 0",
       }}
     >
-      <Container
-        maxWidth={false}
-        sx={{ padding: 0, marginLeft: 0, marginRight: 0 }}
-      >
+      <Container maxWidth={false} sx={{ padding: 0, marginLeft: 0, marginRight: 0 }}>
         <Toolbar disableGutters>
-          {/*Improve this */}
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ fontWeight: "bold", display: "flex", margin: 3 }}
+          {/* Logo and Title Section */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              marginLeft: 2, // Space between logo and the edge
+            }}
           >
-            WildInsights
-          </Typography>
+            {/* Logo Image */}
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={logo} // Image source from imported logo
+                alt="Logo"
+                style={{
+                  height: "40px",
+                  marginRight: "10px",
+                  backgroundColor: "transparent", // Ensure image background is transparent
+                }}
+              />
+              {/* Title Text (Non-clickable, Black) */}
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ fontWeight: "bold", color: "#000", display: "flex" }}
+              >
+                WildInsights
+              </Typography>
+            </Box>
+          </Box>
 
           {/* Links for large screens */}
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3, ml: 3 }}>
             {menuItems.map((item) =>
               item.text === "Community" ? (
                 <Box
@@ -149,7 +168,7 @@ const Navbar = () => {
           </Box>
 
           {/* Hamburger menu for small screens */}
-          <Box sx={{ display: { xs: "block", md: "none" } }}>
+          <Box sx={{ display: { xs: "block", md: "none" }, ml: "auto" }}>
             <IconButton
               size="large"
               edge="start"
@@ -201,18 +220,10 @@ const Navbar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleMenuCloseUser}
             >
-              <MenuItem
-                component={Link}
-                to="/user/dashboard"
-                onClick={handleMenuCloseUser}
-              >
+              <MenuItem component={Link} to="/user/dashboard" onClick={handleMenuCloseUser}>
                 Dashboard
               </MenuItem>
-              <MenuItem
-                component={Link}
-                to="/user/profile"
-                onClick={handleMenuCloseUser}
-              >
+              <MenuItem component={Link} to="/user/profile" onClick={handleMenuCloseUser}>
                 Profile
               </MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
