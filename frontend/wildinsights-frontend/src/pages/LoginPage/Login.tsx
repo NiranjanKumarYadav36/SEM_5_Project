@@ -142,7 +142,7 @@ const Login = () => {
               src={images[currentImageIndex].image} // Update the image URL based on your response
               alt={`Image ${currentImageIndex + 1}`}
               sx={{
-                height: "693px", // Fixed height for the container
+                height: "75vh", // Fixed height for the container
                 width: "550px", // Fixed width for the container
                 objectFit: "cover", // Ensures the image scales proportionally while covering the box area
                 position: "relative",

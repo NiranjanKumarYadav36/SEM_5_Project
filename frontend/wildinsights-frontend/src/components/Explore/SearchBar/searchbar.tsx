@@ -216,7 +216,6 @@ const SearchBar: React.FC<SearchComponentProps> = ({ onSearch }) => {
           >
             {loading ? <CircularProgress size={24} /> : "Go"}
           </Button>
-          <Filter onApply={handleApplyFilters} />
         </Box>
         {error && (
           <Typography color="error" sx={{ marginTop: 2 }}>
