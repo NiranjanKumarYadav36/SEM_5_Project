@@ -38,10 +38,10 @@ function UserDashboard() {
   const navItems = [
     { label: "Home", path: "/", icon: <HomeIcon /> },
     { label: "Profile", path: "/user/profile", icon: <PersonIcon /> },
-    { label: "Observations", path: "/user/dashboard", icon: <VisibilityIcon /> },
-    { label: "Edit Observations", path: "/edit-observations", icon: <EditIcon /> },
-    { label: "Identifications", path: "/identifications", icon: <Done /> },
-    { label: "Projects", path: "/community/projects", icon: <WorkIcon /> }
+    { label: "Observations", path: "/observation/me", icon: <VisibilityIcon /> },
+    { label: "Edit Observations", path: "/observation/edit", icon: <EditIcon /> },
+    { label: "Identifications", path: "/identify", icon: <Done /> },
+    { label: "Projects", path: "/user/dashboard", icon: <WorkIcon /> }
   ];
 
   return (
