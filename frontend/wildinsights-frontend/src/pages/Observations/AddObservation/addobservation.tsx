@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import {
   Box,
@@ -17,6 +16,7 @@ import axiosclient from "../../../components/Apiclient/axiosclient";
 import LocationMapPopup from "../../../components/GoogleMaps/GetLocationMap/locationmap";
 import Navbar from "../../../components/Navbar/Navbar";
 import Footer from "../../../components/Footer/footer";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 interface MarkerData {
   latitude: number;
@@ -44,6 +44,9 @@ const AddObservation: React.FC = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false); // For location popup
   const [markerData, setMarkerData] = useState<MarkerData | null>(null); // Selected location data
+  const [successMessage, setSuccessMessage] = useState<string | null>(null); // Success message state
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const [formData, setFormData] = useState({
     common_name: "",
@@ -135,6 +138,13 @@ const AddObservation: React.FC = () => {
     try {
       const response = await axiosclient.post("/add_observation", formData);
       console.log("Observation successfully added:", response.data);
+      
+      setSuccessMessage("Observation added successfully!"); // Set success message
+      
+      // Navigate to a different page after 2 seconds (e.g., observation list)
+      setTimeout(() => {
+        navigate("/observation/me"); // Replace with the appropriate path
+      }, 2000);
     } catch (error) {
       console.error("Error adding observation:", error);
     }
@@ -149,6 +159,13 @@ const AddObservation: React.FC = () => {
             <Typography variant="h5" gutterBottom>
               Add New Observation
             </Typography>
+
+            {/* Success message */}
+            {successMessage && (
+              <Typography variant="body1" color="success" sx={{ marginBottom: 2 }}>
+                {successMessage}
+              </Typography>
+            )}
 
             {/* Image Preview */}
             {imagePreview && (

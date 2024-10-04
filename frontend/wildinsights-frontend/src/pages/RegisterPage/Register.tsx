@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -24,6 +25,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import axiosclient from "../../components/Apiclient/axiosclient"; // Replace with your axios client
+
 
 const Register = () => {
   const [username, setUsername] = useState("");
