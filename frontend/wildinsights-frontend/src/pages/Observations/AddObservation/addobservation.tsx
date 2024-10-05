@@ -160,12 +160,7 @@ const AddObservation: React.FC = () => {
               Add New Observation
             </Typography>
 
-            {/* Success message */}
-            {successMessage && (
-              <Typography variant="body1" color="success" sx={{ marginBottom: 2 }}>
-                {successMessage}
-              </Typography>
-            )}
+            
 
             {/* Image Preview */}
             {imagePreview && (
@@ -300,6 +295,12 @@ const AddObservation: React.FC = () => {
             <Button variant="contained" onClick={handleSubmit} sx={{ marginTop: 2 }}>
               Submit Observation
             </Button>
+            {/* Success message */}
+            {successMessage && (
+              <Typography variant="body1" color="success" sx={{ marginBottom: 2 }}>
+                {successMessage}
+              </Typography>
+            )}
           </CardContent>
         </Card>
 

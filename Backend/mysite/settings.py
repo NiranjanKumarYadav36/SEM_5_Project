@@ -53,12 +53,6 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-# REST_FRAMEWORK = {'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permission.AllowAny']}
-
-# CORS_ALLOWED = [
-#     "http://localhost:5173",  # Default Vite development server
-# ]
-
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -91,69 +85,6 @@ DATABASES = {
          'NAME': BASE_DIR / 'db.sqlite3',
      }
  }
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
-'''DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'wildlife',  # Your database name
-        'CLIENT': {
-            'host': 'localhost',  # Localhost for local MongoDB instance
-            'port': 27017,        # Default port for MongoDB
-            'username': '',        # Leave blank if not using authentication
-            'password': '',        # Leave blank if not using authentication
-        }
-        'ENGINE': 'djongo',
-        'NAME': 'wildlife',  # Your database name
-        'CLIENT': {
-            'host': 'localhost',  # Localhost for local MongoDB instance
-            'port': 27017,        # Default port for MongoDB
-            'username': '',        # Leave blank if not using authentication
-            'password': '',        # Leave blank if not using authentication
-        }
-    }
-}
-'''
-
-
-
-
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'wild_life',
-#         'USER': 'root',
-#         'PASSWORD': 'haunting363@',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#     }
-# }
-
-
-
-'''DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'wild',  # Your MongoDB database name
-        'CLIENT': {
-            'host': 'mongodb+srv://admin:q5tDwiZDPueNbL3@cluster0.oomr3.mongodb.net/wild?retryWrites=true&w=majority',
-            'username': 'admin', 
-            'password': 'q5tDwiZDPueNbL3',
-        }
-    }
-}
-'''
-
 
 
 # Password validation
