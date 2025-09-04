@@ -91,9 +91,7 @@ df = df.with_columns([
     (pl.col('updated_at') + timedelta(hours=5, minutes=30)).alias('updated_at'),
 ])
 
-#
-#
-#
+
 #                            #### Writing data to Csv #####
 df.write_csv(file='../filtered_data/filtered_amphibians_observations.csv', include_header=True)
 
@@ -113,20 +111,4 @@ print(df.select('observed_on', 'created_at', 'updated_at', 'time_observed_at'))
 
 
 
-
-# print(df.select('observed_on', 'created_at', 'updated_at', 'latitude', 'longitude',))
-#
-# print(df.select('place_county_name', 'place_state_name','place_country_name', 'species_guess'))
-#
-# print(df.select('place_state_name','place_country_name', 'species_guess', 'common_name',))
-#
-# print(df.select('scientific_name', 'iconic_taxon_name'))
-
-
-# print(df.describe())
-
-# value = df.select('created_at')
-
-# for v in value:
-#     type(print(v))
 

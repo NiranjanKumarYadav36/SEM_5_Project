@@ -8,12 +8,15 @@ df = df.drop(columns=['id'])
 
 agreements = 'user_name'
 
-#                 #### Deleting  username == none ####
+
+              #### Deleting  username == none ####
 df = df[~(df[agreements].isna() | (df[agreements] == ""))]
+
 
 empty_description_row1 = df[df[('%s' % agreements)].isna()]
 empty_description_row2 = df[df[agreements] == ""]
 print(empty_description_row1[agreements], empty_description_row2[agreements])
+
 
 columns = ['observed_on', 'time_observed_at', 'latitude', 'longitude', 'image_url', 'created_at', 'updated_at',
            'description', 'num_identification_agreements', 'num_identification_disagreements', 'place_guess',
